@@ -1,0 +1,4 @@
+# pypi-release-tools
+setuptools
+wheel
+twine
