@@ -3,7 +3,11 @@ rem wheel 빌드 후 PyPi에 배포 (토큰 입력 필요).
 
 rem .venv\Scripts\activate
 
-pip install -r requirements.txt
+python --version
+python -m ensurepip --upgrade
+python -m pip install --upgrade pip
+python -m pip install --user -r requirements.txt
+python -m pip list
 
 if exist "build" rmdir /s /q "build"
 if exist "dist" rmdir /s /q "dist"

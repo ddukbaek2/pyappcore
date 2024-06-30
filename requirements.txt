@@ -1,7 +1,8 @@
-# pypi-release-tools.
+# pypi-release-package.
 setuptools
 wheel
 twine
+debugpy
 
 # build-support.
 pyinstaller

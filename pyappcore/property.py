@@ -2,7 +2,8 @@
 # 참조 모듈 목록.
 #------------------------------------------------------------------------
 from __future__ import annotations
-from typing import Type, Optional, TypeVar, Any
+from typing import Any, Final, Optional, Type, TypeVar, Union
+import builtins
 import inspect
 
 
@@ -22,7 +23,7 @@ class BaseClass:
 				self.__targetInstance = targetInstance
 				self.__targetClass = targetClass
 			def __getattr__(self, name):
-				return getattr(super(self.__targetClass, self.__targetInstance), name)
+				return builtins.getattr(super(self.__targetClass, self.__targetInstance), name)
 		return InternalBaseWrapper(self, type(self))
 
 
@@ -35,7 +36,7 @@ class Value(BaseClass):
 	__value : Optional[TValueType]
 	def __init__(self, valueType : Type[TValueType], defaultValue : Optional[TValueType] = None):
 		self.__valueType = valueType
-		if defaultValue and isinstance(defaultValue, self.__valueType):
+		if defaultValue and builtins.isinstance(defaultValue, self.__valueType):
 			self.value = defaultValue
 		else:
 			self.__value = self.__valueType()
@@ -44,7 +45,7 @@ class Value(BaseClass):
 		return self.__value
 	@Value.setter
 	def Value(self, value : TValueType):
-		if not isinstance(value, self.__valueType):
+		if not builtins.isinstance(value, self.__valueType):
 			raise TypeError(f"Value must be of type '{self.__valueType.__name__}'")
 		self.__value = value
 	@property
@@ -92,7 +93,7 @@ class PropertyValue(Value):
 		base = super()
 		print(f"property value setter : {base.Value}")
   
-		if not isinstance(value, base.ValueType):
+		if not builtins.isinstance(value, base.ValueType):
 			raise TypeError(f"Value must be of type '{self.ValueType.__name__}'")
 		elif self.__ownerClassType is not None:
 			# 스택의 2번째 요소 (현재 함수를 지닌 객체를 호출한 쪽)가 지정 클래스였는지 확인.

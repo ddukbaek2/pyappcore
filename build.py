@@ -24,7 +24,8 @@ setup(
 		],
 	},
     install_requires = [
-		"pyinstaller"
+		"pyinstaller",
+		"debugpy"
 	],
 	classifiers = [
 		"Programming Language :: Python :: 3",

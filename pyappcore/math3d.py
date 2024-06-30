@@ -2,7 +2,8 @@
 # 참조 모듈 목록.
 #------------------------------------------------------------------------
 from __future__ import annotations
-from typing import Union
+from typing import Any, Final, Optional, Type, TypeVar, Union
+import builtins
 
 
 #------------------------------------------------------------------------
