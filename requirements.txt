@@ -1,7 +1,7 @@
 # must-install-package-development.
 setuptools
 wheel
-
+dotenv-python
 
 # must-install-package-release-pypi.
 twine
