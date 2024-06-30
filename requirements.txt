@@ -3,4 +3,5 @@ setuptools
 wheel
 twine
 
-# todo.
+# build-support.
+pyinstaller
