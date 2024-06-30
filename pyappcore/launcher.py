@@ -156,7 +156,7 @@ def Launching(moduleName : str, functionName : str, symbols : str) -> int:
 		# 순서 : DEBUG < INFO < WARNING < ERROR < CRITICAL.
 		useLog : bool = Application.HasSymbol(PYAPPCORE_SYMBOL_LOG)
 		if useLog:
-			log.Initialize()
+			log.InitializeLOGSystem()
 
 	# 예외.
 	except Exception as exception:

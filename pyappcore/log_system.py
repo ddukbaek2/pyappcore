@@ -32,7 +32,7 @@ class PrintHandler(Handler):
 #------------------------------------------------------------------------
 # 화면 출력.
 #------------------------------------------------------------------------
-def Initialize():
+def InitializeLOGSystem():
 	timestamp = str_util.GetTimestamp("", "", "", False)
 	useLogFile : bool = False
 	logLevel : int = NOTSET

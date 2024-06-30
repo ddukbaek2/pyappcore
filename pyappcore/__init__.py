@@ -12,7 +12,7 @@ from .code_generator_symbols import *
 from .constants import *
 from .json_util import *
 from .launcher import *
-from .log import *
+from .log_system import *
 from .math3d import *
 from .property import *
 from .resources import *
