@@ -1,8 +1,11 @@
-# pypi-release-package.
+# must-install-package-development.
 setuptools
 wheel
-twine
-debugpy
 
-# build-support.
+
+# must-install-package-release-pypi.
+twine
+
+# supply-dependency-package.
+debugpy
 pyinstaller
