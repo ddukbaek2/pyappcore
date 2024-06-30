@@ -9,7 +9,7 @@ from setuptools import setup, find_packages
 #------------------------------------------------------------------------
 setup(
 	name = "pyappcore",
-	version = "v0.0.1",
+	version = "v0.0.2",
 	author = "ddukbaek2",
 	author_email = "ddukbaek2@gmail.com",
 	description = "Python Simple Framework.",
