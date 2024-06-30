@@ -12,8 +12,8 @@ import os
 # 추가 설치를 통한 참조 모듈 목록.
 #------------------------------------------------------------------------
 from .application import Application, PYAPPCORE_SYMBOL_EXPRESS
-import ansicode
-import str_util
+from .ansicode import *
+from .str_util import *
 
 
 #------------------------------------------------------------------------
@@ -22,18 +22,18 @@ import str_util
 class PrintHandler(Handler):
 	def emit(self, record : LogRecord):
 		message = self.format(record)
-		if record.levelno == FATAL or record.levelno == CRITICAL: ansicode.Print(f"<bg_red><white><b>{message}</b></white></bg_red>")
-		elif record.levelno == ERROR: ansicode.Print(f"<red>{message}</red>")
-		elif record.levelno == WARN or record.levelno == WARNING: ansicode.Print(f"<yellow>{message}</yellow>")
-		elif record.levelno == INFO: ansicode.Print(f"{message}")
-		elif record.levelno == DEBUG: ansicode.Print(f"<magenta>{message}</magenta>")
+		if record.levelno == FATAL or record.levelno == CRITICAL: Print(f"<bg_red><white><b>{message}</b></white></bg_red>")
+		elif record.levelno == ERROR: Print(f"<red>{message}</red>")
+		elif record.levelno == WARN or record.levelno == WARNING: Print(f"<yellow>{message}</yellow>")
+		elif record.levelno == INFO: Print(f"{message}")
+		elif record.levelno == DEBUG: Print(f"<magenta>{message}</magenta>")
 
 
 #------------------------------------------------------------------------
 # 화면 출력.
 #------------------------------------------------------------------------
 def InitializeLOGSystem():
-	timestamp = str_util.GetTimestamp("", "", "", False)
+	timestamp = GetTimestampString("", "", "", False)
 	useLogFile : bool = False
 	logLevel : int = NOTSET
 	logFilePath : str = str()
@@ -71,7 +71,8 @@ def InitializeLOGSystem():
 	# 로그파일 설정.
 	if useLogFile:
 		logDirPath = Application.GetRootPathWithRelativePath("logs")
-		if not os.path.exists(logDirPath): os.makedirs(logDirPath)
+		if not os.path.exists(logDirPath):
+			os.makedirs(logDirPath)
 		fileHandler : StreamHandler = FileHandler(logFilePath)
 		fileHandler.setLevel(logLevel)
 		fileHandler.setFormatter(formatter)

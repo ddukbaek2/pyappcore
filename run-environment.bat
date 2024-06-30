@@ -9,3 +9,9 @@ where python
 python -m venv .venv
 
 .\venv\Scripts\activate.bat
+
+python --version
+python -m ensurepip --upgrade
+pip install --upgrade pip
+pip install --r requirements.txt
+pip list
