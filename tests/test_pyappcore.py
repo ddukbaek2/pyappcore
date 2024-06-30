@@ -3,7 +3,7 @@
 #------------------------------------------------------------------------
 import unittest
 import builtins
-from pyappcore import PYSONObject
+from pyappcore import *
 
 
 #------------------------------------------------------------------------
@@ -11,8 +11,7 @@ from pyappcore import PYSONObject
 #------------------------------------------------------------------------
 class TestCase(unittest.TestCase):
     def test_Print(self):
-        builtins.print("pysonlib-test")
-        pysonObject = PYSONObject()
+        builtins.print("pyappcore-tests")
 
 
 #------------------------------------------------------------------------

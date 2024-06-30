@@ -17,11 +17,15 @@ setup(
 	long_description_content_type = "text/markdown",
 	url = "https://github.com/ddukbaek2/pyappcore",
 	packages = find_packages(),
-	include_package_data=True,
+	include_package_data = True,
 	package_data = {
-		"": ["resources/*"],
+		"": [
+			"resources/*"
+		],
 	},
-    install_requires = [],
+    install_requires = [
+		"pyinstaller"
+	],
 	classifiers = [
 		"Programming Language :: Python :: 3",
 		"License :: OSI Approved :: MIT License",
