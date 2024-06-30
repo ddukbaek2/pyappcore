@@ -24,13 +24,16 @@ SEMICOLON : str = ";"
 COLON : str = ":"
 SPACE : str = " "
 DEBUG : str = "DEBUG"
+NODEBUG : str = "NODEBUG"
 
-PYAPPCORE_SYMBOL_SUBPROCESS : str = "PYAPPCORE_SYMBOL_SUBPROCESS"
-PYAPPCORE_SYMBOL_LOG : str = "PYAPPCORE_SYMBOL_LOG"
-PYAPPCORE_SYMBOL_DEBUG : str = "PYAPPCORE_SYMBOL_DEBUG"
+PYAPPCORE_SYMBOL_EXPRESS : str = "EXPRESS" # "PYAPPCORE_SYMBOL_EXPRESS"
+PYAPPCORE_SYMBOL_SUBPROCESS : str = "SUBPROCESS" # "PYAPPCORE_SYMBOL_SUBPROCESS"
+PYAPPCORE_SYMBOL_LOG : str = "LOG" # "PYAPPCORE_SYMBOL_LOG"
+PYAPPCORE_SYMBOL_DEBUG : str = "DEBUG" # "PYAPPCORE_SYMBOL_DEBUG"
+PYAPPCORE_SYMBOL_NODEBUG : str = "NODEBUG" # "PYAPPCORE_SYMBOL_NODEBUG"
 
 CONFIGURATION_FILENAME : str = "configuration.json"
-LOG_LOGGERNAME : str = "pyappcore"
+PYAPPCORE_LOG_LOGGERNAME : str = "pyappcore"
 LOG_CRITICAL : int  = 50
 LOG_ERROR : int = 40
 LOG_EXCEPTION : int  = 40
@@ -286,7 +289,7 @@ class Application:
 	#------------------------------------------------------------------------
 	@staticmethod
 	def GetLogger() -> Logger:
-		return logging.getLogger(LOG_LOGGERNAME)
+		return logging.getLogger(PYAPPCORE_LOG_LOGGERNAME)
 
 	#------------------------------------------------------------------------
 	# 설정값 반환 : "{workspace}/res/configuration.json" 필요, 만약 파일이 없으면 None 반환.

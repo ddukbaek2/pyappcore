@@ -1,5 +1,5 @@
 #------------------------------------------------------------------------
-# 참조 모듈 목록.
+# 참조 중인 기본 라이브러리 모듈 목록.
 #------------------------------------------------------------------------
 from __future__ import annotations
 from typing import Any, Final, Optional, Type, TypeVar, Union
@@ -8,8 +8,14 @@ import debugpy # type: ignore
 import importlib
 import os
 import sys
+
+
+#------------------------------------------------------------------------
+# 추가 설치를 통한 참조 모듈 목록.
+#------------------------------------------------------------------------
 from .application import Application
 from .str_util import *
+import log
 
 
 
@@ -18,24 +24,31 @@ from .str_util import *
 #------------------------------------------------------------------------
 FROZEN : str = "frozen"
 MAIN : str = "__main__"
-PYAPPCORE_SYMBOL_SUBPROCESS : str = "PYAPPCORE_SYMBOL_SUBPROCESS"
-PYAPPCORE_SYMBOL_LOG : str = "PYAPPCORE_SYMBOL_LOG"
-PYAPPCORE_SYMBOL_DEBUG : str = "PYAPPCORE_SYMBOL_DEBUG"
+PYAPPCORE_SYMBOL_SUBPROCESS : str = "SUBPROCESS"
+PYAPPCORE_SYMBOL_LOG : str = "LOG"
+PYAPPCORE_SYMBOL_DEBUG : str = "DEBUG"
+PYAPPCORE_SYMBOL_NODEBUG : str = "NODEBUG"
+
+
+#------------------------------------------------------------------------
+# 빌드.
+#------------------------------------------------------------------------
+def IsBuild() -> bool:
+	# 실행 환경 체크.
+	try:
+		return builtins.getattr(sys, FROZEN, False)
+	except Exception as exception:
+		return False
 
 
 #------------------------------------------------------------------------
 # 시작.
 #------------------------------------------------------------------------
-def Launching() -> int:
+def Launching(moduleName : str, functionName : str, symbols : str) -> int:
 	builtins.print("pyappcore.launcher.Launch()")
 
-	# 실행 환경 체크.
-	try:
-		isBuild : bool = builtins.getattr(sys, FROZEN, False)
-	except Exception as exception:
-		isBuild : bool = False
-
 	# 빌드인 경우 경로.
+	isBuild : bool = IsBuild()
 	if isBuild:
 		# 실행파일에서 생성되는 임시 루트 경로.
 		# 리소스를 위한 캐시폴더로 실제 실행파일의 위치가 아님.
@@ -81,7 +94,6 @@ def Launching() -> int:
 			# import __include_in_build__ # type: ignore
 			# import __symbols_in_build__ # type: ignore
 			# symbols = __symbols_in_build__.SYMBOLS
-			symbols : str = ""
 			Application._Application__SetSymbols(symbols) # 심볼 설정.
 
 			# 디버그 모드 설정.
@@ -101,7 +113,8 @@ def Launching() -> int:
 			sys.argv = [argument for argument in sys.argv if argument]
 
 			# 실행된 파이썬 스크립트 파일 설정.
-			Application._Application__SetExecuteFileName(sys.argv[0])
+			executeFileName = sys.argv[0]
+			Application._Application__SetExecuteFileName(executeFileName)
 			sys.argv = sys.argv[1:]
 
 			# 심볼 설정.
@@ -117,12 +130,12 @@ def Launching() -> int:
 			# 디버그 모드 일 경우 원격 디버거 실행.
 			# 콘솔에 출력되는 해당 문자열을 감지해서 디버그 대기와 시작을 판단하므로 수정금지.
 			if Application.IsDebug():
-				builtins.print("PYAPPCORE.DEBUGPY.START")
+				builtins.print("pyappcore.launcher.debugpy.start()")
 				remotePort : int = 4885 # vscodeSettings["launcher"]["debug"]["remotePort"]
 				debugpy.listen(("localhost", remotePort))
-				builtins.print("PYAPPCORE.DEBUGPY.WAIT")
+				builtins.print("pyappcore.launcher.debugpy.wait()")
 				debugpy.wait_for_client()
-				builtins.print("PYAPPCORE.DEBUGPY.STARTED")
+				builtins.print("pyappcore.launcher.debugpy.started()")
 
 		# 공통.
 		# 인자 재조립 처리.
@@ -143,7 +156,7 @@ def Launching() -> int:
 		# 순서 : DEBUG < INFO < WARNING < ERROR < CRITICAL.
 		useLog : bool = Application.HasSymbol(PYAPPCORE_SYMBOL_LOG)
 		if useLog:
-			pass
+			log.Initialize()
 
 	# 예외.
 	except Exception as exception:
@@ -152,8 +165,6 @@ def Launching() -> int:
 		
 	# 시작.
 	try:
-		moduleName : str = "main"
-		functionName : str = "Main"
 		module = importlib.import_module(moduleName)
 		function = builtins.getattr(module, functionName)
 		exitCode : int = function(sys.argv)
@@ -168,9 +179,9 @@ def Launching() -> int:
 		return 1
 
 
-#------------------------------------------------------------------------
-# 파일 진입점.
-#------------------------------------------------------------------------
-if __name__ == "__main__":
-	exitCode = Launching()
-	sys.exit(exitCode)
+# #------------------------------------------------------------------------
+# # 파일 진입점.
+# #------------------------------------------------------------------------
+# if __name__ == "__main__":
+# 	exitCode = Launching()
+# 	sys.exit(exitCode)

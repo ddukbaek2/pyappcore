@@ -9,10 +9,10 @@ from setuptools import setup, find_packages
 #------------------------------------------------------------------------
 setup(
 	name = "pyappcore",
-	version = "v0.0.5",
+	version = "v0.0.7",
 	author = "ddukbaek2",
 	author_email = "ddukbaek2@gmail.com",
-	description = "Python Simple Framework.",
+	description = "Python Simple App Framework.",
 	long_description = open(file = "README.md", mode = "r", encoding = "utf-8").read(),
 	long_description_content_type = "text/markdown",
 	url = "https://github.com/ddukbaek2/pyappcore",
