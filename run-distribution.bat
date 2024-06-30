@@ -5,9 +5,10 @@ rem .venv\Scripts\activate
 
 python --version
 python -m ensurepip --upgrade
-python -m pip install --upgrade pip
-python -m pip install --r requirements.txt
-python -m pip list
+pip install --upgrade pip
+pip install --r requirements.txt
+pip list
+
 
 if exist "build" rmdir /s /q "build"
 if exist "dist" rmdir /s /q "dist"
