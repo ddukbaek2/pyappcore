@@ -1,10 +1,16 @@
 @echo off
+rem wheel 빌드.
 
 rem .venv\Scripts\activate
 
-if exist "output" rmdir /s /q "output"
-if exist "build" rmdir /s /q "build"
-if exist "dist" rmdir /s /q "dist"
-if exist "pylonlib.egg-info" rmdir /s /q "pylonlib.egg-info"
+pip install -r requirements.txt
 
-python release.py sdist bdist_wheel >NUL 2>&1
+if exist "build" rmdir /s /q "build"
+if exist "pyappcore.egg-info" rmdir /s /q "pyappcore.egg-info"
+if exist "dist" rmdir /s /q "dist"
+
+python build.py sdist bdist_wheel
+
+if exist "build" rmdir /s /q "build"
+if exist "pyappcore.egg-info" rmdir /s /q "pyappcore.egg-info"
+del /q "dist\*.gz"

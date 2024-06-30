@@ -1,4 +1,4 @@
-# pylonlib
+# pyappcore
 - Python Script Object Notation (pyson) is a standard text-based format for expressing structured data using Python object syntax.
   
 - 파이썬 문법으로 다룰 수 있는 유사 JSON 포맷의 데이터 오브젝트 입니다.

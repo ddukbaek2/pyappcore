@@ -8,14 +8,14 @@ from setuptools import setup, find_packages
 # 설치.
 #------------------------------------------------------------------------
 setup(
-	name = "pylonlib",
+	name = "pyappcore",
 	version = "v0.0.1",
 	author = "ddukbaek2",
 	author_email = "ddukbaek2@gmail.com",
 	description = "Python Simple Framework.",
 	long_description = open(file = "README.md", mode = "r", encoding = "utf-8").read(),
 	long_description_content_type = "text/markdown",
-	url = "https://github.com/ddukbaek2/pylonlib",
+	url = "https://github.com/ddukbaek2/pyappcore",
 	packages = find_packages(),
 	include_package_data=True,
 	package_data = {

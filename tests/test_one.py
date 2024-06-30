@@ -3,7 +3,7 @@
 #------------------------------------------------------------------------
 import unittest
 import builtins
-from pysonlib import PYSONObject
+from pyappcore import PYSONObject
 
 
 #------------------------------------------------------------------------
