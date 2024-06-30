@@ -1,12 +1,12 @@
 @echo off
-rem wheel 빌드 후 PyPi에 배포 (토큰 입력 필요).
+rem wheel 빌드 후 PyPi에 배포. (Windows)
 
 rem .venv\Scripts\activate
 
 python --version
 python -m ensurepip --upgrade
 python -m pip install --upgrade pip
-python -m pip install --user -r requirements.txt
+python -m pip install --r requirements.txt
 python -m pip list
 
 if exist "build" rmdir /s /q "build"

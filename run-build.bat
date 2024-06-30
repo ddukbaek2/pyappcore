@@ -1,13 +1,13 @@
 @echo off
-rem wheel 빌드.
+rem wheel 빌드. (Windows)
 
 rem .venv\Scripts\activate
 
 python --version
 python -m ensurepip --upgrade
-python -m pip install --upgrade pip
-python -m pip install --user -r requirements.txt
-python -m pip list
+pip install --upgrade pip
+pip install --r requirements.txt
+pip list
 
 if exist "build" rmdir /s /q "build"
 if exist "pyappcore.egg-info" rmdir /s /q "pyappcore.egg-info"
