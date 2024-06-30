@@ -8,9 +8,8 @@ import debugpy # type: ignore
 import importlib
 import os
 import sys
-import application
 from .application import Application
-import str_util
+from .str_util import *
 
 
 
@@ -19,6 +18,9 @@ import str_util
 #------------------------------------------------------------------------
 FROZEN : str = "frozen"
 MAIN : str = "__main__"
+PYAPPCORE_SYMBOL_SUBPROCESS : str = "PYAPPCORE_SYMBOL_SUBPROCESS"
+PYAPPCORE_SYMBOL_LOG : str = "PYAPPCORE_SYMBOL_LOG"
+PYAPPCORE_SYMBOL_DEBUG : str = "PYAPPCORE_SYMBOL_DEBUG"
 
 
 #------------------------------------------------------------------------
@@ -108,7 +110,7 @@ def Launching() -> int:
 			sys.argv = sys.argv[1:]
 
 			# 디버그 모드 설정.
-			useDebug : bool = Application.HasSymbol(application.PYAPPCORE_SYMBOL_DEBUG)
+			useDebug : bool = Application.HasSymbol(PYAPPCORE_SYMBOL_DEBUG)
 			Application._Application__SetDebug(useDebug)
 			builtins.print(f"Application.IsDebug() : {Application.IsDebug()}")
 
@@ -127,7 +129,7 @@ def Launching() -> int:
 		# VSCODE 상황일때의 인자 목록은 문자열 리스트가 아닌 콤마로 합쳐진 형태로 넘어올 수 있음.
 		# 어찌 되었건 쉼표 또한 구분자로 인정하고 공통 처리.
 		if not Application.IsBuild() and sys.argv:
-			sys.argv = str_util.CreateStringListFromSeperatedStringLists(sys.argv)	
+			sys.argv = CreateStringListFromSeperatedStringLists(sys.argv)	
 
 		# 인자 출력.
 		builtins.print("sys.argv")
@@ -139,7 +141,7 @@ def Launching() -> int:
 
 		# 로그 설정.
 		# 순서 : DEBUG < INFO < WARNING < ERROR < CRITICAL.
-		useLog : bool = Application.HasSymbol(application.PYAPPCORE_SYMBOL_LOG)
+		useLog : bool = Application.HasSymbol(PYAPPCORE_SYMBOL_LOG)
 		if useLog:
 			pass
 
@@ -158,12 +160,13 @@ def Launching() -> int:
 		return exitCode
 	# 예외.
 	except Exception as exception:
-		useLog : bool = Application.HasSymbol(application.PYAPPCORE_SYMBOL_LOG)
+		useLog : bool = Application.HasSymbol(PYAPPCORE_SYMBOL_LOG)
 		if useLog:
 			Application.LogException(exception)
 		else:
 			builtins.print(exception)
 		return 1
+
 
 #------------------------------------------------------------------------
 # 파일 진입점.
