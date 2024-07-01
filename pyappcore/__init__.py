@@ -7,8 +7,8 @@ import builtins
 from .ansicode import *
 from .application import *
 from .application import Application as App
-from .make import *
-from .make import *
+from .make_util import *
+from .make_util import *
 from .constants import *
 from .json_util import *
 from .launcher import *
