@@ -19,8 +19,8 @@ python build.py sdist bdist_wheel >NUL 2>&1
 rem set TWINE_USERNAME=__token__
 rem set TWINE_PASSWORD=
 twine upload dist/*
-rem set TWINE_USERNAME=
-rem set TWINE_PASSWORD=
+set TWINE_USERNAME=
+set TWINE_PASSWORD=
 
 if exist "build" rmdir /s /q "build"
 if exist "dist" rmdir /s /q "dist"

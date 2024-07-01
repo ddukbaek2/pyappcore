@@ -1,7 +1,19 @@
 #------------------------------------------------------------------------
 # 참조 모듈 목록.
 #------------------------------------------------------------------------
+import os
 from setuptools import setup, find_packages
+from dotenv import load_dotenv
+
+
+#------------------------------------------------------------------------
+# 환경 변수 목록 파일 로드.
+#------------------------------------------------------------------------
+load_dotenv()
+PYAPPCORE_VERSION = os.getenv("PYAPPCORE_VERSION")
+PYPI_API_TOKEN = os.getenv("PYPI_API_TOKEN")
+os.environ["TWINE_USERNAME"] = "__token__"
+os.environ["TWINE_PASSWORD"] = PYPI_API_TOKEN
 
 
 #------------------------------------------------------------------------
@@ -9,7 +21,7 @@ from setuptools import setup, find_packages
 #------------------------------------------------------------------------
 setup(
 	name = "pyappcore",
-	version = "v0.0.9",
+	version = PYAPPCORE_VERSION,
 	author = "ddukbaek2",
 	author_email = "ddukbaek2@gmail.com",
 	description = "Python Simple App Framework.",
