@@ -6,8 +6,8 @@ rem .venv\Scripts\activate
 
 python --version
 python -m ensurepip --upgrade
-pip install --upgrade pip
-pip install --r requirements.txt
-pip list
+python -m pip install --upgrade pip
+python -m pip install --r requirements.txt
+python -m pip list
 
 python -m unittest discover -s tests

@@ -42,8 +42,9 @@ def IsBuild() -> bool:
 
 #------------------------------------------------------------------------
 # 시작.
+# - Symbols는 바이너리상태에서는 
 #------------------------------------------------------------------------
-def Launching(moduleName : str, functionName : str, symbols : str) -> int:
+def Launching(moduleName : str, functionName : str) -> int:
 	builtins.print("pyappcore.launcher.Launch()")
 
 	# 빌드인 경우 경로.
@@ -86,13 +87,14 @@ def Launching(moduleName : str, functionName : str, symbols : str) -> int:
 		# 실행파일 빌드.
 		if Application.IsBuild():
 			# 실행된 파일 이름 설정.
-			Application._Application__SetExecuteFileName(sys.argv[0])
+			executeFileName = sys.argv[0]
+			Application._Application__SetExecuteFileName(executeFileName)
 			sys.argv = sys.argv[1:]
 
 			# 심볼 설정.
-			# import __include_in_build__ # type: ignore
-			# import __symbols_in_build__ # type: ignore
-			# symbols = __symbols_in_build__.SYMBOLS
+			import __pyappcore_include_in_build__ # type: ignore
+			import __pyappcore_symbols_in_build__ # type: ignore
+			symbols = __pyappcore_symbols_in_build__.SYMBOLS
 			Application._Application__SetSymbols(symbols) # 심볼 설정.
 
 			# 디버그 모드 설정.
