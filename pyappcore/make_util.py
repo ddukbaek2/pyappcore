@@ -10,8 +10,8 @@ import importlib
 import inspect
 import json
 import os
-import json_util
-import str_util
+from json_util import RemoveAllCommentsInString
+from str_util import GetSplitFilePath
 
 
 #------------------------------------------------------------------------
@@ -140,7 +140,7 @@ def IsTypeIgnores(names : list[str]) -> bool:
 # 	try:
 # 		with builtins.open(SETTINGSFILEPATH, READMODE, encoding = UTF8) as file:
 # 			string = file.read()
-# 			jsonText = json_util.RemoveAllCommentsInString(string)
+# 			jsonText = RemoveAllCommentsInString(string)
 # 			return json.loads(jsonText)
 # 	except Exception as exception:
 # 		builtins.print(exception)
@@ -184,7 +184,7 @@ def CreateIncludeInBuildToFile(moduleDirPaths : list[str], includesDirPath : str
 	excludes.add(".")
 	excludes.add("..")
 	# for moduleFilePath in FindModuleFilePaths(CURRENTPATH):
-	# 	path, name, extension = str_util.GetSplitFilePath(moduleFilePath)
+	# 	path, name, extension = GetSplitFilePath(moduleFilePath)
 	# 	excludes.add(moduleFilePath)
 	# 	excludes.add(name)
 

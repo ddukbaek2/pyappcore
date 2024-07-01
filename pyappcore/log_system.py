@@ -1,19 +1,14 @@
 #------------------------------------------------------------------------
-# 참조 중인 기본 라이브러리 모듈 목록.
+# 참조 모듈 목록.
 #------------------------------------------------------------------------
 from __future__ import annotations
 from typing import Any, Final, Optional, Type, TypeVar, Union
 import builtins
 from logging import Logger, Handler, StreamHandler, FileHandler, Formatter, LogRecord, NOTSET, DEBUG, INFO, WARN, WARNING, ERROR, CRITICAL, FATAL
 import os
-
-
-#------------------------------------------------------------------------
-# 추가 설치를 통한 참조 모듈 목록.
-#------------------------------------------------------------------------
 from .application import Application, PYAPPCORE_SYMBOL_EXPRESS
 from .ansicode import *
-from .str_util import *
+from .str_util import GetTimestampString
 
 
 #------------------------------------------------------------------------

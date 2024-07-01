@@ -1,19 +1,11 @@
 @echo off
 
 rem 가상환경 설정. (Windows)
-rem 그냥 VSCODE에서 시키는대로 하자
-
-set VIRTUALENVIRONMENTPATH=%~dp0.venv
+rem 됐다 안됐다 하는걸 보니 노답이다... 그냥 VSCODE에서 제공해주는 방법으로 하자...
 
 where python
 
+rmdir /s /q .venv
 python -m venv .venv
 
-.venv\Scripts\activate.bat
-
-python --version
-python -m ensurepip --upgrade
-python -m pip install --upgrade pip
-python -m pip install --r requirements.txt
-python -m pip list
-
+call run-pip.bat
