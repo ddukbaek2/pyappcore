@@ -10,8 +10,8 @@ import importlib
 import inspect
 import json
 import os
-from json_util import RemoveAllCommentsInString
-from str_util import GetSplitFilePath
+from .json_util import RemoveAllCommentsInString
+from .str_util import GetSplitFilePath
 
 
 #------------------------------------------------------------------------
@@ -159,7 +159,7 @@ def CreateSymbolsInBuildToFile(symbols : list[str], symbolsDirPath : str) -> Non
 	writelines.append("")
 	writelines.append(f"SYMBOLS = set()")
 	for symbol in symbols:
-		writelines.append(f"SYMBOLS.append(\"{symbol}\")")
+		writelines.append(f"SYMBOLS.add(\"{symbol}\")")
 
 	# 파일 작성.
 	symbolsFilePath : str = f"{symbolsDirPath}/{SYMBOLSINBUILDFILENAME}"
