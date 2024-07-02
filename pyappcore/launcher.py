@@ -1,5 +1,5 @@
 #------------------------------------------------------------------------
-# 참조 중인 기본 라이브러리 모듈 목록.
+# 모듈 목록.
 #------------------------------------------------------------------------
 from __future__ import annotations
 from typing import Any, Final, Optional, Type, TypeVar, Union
@@ -8,11 +8,6 @@ import debugpy # type: ignore
 import importlib
 import os
 import sys
-
-
-#------------------------------------------------------------------------
-# 추가 설치를 통한 참조 모듈 목록.
-#------------------------------------------------------------------------
 from .application import Application
 from .str_util import *
 from .log_util import *
@@ -24,10 +19,10 @@ from .log_util import *
 FROZEN : str = "frozen"
 MAIN : str = "__main__"
 SEMICOLON : str = ";"
-PYAPPCORE_SYMBOL_SUBPROCESS : str = "SUBPROCESS"
-PYAPPCORE_SYMBOL_LOG : str = "LOG"
-PYAPPCORE_SYMBOL_DEBUG : str = "DEBUG"
-PYAPPCORE_SYMBOL_NODEBUG : str = "NODEBUG"
+SYMBOL_SUBPROCESS : str = "SUBPROCESS"
+SYMBOL_LOG : str = "LOG"
+SYMBOL_DEBUG : str = "DEBUG"
+SYMBOL_NODEBUG : str = "NODEBUG"
 DEPENDENCIESINBUILDMODULENAME : str = "__pyappcore_dependencies_in_build__"
 SYMBOLSINBUILDMODULENAME : str = "__pyappcore_symbols_in_build__"
 
@@ -129,7 +124,7 @@ def Launching(moduleName : str, functionName : str) -> int:
 			sys.argv = sys.argv[1:]
 
 			# 디버그 모드 설정.
-			useDebug : bool = Application.HasSymbol(PYAPPCORE_SYMBOL_DEBUG)
+			useDebug : bool = Application.HasSymbol(SYMBOL_DEBUG)
 			Application._Application__SetDebug(useDebug)
 			builtins.print(f"Application.IsDebug() : {Application.IsDebug()}")
 
@@ -160,8 +155,9 @@ def Launching(moduleName : str, functionName : str) -> int:
 
 		# 로그 설정.
 		# 순서 : DEBUG < INFO < WARNING < ERROR < CRITICAL.
-		useLog : bool = Application.HasSymbol(PYAPPCORE_SYMBOL_LOG)
+		useLog : bool = Application.HasSymbol(SYMBOL_LOG)
 		if useLog:
+			builtins.print("__log__")
 			InitializeLOGSystem()
 
 	# 예외.
@@ -177,7 +173,7 @@ def Launching(moduleName : str, functionName : str) -> int:
 		return exitCode
 	# 예외.
 	except Exception as exception:
-		useLog : bool = Application.HasSymbol(PYAPPCORE_SYMBOL_LOG)
+		useLog : bool = Application.HasSymbol(SYMBOL_LOG)
 		if useLog:
 			Application.LogException(exception)
 		else:

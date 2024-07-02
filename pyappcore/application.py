@@ -247,9 +247,11 @@ class Application:
 	# 현재 앱에 해당 심볼이 등록 되어있는지 여부.
 	#------------------------------------------------------------------------
 	@staticmethod
-	def HasSymbol(symbol : str) -> bool:
-		symbols = Application.GetSymbols()
-		if not symbol in symbols:
+	def HasSymbol(symbolString : str) -> bool:
+		symbols = Application._Application__Symbols
+		if not symbols:
+			return False
+		if not symbolString in symbols:
 			return False
 		return True
 
@@ -257,8 +259,8 @@ class Application:
 	# 현재 앱에 입력되어있는 심볼 목록.
 	#------------------------------------------------------------------------
 	@staticmethod
-	def GetSymbols() -> set[str]:
-		return Application._Application__Symbols	
+	def GetSymbols() -> list[str]:
+		return list(Application._Application__Symbols)
 
 	#------------------------------------------------------------------------
 	# 애플리케이션이 존재하는 경로에 상대경로를 입력하여 절대경로를 획득.
