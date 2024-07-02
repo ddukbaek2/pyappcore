@@ -17,14 +17,7 @@ from str_util import GetSplitFilePath
 #------------------------------------------------------------------------
 # 전역 상수 목록.
 #------------------------------------------------------------------------
-# CURRENTFILEPATH : str = os.path.abspath(__file__)
-# CURRENTPATH : str = os.path.dirname(CURRENTFILEPATH).replace("\\", "/")
-# ROOTPATH : str = os.path.dirname(CURRENTPATH).replace("\\", "/")
-# SETTINGSFILEPATH : str = f"{ROOTPATH}/.vscode/settings.json"
-
-# SYMBOLSINBUILDFILEPATH : str = f"{CURRENTPATH}/__pyappcore_symbols_in_build__.py"
 SYMBOLSINBUILDFILENAME : str = "__pyappcore_symbols_in_build__.py"
-# INCLUDEINBUILDFILEPATH : str = f"{CURRENTPATH}/__pyappcore_include_in_build__.py"
 INCLUDEINBUILDFILENAME : str = "__pyappcore_include_in_build__.py"
 SEMICOLON : str = ";"
 COLON : str = "."

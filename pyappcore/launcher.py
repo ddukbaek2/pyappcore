@@ -44,7 +44,7 @@ def IsBuild() -> bool:
 # 시작.
 # - Symbols는 바이너리상태에서는 
 #------------------------------------------------------------------------
-def Launching(moduleName : str, functionName : str, use) -> int:
+def Launching(moduleName : str, functionName : str) -> int:
 	builtins.print("pyappcore.launcher.Launch()")
 
 	# 빌드인 경우 경로.
