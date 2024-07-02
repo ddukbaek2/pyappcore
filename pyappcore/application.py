@@ -193,12 +193,12 @@ class Application:
 	# 기존 심볼을 모두 지우고 새로운 심볼 목록 설정 (구분자 : ;).
 	#------------------------------------------------------------------------
 	@staticmethod
-	def __SetSymbols(text : str) -> None:	
+	def __SetSymbols(symbolsString : str) -> None:	
 		# 입력받은 텍스트 정리.
-		text = text.upper()
+		symbolsString = symbolsString.upper()
 
 		# 중복을 허용하지 않는 선에서 처리.
-		symbols : list[str] = text.split(SEMICOLON) if SEMICOLON in text else [text]
+		symbols : list[str] = symbolsString.split(SEMICOLON) if SEMICOLON in symbolsString else [symbolsString]
 
 		# 객체 생성 및 심볼 설정.
 		Application._Application__Symbols = set()

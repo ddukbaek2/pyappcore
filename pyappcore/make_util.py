@@ -17,8 +17,8 @@ from .str_util import GetSplitFilePath
 #------------------------------------------------------------------------
 # 전역 상수 목록.
 #------------------------------------------------------------------------
+DEPENDENCIESINBUILDFILENAME : str = "__pyappcore_dependencies_in_build__.py"
 SYMBOLSINBUILDFILENAME : str = "__pyappcore_symbols_in_build__.py"
-INCLUDEINBUILDFILENAME : str = "__pyappcore_include_in_build__.py"
 SEMICOLON : str = ";"
 COLON : str = "."
 PYEXTENSION : str = ".py"
@@ -145,7 +145,7 @@ def GetVisualStudioCodeSettings(rootDirPath : str) -> Union[dict, None]:
 
 
 #------------------------------------------------------------------------
-# 바이너리 빌드를 위한 __symbols_in_build__.py 스크립트 생성.
+# 빌드시 심볼 파일 생성.
 #------------------------------------------------------------------------
 def CreateSymbolsInBuildToFile(symbols : list[str], symbolsDirPath : str) -> None:
 
@@ -168,9 +168,9 @@ def CreateSymbolsInBuildToFile(symbols : list[str], symbolsDirPath : str) -> Non
 
 
 #------------------------------------------------------------------------
-# 빌드시 참조 파일 생성.
+# 빌드시 의존성 참조 파일 생성.
 #------------------------------------------------------------------------
-def CreateIncludeInBuildToFile(moduleDirPaths : list[str], includesDirPath : str) -> None:
+def CreateDependenciesInBuildToFile(moduleDirPaths : list[str], includesDirPath : str) -> None:
 	# 단독 임포트 금지 모듈 이름 목록.
 	mustImportFroms = list()
 	mustImportFroms.append("__future__")
@@ -263,6 +263,6 @@ def CreateIncludeInBuildToFile(moduleDirPaths : list[str], includesDirPath : str
 				writelines.append(f"import {fromTargetName}")
 
 	# 파일 작성.
-	includesFilePath : str = f"{includesDirPath}/{INCLUDEINBUILDFILENAME}"
+	includesFilePath : str = f"{includesDirPath}/{DEPENDENCIESINBUILDFILENAME}"
 	with open(includesFilePath, WRITEMODE, encoding = UTF8) as file:
 		file.write(LINEFEED.join(writelines))

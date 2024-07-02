@@ -23,10 +23,13 @@ from .log_util import *
 #------------------------------------------------------------------------
 FROZEN : str = "frozen"
 MAIN : str = "__main__"
+SEMICOLON : str = ";"
 PYAPPCORE_SYMBOL_SUBPROCESS : str = "SUBPROCESS"
 PYAPPCORE_SYMBOL_LOG : str = "LOG"
 PYAPPCORE_SYMBOL_DEBUG : str = "DEBUG"
 PYAPPCORE_SYMBOL_NODEBUG : str = "NODEBUG"
+DEPENDENCIESINBUILDMODULENAME : str = "__pyappcore_dependencies_in_build__"
+SYMBOLSINBUILDMODULENAME : str = "__pyappcore_symbols_in_build__"
 
 
 #------------------------------------------------------------------------
@@ -52,25 +55,21 @@ def Launching(moduleName : str, functionName : str) -> int:
 	if isBuild:
 		# 실행파일에서 생성되는 임시 루트 경로.
 		# 리소스를 위한 캐시폴더로 실제 실행파일의 위치가 아님.
-		launcherPath : str = str()
 		cachePath : str = sys._MEIPASS
 		rootPath : str = os.path.dirname(sys.executable)
 		sourcePath : str = os.path.join(cachePath, "src")
 		resPath : str = os.path.join(cachePath, "res")
-		testPath : str = str() # 빌드시 제외.
 	# 빌드가 아닌 경우 경로.
 	else:
 		# 현재 프로젝트를 기준으로 한 경로.
-		launcherPath : str = os.path.dirname(os.path.abspath(sys.modules[MAIN].__file__))
-		rootPath : str = os.path.dirname(launcherPath)
-		sourcePath : str = os.path.join(rootPath, "src")
+		sourcePath : str = os.path.dirname(os.path.abspath(sys.modules[MAIN].__file__))
+		rootPath : str = os.path.dirname(sourcePath)
 		resPath : str = os.path.join(rootPath, "res")
-		testPath : str = os.path.join(rootPath, "tests")
 
 	# 런처 및 소스 폴더 추가.
-	if sourcePath and sourcePath not in sys.path: sys.path.append(sourcePath)
-	if testPath and testPath not in sys.path: sys.path.append(testPath)
-	if launcherPath and launcherPath not in sys.path: sys.path.append(launcherPath)
+	# if sourcePath and sourcePath not in sys.path: sys.path.append(sourcePath)
+	# if testPath and testPath not in sys.path: sys.path.append(testPath)
+	# if launcherPath and launcherPath not in sys.path: sys.path.append(launcherPath)
 
 	# 프로젝트 값 설정.
 	Application._Application__SetBuild(isBuild)
@@ -86,16 +85,20 @@ def Launching(moduleName : str, functionName : str) -> int:
 	try:
 		# 실행파일 빌드.
 		if Application.IsBuild():
+			print("__build__")
+
 			# 실행된 파일 이름 설정.
 			executeFileName = sys.argv[0]
 			Application._Application__SetExecuteFileName(executeFileName)
 			sys.argv = sys.argv[1:]
 
 			# 심볼 설정.
-			import __pyappcore_include_in_build__ # type: ignore
-			import __pyappcore_symbols_in_build__ # type: ignore
-			symbols = __pyappcore_symbols_in_build__.SYMBOLS
-			Application._Application__SetSymbols(symbols) # 심볼 설정.
+			if SYMBOLSINBUILDMODULENAME in sys.modules:
+				symbols = sys.modules[SYMBOLSINBUILDMODULENAME].SYMBOLS
+				symbolsString : str = SEMICOLON.join(symbols)
+			else:
+				symbolsString : str = str()
+			Application._Application__SetSymbols(symbolsString)
 
 			# 디버그 모드 설정.
 			Application._Application__SetDebug(False) # 빌드는 DEBUG 심볼이 있던 없던 무조건 False.
@@ -103,6 +106,8 @@ def Launching(moduleName : str, functionName : str) -> int:
 
 		# 빌드 외.
 		else:
+			print("__nonbuild__")
+
 			# PYCHARM.
 			# MANUAL.
 			# 둘은 일단 상황 제외.
@@ -119,8 +124,8 @@ def Launching(moduleName : str, functionName : str) -> int:
 			sys.argv = sys.argv[1:]
 
 			# 심볼 설정.
-			symbols = sys.argv[0]
-			Application._Application__SetSymbols(symbols)
+			symbolsString = sys.argv[0]
+			Application._Application__SetSymbols(symbolsString)
 			sys.argv = sys.argv[1:]
 
 			# 디버그 모드 설정.
