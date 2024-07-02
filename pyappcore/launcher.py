@@ -67,7 +67,7 @@ def Launching(moduleName : str, functionName : str) -> int:
 		resPath : str = os.path.join(rootPath, "res")
 
 	# 런처 및 소스 폴더 추가.
-	# if sourcePath and sourcePath not in sys.path: sys.path.append(sourcePath)
+	if sourcePath and sourcePath not in sys.path: sys.path.append(sourcePath)
 	# if testPath and testPath not in sys.path: sys.path.append(testPath)
 	# if launcherPath and launcherPath not in sys.path: sys.path.append(launcherPath)
 
@@ -75,6 +75,7 @@ def Launching(moduleName : str, functionName : str) -> int:
 	Application._Application__SetBuild(isBuild)
 	Application._Application__SetRootPath(rootPath)
 	Application._Application__SetResPath(resPath)
+	Application._Application__SetSymbols("")
 
 	# 프로젝트 값 출력.
 	builtins.print(f"Application.IsBuild(): {Application.IsBuild()}")  
@@ -94,11 +95,10 @@ def Launching(moduleName : str, functionName : str) -> int:
 
 			# 심볼 설정.
 			if SYMBOLSINBUILDMODULENAME in sys.modules:
+				builtins.print("__pycore_symbols_in_build__")
 				symbols = sys.modules[SYMBOLSINBUILDMODULENAME].SYMBOLS
 				symbolsString : str = SEMICOLON.join(symbols)
-			else:
-				symbolsString : str = str()
-			Application._Application__SetSymbols(symbolsString)
+				Application._Application__SetSymbols(symbolsString)
 
 			# 디버그 모드 설정.
 			Application._Application__SetDebug(False) # 빌드는 DEBUG 심볼이 있던 없던 무조건 False.
@@ -106,7 +106,7 @@ def Launching(moduleName : str, functionName : str) -> int:
 
 		# 빌드 외.
 		else:
-			print("__nonbuild__")
+			print("__nobuild__")
 
 			# PYCHARM.
 			# MANUAL.
@@ -151,8 +151,8 @@ def Launching(moduleName : str, functionName : str) -> int:
 			sys.argv = CreateStringListFromSeperatedStringLists(sys.argv)	
 
 		# 인자 출력.
-		builtins.print("sys.argv")
 		if sys.argv:
+			builtins.print("sys.argv")
 			index = 0
 			for arg in sys.argv:
 				builtins.print(f" - [{index}] {arg}")

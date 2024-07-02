@@ -31,3 +31,7 @@
 
 ## 사용방법
 - 
+
+## 조건
+- __pyappcore_dependencies_in_build__
+- __pyappcore_symbols_in_build__

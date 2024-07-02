@@ -205,9 +205,9 @@ class Application:
 		if symbols: Application._Application__Symbols.update(symbols)
 
 		# NONE, EMPTY, SPACE는 없는 것과 마찬가지이므로 목록에서 제거.
-		Application._Application__Symbols.remove(NONE)
-		Application._Application__Symbols.remove(EMPTY)
-		Application._Application__Symbols.remove(SPACE)
+		Application._Application__Symbols.discard(NONE)
+		Application._Application__Symbols.discard(EMPTY)
+		Application._Application__Symbols.discard(SPACE)
 
 	#------------------------------------------------------------------------
 	# 빌드된 상태인지 여부.
