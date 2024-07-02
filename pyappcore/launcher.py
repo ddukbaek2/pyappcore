@@ -15,7 +15,7 @@ import sys
 #------------------------------------------------------------------------
 from .application import Application
 from .str_util import *
-from .log_system import *
+from .log_util import *
 
 
 #------------------------------------------------------------------------

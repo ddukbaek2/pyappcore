@@ -126,18 +126,22 @@ def IsTypeIgnores(names : list[str]) -> bool:
 	return False
 
 
-# #------------------------------------------------------------------------
-# # .vscode/settings.json 파일 불러오기.
-# #------------------------------------------------------------------------
-# def GetVisualStudioCodeSettings() -> dict:
-# 	try:
-# 		with builtins.open(SETTINGSFILEPATH, READMODE, encoding = UTF8) as file:
-# 			string = file.read()
-# 			jsonText = RemoveAllCommentsInString(string)
-# 			return json.loads(jsonText)
-# 	except Exception as exception:
-# 		builtins.print(exception)
-# 		return dict()
+#------------------------------------------------------------------------
+# .vscode/settings.json 파일 불러오기.
+#------------------------------------------------------------------------
+def GetVisualStudioCodeSettings(rootDirPath : str) -> Union[dict, None]:
+	try:
+		settingsFilePath = f"{rootDirPath}/.vscode/settings.json"
+		if os.path.exists(settingsFilePath):
+			with builtins.open(settingsFilePath, READMODE, encoding = UTF8) as file:
+				string = file.read()
+				jsonText = RemoveAllCommentsInString(string)
+				vscodeSettings = json.loads(jsonText)
+				return vscodeSettings
+		return None
+	except Exception as exception:
+		builtins.print(exception)
+		return None
 
 
 #------------------------------------------------------------------------

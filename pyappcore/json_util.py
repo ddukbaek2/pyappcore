@@ -25,6 +25,15 @@ def STRToJSON(jsonString : str) -> dict:
 
 
 #------------------------------------------------------------------------
+# 예쁜 JSON 텍스트로 반환.
+#------------------------------------------------------------------------
+def GetPrettyJSONString(jsonText : str) -> str:
+	jsonDictData = json.loads(jsonText)
+	newJsonText = json.dumps(jsonDictData, indent = 4, ensure_ascii = False)
+	return newJsonText
+
+
+#------------------------------------------------------------------------
 # 문자열에서 주석(//, /**/, #)을 전부 제거.
 #------------------------------------------------------------------------
 def RemoveAllCommentsInString(text : str) -> str:
