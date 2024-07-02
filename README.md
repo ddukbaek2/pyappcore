@@ -17,7 +17,7 @@
 4. 설치할 종속성 선택
 
 ## 프로젝트 배치파일 목록
-- run-venv.bat : 가상환경 설치 (중단).
+- run-venv.bat : 가상환경 설치 (제작중단).
 - run-activate.bat : 가상환경 활성화.
 - run-deactivate.bat : 가상환경 비활성화.
 - run-test.bat : 유닛테스트.
@@ -29,3 +29,5 @@
 ## 설치방법
 - pip install pyappcore
 
+## 사용방법
+- 

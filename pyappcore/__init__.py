@@ -10,7 +10,7 @@ from .application import Application as App
 from .constants import *
 from .json_util import *
 from .launcher import *
-from .log_system import *
+from .log_util import *
 from .make_util import *
 from .math3d import *
 from .property import *
