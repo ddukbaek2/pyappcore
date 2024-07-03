@@ -193,25 +193,21 @@ def CreateDependenciesInBuildToFile(moduleDirPaths : list[str], sourceDirPath : 
 
 	# 제외 모듈 이름 목록.
 	excludesModuleNames = set()
-	# excludes.add(".")
-	# excludes.add("..")
-	for moduleFilePath in FindModuleFilePaths(sourceDirPath):
-		print(moduleFilePath)
-		path, name, extension = GetSplitFilePath(moduleFilePath)
-	# 	excludesModuleNames.add(moduleFilePath)
-	# 	excludesModuleNames.add(name)
-		excludesModuleNames.add("__prebuild__")
-		excludesModuleNames.add("__launcher__")
-		excludesModuleNames.add("__pyappcore_dependencies_in_build__")
-
+	excludesModuleNames.add("__prebuild__")
+	excludesModuleNames.add("__launcher__")
+	excludesModuleNames.add("__pyappcore_dependencies_in_build__")
+	# for moduleFilePath in FindModuleFilePaths(sourceDirPath):
+		# path, name, extension = GetSplitFilePath(moduleFilePath)
+		
 	# 모든 모듈 파일 경로 가져옴.
 	moduleFilePaths = set()
 	for moduleDirPath in moduleDirPaths:
-		moduleFilePaths = FindModuleFilePaths(moduleDirPath)
-		for filePath in FindModuleFilePaths(moduleDirPath):
-			# if filePath in excludesModuleNames:
-			# 	continue
-			moduleFilePaths.add(filePath)
+		for moduleFilePath in FindModuleFilePaths(moduleDirPath):
+			path, name, extension = GetSplitFilePath(moduleFilePath)
+			if name in excludesModuleNames:
+				continue
+
+			moduleFilePaths.add(moduleFilePath)
 
 
 	# "#type: Ignore" 체크를 위한 소스 폴더 추가.

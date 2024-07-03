@@ -3,9 +3,18 @@
 #------------------------------------------------------------------------
 from __future__ import annotations
 import builtins
+import os
 import sys
-import __pyappcore_dependencies_in_build__ #type: ignore
 from pyappcore import Launching
+
+
+#------------------------------------------------------------------------
+# 전역 상수 목록.
+#------------------------------------------------------------------------
+SEMICOLON : str = ";"
+CURRENTFILEPATH : str = os.path.abspath(__file__)
+SRCPATH : str = os.path.dirname(CURRENTFILEPATH).replace("\\", "/")
+ROOTPATH : str = os.path.dirname(SRCPATH).replace("\\", "/")
 
 
 #------------------------------------------------------------------------
@@ -13,7 +22,12 @@ from pyappcore import Launching
 #------------------------------------------------------------------------
 if __name__ == "__main__":
 	try:
-		builtins.print("__launcher__")
+		builtins.print("__launcher__")      
+		# 현재 파일의 디렉터리를 모듈 검색 경로에 추가.
+		if SRCPATH and SRCPATH not in sys.path:
+			sys.path.append(SRCPATH)
+
+		import __pyappcore_dependencies_in_build__ #type: ignore
 		exitCode : int = Launching("main", "Main")
 		sys.exit(exitCode)
 	except Exception as exception:
