@@ -107,7 +107,8 @@ def IsTypeIgnore(name : str) -> bool:
 	if not name:
 		return False
 	try:
-		if not importlib.util.find_spec(name):
+		moduleSpec = importlib.util.find_spec(name)
+		if not moduleSpec:
 			return True
 	except Exception as exception:
 		return True
@@ -120,12 +121,12 @@ def IsTypeIgnore(name : str) -> bool:
 def IsTypeIgnores(names : list[str]) -> bool:
 	if not names:
 		return False
-	try:
-		for name in names:
+	for name in names:
+		try:
 			if IsTypeIgnore(name):
 				return True
-	except Exception as exception:
-		return True
+		except Exception as exception:
+			return True
 	return False
 
 
@@ -290,15 +291,17 @@ def CreateDependenciesInBuildToFile(moduleDirPaths : list[str], sourceDirPath : 
 		importTargetNames = importData[fromTargetName]
 		if importTargetNames:
 			importTargetsText = COMMAWITHSPACE.join(importTargetNames)
-			if IsTypeIgnore(fromTargetName) or IsTypeIgnores(importTargetNames):
-				writelines.append(f"from {fromTargetName} import {importTargetsText} {TYPEIGNORE}")
-			else:
-				writelines.append(f"from {fromTargetName} import {importTargetsText}")
+			# if IsTypeIgnore(fromTargetName) or IsTypeIgnores(importTargetNames):
+			# 	writelines.append(f"from {fromTargetName} import {importTargetsText} {TYPEIGNORE}")
+			# else:
+			# 	writelines.append(f"from {fromTargetName} import {importTargetsText}")
+			writelines.append(f"from {fromTargetName} import {importTargetsText}")
 		else:
-			if IsTypeIgnore(fromTargetName):
-				writelines.append(f"import {fromTargetName} {TYPEIGNORE}")
-			else:
-				writelines.append(f"import {fromTargetName}")
+			# if IsTypeIgnore(fromTargetName):
+			# 	writelines.append(f"import {fromTargetName} {TYPEIGNORE}")
+			# else:
+			# 	writelines.append(f"import {fromTargetName}")
+			writelines.append(f"import {fromTargetName}")
 
 	# 파일 작성.
 	with open(dependenciesFilePath, WRITEMODE, encoding = UTF8) as file:
