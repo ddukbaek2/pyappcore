@@ -151,6 +151,11 @@ def GetVisualStudioCodeSettings(rootDirPath : str) -> Union[dict, None]:
 # 빌드시 심볼 파일 생성.
 #------------------------------------------------------------------------
 def CreateSymbolsInBuildToFile(symbols : list[str], symbolsDirPath : str) -> None:
+	# 기존 파일 제거.
+	symbolsFilePath : str = f"{symbolsDirPath}/{SYMBOLSINBUILDFILENAME}"
+	if os.path.exists(symbolsFilePath):
+		os.remove(symbolsFilePath)
+		builtins.print(f"os.remove(\"{symbolsFilePath}\")")
 
 	# 텍스트 작성.
 	symbols = set(symbols)
@@ -175,6 +180,12 @@ def CreateSymbolsInBuildToFile(symbols : list[str], symbolsDirPath : str) -> Non
 # 빌드시 의존성 참조 파일 생성.
 #------------------------------------------------------------------------
 def CreateDependenciesInBuildToFile(moduleDirPaths : list[str], sourceDirPath : str, otherModuleNames : set[str] = None) -> None:
+	# 기존 파일 제거.
+	dependenciesFilePath : str = f"{sourceDirPath}/{DEPENDENCIESINBUILDFILENAME}"
+	if os.path.exists(dependenciesFilePath):
+		os.remove(dependenciesFilePath)
+		builtins.print(f"os.remove(\"{dependenciesFilePath}\")")
+  
 	# 단독 임포트 금지 모듈 이름 목록.
 	excludeDontOnlyImportModuleNames = list()
 	excludeDontOnlyImportModuleNames.append("__future__")
@@ -294,7 +305,5 @@ def CreateDependenciesInBuildToFile(moduleDirPaths : list[str], sourceDirPath : 
 				writelines.append(f"import {fromTargetName}")
 
 	# 파일 작성.
-	dependenciesFilePath : str = f"{sourceDirPath}/{DEPENDENCIESINBUILDFILENAME}"
-	if os.path.exists(dependenciesFilePath): os.remove(dependenciesFilePath)
 	with open(dependenciesFilePath, WRITEMODE, encoding = UTF8) as file:
 		file.write(LINEFEED.join(writelines))
