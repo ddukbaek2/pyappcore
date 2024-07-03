@@ -1,0 +1,21 @@
+#------------------------------------------------------------------------
+# 참조 모듈 목록.
+#------------------------------------------------------------------------
+from __future__ import annotations
+import builtins
+import sys
+import __pyappcore_dependencies_in_build__ #type: ignore
+from pyappcore import Launching
+
+
+#------------------------------------------------------------------------
+# 파일 진입점.
+#------------------------------------------------------------------------
+if __name__ == "__main__":
+	try:
+		builtins.print("__launcher__")
+		exitCode : int = Launching("main", "Main")
+		sys.exit(exitCode)
+	except Exception as exception:
+		builtins.print(exception)
+		sys.exit(1)

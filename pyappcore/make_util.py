@@ -10,6 +10,7 @@ import importlib
 import inspect
 import json
 import os
+import sys
 from .json_util import RemoveAllCommentsInString
 from .str_util import GetSplitFilePath
 
@@ -199,6 +200,11 @@ def CreateDependenciesInBuildToFile(moduleDirPaths : list[str], sourceDirPath : 
 			# if filePath in excludesModuleNames:
 			# 	continue
 			moduleFilePaths.add(filePath)
+
+
+	# "#type: Ignore" 체크를 위한 소스 폴더 추가.
+	if sourceDirPath and sourceDirPath not in sys.path:
+		sys.path.append(sourceDirPath)
 
 	# 저장 자료구조 추가.
 	importData = dict()

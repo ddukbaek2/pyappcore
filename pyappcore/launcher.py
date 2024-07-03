@@ -52,19 +52,14 @@ def Launching(moduleName : str, functionName : str) -> int:
 		# 리소스를 위한 캐시폴더로 실제 실행파일의 위치가 아님.
 		cachePath : str = sys._MEIPASS
 		rootPath : str = os.path.dirname(sys.executable)
-		sourcePath : str = os.path.join(cachePath, "src")
+		sourceDirPath : str = os.path.join(cachePath, "src")
 		resPath : str = os.path.join(cachePath, "res")
 	# 빌드가 아닌 경우 경로.
 	else:
 		# 현재 프로젝트를 기준으로 한 경로.
-		sourcePath : str = os.path.dirname(os.path.abspath(sys.modules[MAIN].__file__))
-		rootPath : str = os.path.dirname(sourcePath)
+		sourceDirPath : str = os.path.dirname(os.path.abspath(sys.modules[MAIN].__file__))
+		rootPath : str = os.path.dirname(sourceDirPath)
 		resPath : str = os.path.join(rootPath, "res")
-
-		# 런처 및 소스 폴더 추가.
-		# if sourcePath and sourcePath not in sys.path: sys.path.append(sourcePath)
-		# if testPath and testPath not in sys.path: sys.path.append(testPath)
-		# if launcherPath and launcherPath not in sys.path: sys.path.append(launcherPath)
 
 	# 프로젝트 값 설정.
 	Application._Application__SetBuild(isBuild)
