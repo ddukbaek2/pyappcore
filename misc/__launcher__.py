@@ -22,10 +22,10 @@ if __name__ == "__main__":
 	try:
 		# if IsBuild():
 		# 	# # 참조 모듈 종속성 추가.
-		# 	# import __pyappcore_include_in_build__ # type: ignore
+		# 	# import __pyappcore_include_in_build__ #type: ignore
 
 		# 	# 빌드시 두번째 인자는 심볼목록.
-		# 	import __pycore_symbols_in_build__ # type: ignore
+		# 	import __pycore_symbols_in_build__ #type: ignore
 		# 	modulesString = repr(sys.modules)
 		# 	builtins.print(f"modulesString={modulesString}")
 
@@ -37,7 +37,7 @@ if __name__ == "__main__":
 		# 		builtins.print("not found __pycore_symbols_in_build__")
 		# else:
 		# 	# 빌드시 두번째 인자는 심볼목록.
-		# 	import __pycore_symbols_in_build__ # type: ignore
+		# 	import __pycore_symbols_in_build__ #type: ignore
 		# 	modulesString = repr(sys.modules)
 		# 	builtins.print(f"modulesString={modulesString}")
 

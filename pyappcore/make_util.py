@@ -31,6 +31,8 @@ LINEFEED : str = "\n"
 READMODE : str = "r"
 WRITEMODE : str = "w"
 UTF8 : str = "utf-8"
+COMMAWITHSPACE : str = ", "
+TYPEIGNORE : str = "# type: ignore"
 
 
 #------------------------------------------------------------------------
@@ -98,7 +100,7 @@ def GetImportFromType(fromTargetName : str, importTargetName : str) -> str:
 
 
 #------------------------------------------------------------------------
-# "# type: ignore" 를 추가할지 말지 여부.
+# "#type: ignore" 를 추가할지 말지 여부.
 #------------------------------------------------------------------------
 def IsTypeIgnore(name : str) -> bool:
 	if not name:
@@ -170,7 +172,7 @@ def CreateSymbolsInBuildToFile(symbols : list[str], symbolsDirPath : str) -> Non
 #------------------------------------------------------------------------
 # 빌드시 의존성 참조 파일 생성.
 #------------------------------------------------------------------------
-def CreateDependenciesInBuildToFile(moduleDirPaths : list[str], sourceDirPath : str) -> None:
+def CreateDependenciesInBuildToFile(moduleDirPaths : list[str], sourceDirPath : str, otherModuleNames : set[str] = None) -> None:
 	# 단독 임포트 금지 모듈 이름 목록.
 	excludeDontOnlyImportModuleNames = list()
 	excludeDontOnlyImportModuleNames.append("__future__")
@@ -200,8 +202,24 @@ def CreateDependenciesInBuildToFile(moduleDirPaths : list[str], sourceDirPath : 
 
 	# 저장 자료구조 추가.
 	importData = dict()
-	writelines = list()
+
+	# 기본적으로 그 외 사용자 추가 모듈 들은 미리 추가해둔다.
+	for otherModuleName in otherModuleNames:
+		if not otherModuleName in importData:
+			importData[otherModuleName] = set()
+	
+	# 파일 목록 순회.
 	for moduleFilePath in moduleFilePaths:
+     
+		# 파일(모듈)의 이름 가져오기.
+		path, name, extension = GetSplitFilePath(moduleFilePath)
+
+		# 빌드되는 소스와 동일 폴더는 종속성 여부를 따지지 않고 일단 모듈부터 집어넣는다.
+		# 아래쪽에서 실제 소스안의 모듈이나 소스안의 모듈의 참조 클래스 등을 집어 넣는 상황도
+  		# 이미 고려되어 있기 때문에 미리 넣는다고 문제가 될 일은 아예 없다.
+		if not name in importData:
+			importData[name] = set()
+
 		with open(moduleFilePath, READMODE, encoding = UTF8) as file:
 			# 파싱 및 구문분석.
 			astNode = ast.parse(file.read(), filename = moduleFilePath)   
@@ -221,7 +239,7 @@ def CreateDependenciesInBuildToFile(moduleDirPaths : list[str], sourceDirPath : 
 						# writelines.append(f"# [ast.Import][IMPORT] current.names.name: {importTargetName}, type: {importTargetType}")
 
 						if not importTargetName in importData:
-							importData[importTargetName] = list()
+							importData[importTargetName] = set()
 
 				# from 패키지 or 하위패키지 or 모듈 import 패키지 and 하위패키지 and 모듈 and 클래스 and 함수.
 				elif isinstance(current, ast.ImportFrom):
@@ -246,23 +264,25 @@ def CreateDependenciesInBuildToFile(moduleDirPaths : list[str], sourceDirPath : 
 
 	# 텍스트 작성.
 	nowDateTime = DateTime.now()
+	writelines = list()
 	writelines.append(f"# Automatic dependency generation code used when building pyinstaller.")
 	writelines.append(f"# Created time : {nowDateTime}")
 	writelines.append("")
 	writelines.append("")
 	
+	# 참조 모듈 목록 작성.
 	moduleNames = sorted(importData.keys())
 	for fromTargetName in moduleNames:
 		importTargetNames = importData[fromTargetName]
 		if importTargetNames:
-			importTargetsText = ", ".join(importTargetNames)
+			importTargetsText = COMMAWITHSPACE.join(importTargetNames)
 			if IsTypeIgnore(fromTargetName) or IsTypeIgnores(importTargetNames):
-				writelines.append(f"from {fromTargetName} import {importTargetsText} # type: ignore")
+				writelines.append(f"from {fromTargetName} import {importTargetsText} {TYPEIGNORE}")
 			else:
 				writelines.append(f"from {fromTargetName} import {importTargetsText}")
 		else:
 			if IsTypeIgnore(fromTargetName):
-				writelines.append(f"import {fromTargetName} # type: ignore")
+				writelines.append(f"import {fromTargetName} {TYPEIGNORE}")
 			else:
 				writelines.append(f"import {fromTargetName}")
 
