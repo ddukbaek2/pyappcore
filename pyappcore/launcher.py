@@ -61,10 +61,10 @@ def Launching(moduleName : str, functionName : str) -> int:
 		rootPath : str = os.path.dirname(sourcePath)
 		resPath : str = os.path.join(rootPath, "res")
 
-	# 런처 및 소스 폴더 추가.
-	if sourcePath and sourcePath not in sys.path: sys.path.append(sourcePath)
-	# if testPath and testPath not in sys.path: sys.path.append(testPath)
-	# if launcherPath and launcherPath not in sys.path: sys.path.append(launcherPath)
+		# 런처 및 소스 폴더 추가.
+		# if sourcePath and sourcePath not in sys.path: sys.path.append(sourcePath)
+		# if testPath and testPath not in sys.path: sys.path.append(testPath)
+		# if launcherPath and launcherPath not in sys.path: sys.path.append(launcherPath)
 
 	# 프로젝트 값 설정.
 	Application._Application__SetBuild(isBuild)
@@ -91,12 +91,14 @@ def Launching(moduleName : str, functionName : str) -> int:
 			# 심볼 설정.
 			if SYMBOLSINBUILDMODULENAME in sys.modules:
 				builtins.print("__pycore_symbols_in_build__")
-				symbols = sys.modules[SYMBOLSINBUILDMODULENAME].SYMBOLS
+				module = sys.modules[SYMBOLSINBUILDMODULENAME]
+				symbols = module.SYMBOLS
 				symbolsString : str = SEMICOLON.join(symbols)
 				Application._Application__SetSymbols(symbolsString)
 
 			# 디버그 모드 설정.
-			Application._Application__SetDebug(False) # 빌드는 DEBUG 심볼이 있던 없던 무조건 False.
+			# 빌드 시 DEBUG 심볼이 있던 없던 무조건 False.
+			Application._Application__SetDebug(False)
 			builtins.print(f"Application.IsDebug() : {Application.IsDebug()}")
 
 		# 빌드 외.
@@ -167,6 +169,7 @@ def Launching(moduleName : str, functionName : str) -> int:
 		
 	# 시작.
 	try:
+		builtins.print("__running__")
 		module = importlib.import_module(moduleName)
 		function = builtins.getattr(module, functionName)
 		exitCode : int = function(sys.argv)

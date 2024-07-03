@@ -170,28 +170,32 @@ def CreateSymbolsInBuildToFile(symbols : list[str], symbolsDirPath : str) -> Non
 #------------------------------------------------------------------------
 # 빌드시 의존성 참조 파일 생성.
 #------------------------------------------------------------------------
-def CreateDependenciesInBuildToFile(moduleDirPaths : list[str], includesDirPath : str) -> None:
+def CreateDependenciesInBuildToFile(moduleDirPaths : list[str], sourceDirPath : str) -> None:
 	# 단독 임포트 금지 모듈 이름 목록.
-	mustImportFroms = list()
-	mustImportFroms.append("__future__")
-	mustImportFroms.append("mathutils")
+	excludeDontOnlyImportModuleNames = list()
+	excludeDontOnlyImportModuleNames.append("__future__")
+	excludeDontOnlyImportModuleNames.append("mathutils")
 
-	# 제외 모듈, 파일 이름 목록.
-	excludes = set()
-	excludes.add(".")
-	excludes.add("..")
-	# for moduleFilePath in FindModuleFilePaths(CURRENTPATH):
-	# 	path, name, extension = GetSplitFilePath(moduleFilePath)
-	# 	excludes.add(moduleFilePath)
-	# 	excludes.add(name)
+	# 제외 모듈 이름 목록.
+	excludesModuleNames = set()
+	# excludes.add(".")
+	# excludes.add("..")
+	for moduleFilePath in FindModuleFilePaths(sourceDirPath):
+		print(moduleFilePath)
+		path, name, extension = GetSplitFilePath(moduleFilePath)
+	# 	excludesModuleNames.add(moduleFilePath)
+	# 	excludesModuleNames.add(name)
+		excludesModuleNames.add("__prebuild__")
+		excludesModuleNames.add("__launcher__")
+		excludesModuleNames.add("__pyappcore_dependencies_in_build__")
 
 	# 모든 모듈 파일 경로 가져옴.
 	moduleFilePaths = set()
 	for moduleDirPath in moduleDirPaths:
-		filePaths = FindModuleFilePaths(moduleDirPath)
-		for filePath in filePaths:
-			if filePath in excludes:
-				continue
+		moduleFilePaths = FindModuleFilePaths(moduleDirPath)
+		for filePath in FindModuleFilePaths(moduleDirPath):
+			# if filePath in excludesModuleNames:
+			# 	continue
 			moduleFilePaths.add(filePath)
 
 	# 저장 자료구조 추가.
@@ -208,9 +212,9 @@ def CreateDependenciesInBuildToFile(moduleDirPaths : list[str], includesDirPath 
 					for alias in current.names:
 						importTargetName = alias.name
 						# importTargetType = GetImportType(alias.name)
-						if importTargetName in excludes:
+						if importTargetName in excludesModuleNames:
 							continue
-						if importTargetName in mustImportFroms:
+						if importTargetName in excludeDontOnlyImportModuleNames:
 							continue
 
 						# importDatas.add(f"import {importTargetName}")
@@ -224,7 +228,7 @@ def CreateDependenciesInBuildToFile(moduleDirPaths : list[str], includesDirPath 
 					fromTargetName = current.module
 					# fromTargettype = GetImportType(current.module)
 					if fromTargetName:
-						if fromTargetName in excludes:
+						if fromTargetName in excludesModuleNames:
 							continue
 
 						if not fromTargetName in importData:
@@ -263,6 +267,6 @@ def CreateDependenciesInBuildToFile(moduleDirPaths : list[str], includesDirPath 
 				writelines.append(f"import {fromTargetName}")
 
 	# 파일 작성.
-	includesFilePath : str = f"{includesDirPath}/{DEPENDENCIESINBUILDFILENAME}"
+	includesFilePath : str = f"{sourceDirPath}/{DEPENDENCIESINBUILDFILENAME}"
 	with open(includesFilePath, WRITEMODE, encoding = UTF8) as file:
 		file.write(LINEFEED.join(writelines))

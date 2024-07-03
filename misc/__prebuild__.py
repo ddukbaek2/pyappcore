@@ -3,7 +3,9 @@
 #------------------------------------------------------------------------
 from __future__ import annotations
 import builtins
+import sys
 import os
+import __pyappcore_dependencies_in_build__ #type: ignore
 from pyappcore import make_util
 
 
@@ -15,6 +17,7 @@ CURRENTFILEPATH : str = os.path.abspath(__file__)
 CURRENTPATH : str = os.path.dirname(CURRENTFILEPATH).replace("\\", "/")
 ROOTPATH : str = os.path.dirname(CURRENTPATH).replace("\\", "/")
 SRCPATH : str = f"{ROOTPATH}/src"
+
 
 #------------------------------------------------------------------------
 # 파일 진입점.
