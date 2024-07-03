@@ -166,6 +166,7 @@ def CreateSymbolsInBuildToFile(symbols : list[str], symbolsDirPath : str) -> Non
 
 	# 파일 작성.
 	symbolsFilePath : str = f"{symbolsDirPath}/{SYMBOLSINBUILDFILENAME}"
+	if os.path.exists(symbolsFilePath):  os.remove(symbolsFilePath)
 	with open(symbolsFilePath, WRITEMODE, encoding = UTF8) as file:
 		file.write(LINEFEED.join(writelines))
 
@@ -293,6 +294,7 @@ def CreateDependenciesInBuildToFile(moduleDirPaths : list[str], sourceDirPath : 
 				writelines.append(f"import {fromTargetName}")
 
 	# 파일 작성.
-	includesFilePath : str = f"{sourceDirPath}/{DEPENDENCIESINBUILDFILENAME}"
-	with open(includesFilePath, WRITEMODE, encoding = UTF8) as file:
+	dependenciesFilePath : str = f"{sourceDirPath}/{DEPENDENCIESINBUILDFILENAME}"
+	if os.path.exists(dependenciesFilePath): os.remove(dependenciesFilePath)
+	with open(dependenciesFilePath, WRITEMODE, encoding = UTF8) as file:
 		file.write(LINEFEED.join(writelines))
