@@ -26,12 +26,22 @@
 - run-build.bat : wheel 빌드.
 - run-distribution.bat : PyPi 배포.
 
+## 개발방법
+1. run-activate 로 가상환경을 활성화 합니다.
+2. 기능 개발.
+3. run-distribution 으로 패키지를 릴리즈 합니다.
+
 ## 설치방법
-- pip install pyappcore
+1. pip install pyappcore
+2. 
 
 ## 사용방법
-- 
+1. 매 빌드될 때 마다 __prebuild__.py를 실행합니다.
+2. 실제 IDE 와 연결될 메인 함수는 __launcher__.py 입니다.
 
 ## 조건
+
+
+## 실행시 자동으로 생성되는 파일
 - __pyappcore_dependencies_in_build__
 - __pyappcore_symbols_in_build__

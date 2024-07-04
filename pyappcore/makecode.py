@@ -199,7 +199,7 @@ def CreateDependenciesInBuildToFile(moduleDirPaths : list[str], sourceDirPath : 
 	excludesModuleNames.add("__pyappcore_dependencies_in_build__")
 	# for moduleFilePath in FindModuleFilePaths(sourceDirPath):
 		# path, name, extension = GetSplitFilePath(moduleFilePath)
-		
+
 	# 모든 모듈 파일 경로 가져옴.
 	moduleFilePaths = set()
 	for moduleDirPath in moduleDirPaths:
@@ -217,7 +217,8 @@ def CreateDependenciesInBuildToFile(moduleDirPaths : list[str], sourceDirPath : 
 
 	# 저장 자료구조 추가.
 	importData = dict()
-
+	importData["main"] = set()
+ 
 	# 기본적으로 그 외 사용자 추가 모듈 들은 미리 추가해둔다.
 	for otherModuleName in otherModuleNames:
 		if not otherModuleName in importData:
@@ -229,11 +230,11 @@ def CreateDependenciesInBuildToFile(moduleDirPaths : list[str], sourceDirPath : 
 		# 파일(모듈)의 이름 가져오기.
 		path, name, extension = GetSplitFilePath(moduleFilePath)
 
-		# 빌드되는 소스와 동일 폴더는 종속성 여부를 따지지 않고 일단 모듈부터 집어넣는다.
-		# 아래쪽에서 실제 소스안의 모듈이나 소스안의 모듈의 참조 클래스 등을 집어 넣는 상황도
-  		# 이미 고려되어 있기 때문에 미리 넣는다고 문제가 될 일은 아예 없다.
-		if not name in importData:
-			importData[name] = set()
+		# # 빌드되는 소스와 동일 폴더는 종속성 여부를 따지지 않고 일단 모듈부터 집어넣는다.
+		# # 아래쪽에서 실제 소스안의 모듈이나 소스안의 모듈의 참조 클래스 등을 집어 넣는 상황도
+  		# # 이미 고려되어 있기 때문에 미리 넣는다고 문제가 될 일은 아예 없다.
+		# if not name in importData:
+		# 	importData[name] = set()
 
 		with open(moduleFilePath, READMODE, encoding = UTF8) as file:
 			# 파싱 및 구문분석.
@@ -284,9 +285,11 @@ def CreateDependenciesInBuildToFile(moduleDirPaths : list[str], sourceDirPath : 
 	writelines.append(f"# Created time : {nowDateTime}")
 	writelines.append("")
 	writelines.append("")
-	
+
+		
+ 
 	# 참조 모듈 목록 작성.
-	moduleNames = sorted(importData.keys())
+	moduleNames = sorted(importData.keys(), key = lambda value: (value[0] != "_", value))
 	for fromTargetName in moduleNames:
 		importTargetNames = importData[fromTargetName]
 		if importTargetNames:

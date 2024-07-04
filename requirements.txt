@@ -2,6 +2,7 @@
 setuptools
 wheel
 python-dotenv
+warnings
 
 # must-install-package-release-pypi.
 twine

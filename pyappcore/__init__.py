@@ -11,8 +11,9 @@ from .constants import *
 from .json_util import *
 from .launcher import *
 from .log_util import *
-from .make_util import *
+from .makecode import *
 from .math3d import *
+from .module_util import *
 from .property import *
 from .resources import *
 from .str_util import *
