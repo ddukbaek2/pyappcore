@@ -8,6 +8,7 @@ import debugpy # type: ignore
 import importlib
 import os
 import sys
+import unittest
 from .application import Application
 from .str_util import *
 from .log_util import *
@@ -39,8 +40,38 @@ def IsBuild() -> bool:
 
 
 #------------------------------------------------------------------------
+# 유닛테스트용 시작.
+#------------------------------------------------------------------------
+def TestsLaunching(rootPath : str) -> int:
+    # 파이썬 모듈 추가.
+	# 테스트 하위 패키지.
+	# testsPath : str = f"{rootPath}/tests"
+	# if testsPath and testsPath not in sys.path: sys.path.append(testsPath)
+
+	# 소스 하위 패키지.
+	srcPath : str = f"{rootPath}/src"
+	if srcPath and srcPath not in sys.path: sys.path.append(srcPath)
+
+	# 소스, 테스트 패키지.
+	if rootPath and rootPath not in sys.path: sys.path.append(rootPath)
+
+	builtins.print("__tests__")
+	Application._Application__SetBuild(False)
+	Application._Application__SetDebug(False)
+	Application._Application__SetSymbols("DEBUG;LOG")
+	Application._Application__SetRootPath(rootPath)
+	Application._Application__SetResPath(f"{rootPath}/res")
+	Application._Application__SetExecuteFileName("__main__.py")
+
+	# 현재 폴더 전체 테스트. 
+	testLoader = unittest.TestLoader()
+	testResult = testLoader.discover(f"{rootPath}/tests", pattern = "test*.py")
+	testRunner = unittest.TextTestRunner()
+	testRunner.run(testResult)
+
+
+#------------------------------------------------------------------------
 # 시작.
-# - Symbols는 바이너리상태에서는 
 #------------------------------------------------------------------------
 def Launching(moduleName : str, functionName : str) -> int:
 	builtins.print("pyappcore.launcher.Launch()")
