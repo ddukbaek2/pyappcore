@@ -12,6 +12,7 @@ import json
 import os
 import sys
 from .json_util import RemoveAllCommentsInString
+from .module_util import Node
 from .str_util import GetSplitFilePath
 
 
@@ -185,7 +186,7 @@ def CreateDependenciesInBuildToFile(moduleDirPaths : list[str], sourceDirPath : 
 	dependenciesFilePath : str = f"{sourceDirPath}/{DEPENDENCIESINBUILDFILENAME}"
 	if os.path.exists(dependenciesFilePath):
 		os.remove(dependenciesFilePath)
-		builtins.print(f"os.remove(\"{dependenciesFilePath}\")")
+		# builtins.print(f"os.remove(\"{dependenciesFilePath}\")")
   
 	# 단독 임포트 금지 모듈 이름 목록.
 	excludeDontOnlyImportModuleNames = list()
@@ -286,12 +287,28 @@ def CreateDependenciesInBuildToFile(moduleDirPaths : list[str], sourceDirPath : 
 	writelines.append("")
 	writelines.append("")
 
-		
- 
+	# 소스폴더 노드 구성 및 전체이름 획득.
+	node = Node.BuildTree(sourceDirPath, None)
+	moduleStringDict = Node.GetModuleNames(node)
+	# modulesFullNames = list(moduleStringDict.keys())
+	# for moduleFullName, moduleName in moduleStrings.items():
+	# 	packageName = moduleFullName.replace(moduleName, "")
+	# 	if moduleName.startswith("__"):
+	# 		continue
+	# 	if packageName.endswith("."):
+	# 		packageName = packageName[:-1]
+	# 	builtins.print(f"package: {packageName}, module: {moduleName}")
+	moduleStringDict = { value: key for key, value in moduleStringDict.items() }
+
 	# 참조 모듈 목록 작성.
 	moduleNames = sorted(importData.keys(), key = lambda value: (value[0] != "_", value))
 	for fromTargetName in moduleNames:
 		importTargetNames = importData[fromTargetName]
+
+		# 패키지에 소속된 모듈일 경우 전체이름으로 변경.
+		if fromTargetName in moduleStringDict:
+			fromTargetName = moduleStringDict[fromTargetName]
+
 		if importTargetNames:
 			importTargetsText = COMMAWITHSPACE.join(importTargetNames)
 			# if IsTypeIgnore(fromTargetName) or IsTypeIgnores(importTargetNames):
