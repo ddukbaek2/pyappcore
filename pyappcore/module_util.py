@@ -4,44 +4,85 @@
 from __future__ import annotations
 from typing import Any, Final, Optional, Type, TypeVar, Union
 import builtins
-import warnings
-import importlib
-import inspect
+import os
+from .str_util import GetSplitFilePath
 
 
 #------------------------------------------------------------------------
-# 워닝 존재 여부.
+# 노드.
 #------------------------------------------------------------------------
-def CheckWarningForMmoduleName(moduleName : str) -> bool:
-    with warnings.catch_warnings(record = True) as caughtWarnings:
-        warnings.simplefilter("always")
-        try:
-            importlib.import_module(moduleName)
-        except ImportError:
-            return False
-        if caughtWarnings:
-            for caughtWarning in caughtWarnings:
-                continue
-            return True
-        return False
-    
+class Node:
+	name : str
+	path : str
+	isPackage : bool
+	parent : Node
+	children : list
 
-#------------------------------------------------------------------------
-# 패키지 이름 반환.
-#------------------------------------------------------------------------
-def GetParentPackage(moduleName: str) -> str:
-    try:
-        module = importlib.import_module(moduleName)
-        moduleFile = inspect.getfile(module)
-        moduleSpec = importlib.util.find_spec(moduleName)
+	def __init__(self, name : str = "", path : str = "", parent : Node = None, isPackage : bool = False):
+		self.name = name
+		self.path = path # fullname
+		self.isPackage = isPackage
+		self.parent = parent		
+		self.children = list()
 
-        if moduleSpec and moduleSpec.submodule_search_locations:
-            packageName = moduleSpec.name
-            return packageName
-        else:
-            parts = moduleName.split(".")
-            if len(parts) > 1:
-                return ".".join(parts[:-1])
-    except Exception as e:
-        print(f"Error finding parent package for '{moduleName}': {e}")
-    return str()
+	def __repr__(self, level : int = 0):
+		ret = "\t" * level + repr(self.name) + "\n"
+		for child in self.children:
+			ret += child.__repr__(level + 1)
+		return ret
+	
+	def AddChild(self, childNode):
+		childNode.parent = self
+		self.children.append(childNode)
+	
+	@staticmethod
+	def IsPackage(path : str) -> bool:
+		if not os.path.isdir(path):
+			return False
+		
+		initFilePath = os.path.join(path, "__init__.py")
+		if not os.path.isfile(initFilePath):
+			return False
+
+		return True
+
+	@staticmethod
+	def BuildTree(path : str, parent : Node = None) -> Node:
+		name = os.path.basename(path)
+		node = Node(name, path, parent, True)
+		for childName in os.listdir(path):
+			childPath = os.path.join(path, childName)
+			if os.path.isdir(childPath):
+				if Node.IsPackage(childPath):
+					child = Node.BuildTree(childPath, node)
+					node.AddChild(child)
+			else:
+				cpath, cname, cextension = GetSplitFilePath(childPath)				
+				if not cextension.endswith(".py"):
+					continue
+				if cname == "__init__":
+					continue
+				child = Node(cname, childPath, parent, False)
+				node.AddChild(child)
+		return node
+
+	@staticmethod
+	def PrintTree(node : Node, prefix : str = "", usePrint : bool = True, moduleFullNames : dict[str, str] = None) -> None:
+		if node.isPackage:
+			path = f"{prefix}.{node.name}" if prefix else node.name
+			if usePrint:
+				builtins.print(f"package: {path}")
+			for child in node.children:
+				Node.PrintTree(child, path, usePrint, moduleFullNames)
+		else:
+			path = f"{prefix}.{node.name}" if prefix else node.name
+			if usePrint:
+				builtins.print(f"module: {path}")
+			if not moduleFullNames is None:
+				moduleFullNames[path] = node.name
+
+	@staticmethod
+	def GetModuleNames(node : Node) -> dict[str, str]:
+		moduleFullNames = dict()
+		Node.PrintTree(node, "", False, moduleFullNames)
+		return moduleFullNames
