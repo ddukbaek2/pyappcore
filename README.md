@@ -26,10 +26,12 @@
 - run-build.bat : wheel 빌드.
 - run-distribution.bat : PyPi 배포.
 
-## 개발방법
+## 개발방법 및 노하우
 1. run-activate 로 가상환경을 활성화 합니다.
 2. 기능 개발.
 3. run-distribution 으로 패키지를 릴리즈 합니다.
+4. 폴더를 옮길 때마다 가상환경을 새로 생성 및 활성화 합니다. (기존코드의 가상환경은 기존코드 경로로 맞추어져있습니다.)
+5. .venv는 패키지 인스톨 시에 --user 플래그를 사용할 수 없습니다.
 
 ## 설치방법
 1. pip install pyappcore

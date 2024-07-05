@@ -12,7 +12,11 @@ from .str_util import GetSplitFilePath
 #------------------------------------------------------------------------
 # 전역 상수 목록.
 #------------------------------------------------------------------------
-INITPYFILENAME : str = "__init__.py"
+PYEXTENSION : str = "py"
+INITNAME : str = "__init__"
+INITFILENAME : str = f"{INITNAME}.{PYEXTENSION}"
+BUILTIN : str = "built-in"
+EMPTY : str = ""
 
 
 #------------------------------------------------------------------------
@@ -31,7 +35,7 @@ class Node:
 	#------------------------------------------------------------------------
 	# 생성됨.
 	#------------------------------------------------------------------------
-	def __init__(self, name : str = "", path : str = "", parent : Node = None, isPackage : bool = False):
+	def __init__(self, name : str = EMPTY, path : str = EMPTY, parent : Node = None, isPackage : bool = False):
 		self.Name = name
 		self.Path = path
 		self.IsPackage = isPackage
@@ -50,8 +54,8 @@ class Node:
 	#------------------------------------------------------------------------
 	# 자식 노드 추가.
 	#------------------------------------------------------------------------
-	def AddChild(self, childNode):
-		childNode.parent = self
+	def AddChild(self, childNode : Node):
+		childNode.Parent = self
 		self.Children.append(childNode)
 
 	#------------------------------------------------------------------------
@@ -62,7 +66,7 @@ class Node:
 	def CheckPackage(path : str) -> bool:
 		if not os.path.isdir(path):
 			return False
-		initFilePath = os.path.join(path, "__init__.py")
+		initFilePath = os.path.join(path, INITFILENAME)
 		if not os.path.isfile(initFilePath):
 			return False
 		return True
@@ -82,9 +86,9 @@ class Node:
 					node.AddChild(child)
 			else:
 				cpath, cname, cextension = GetSplitFilePath(childPath)				
-				if not cextension.endswith(".py"):
+				if not cextension.endswith(PYEXTENSION):
 					continue
-				if cname == "__init__":
+				if cname == INITNAME:
 					continue
 				child = Node(cname, childPath, parent, False)
 				node.AddChild(child)
@@ -94,7 +98,7 @@ class Node:
 	# 트리 탐색.
 	#------------------------------------------------------------------------
 	@staticmethod
-	def TraverseTree(node : Node, prefix : str = "", usePrint : bool = True, moduleFullNames : dict[str, str] = None) -> None:
+	def TraverseTree(node : Node, prefix : str = EMPTY, usePrint : bool = True, moduleFullNames : dict[str, str] = None) -> None:
 		if node.IsPackage:
 			path = f"{prefix}.{node.Name}" if prefix else node.Name
 			if usePrint:
@@ -115,7 +119,7 @@ class Node:
 	@staticmethod
 	def GetModuleNames(node : Node) -> dict[str, str]:
 		moduleFullNames = dict()
-		Node.TraverseTree(node, "", False, moduleFullNames)
+		Node.TraverseTree(node, EMPTY, False, moduleFullNames)
 		return moduleFullNames
 
 
@@ -134,7 +138,7 @@ def IsExistsPackageOrModule(packageOrModuleName : str) -> bool:
 			if not moduleFilePath:
 				return False
 			# 빌트인 인 경우는 실제 파일은 없지만 파이썬 인터프리터에 내장된 라이브러리이므로 있다고 간주.
-			if not moduleFilePath == "built-in":
+			if not moduleFilePath == BUILTIN:
 				return True
 			# 경로가 실존하는 파일이나 폴더일 경우 있다고 간주.
 			if os.path.isfile(moduleFilePath) or os.path.isdir(moduleFilePath):

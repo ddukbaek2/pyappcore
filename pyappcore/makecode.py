@@ -52,8 +52,8 @@ def FindModuleFilePaths(moduleDirPath : str) -> set:
 # "#type: ignore" 를 추가할지 말지 여부.
 # - fromimport의 from 혹은 import의 대상은 패키지 아니면 모듈이다.
 #------------------------------------------------------------------------
-def CheckTypeIgnore(name : str) -> bool:
-	if IsExistsPackageOrModule(name):
+def CheckTypeIgnore(fromName : str) -> bool:
+	if IsExistsPackageOrModule(fromName):
 		return False
 	return True
 
@@ -62,13 +62,13 @@ def CheckTypeIgnore(name : str) -> bool:
 # "# type: ignore" 를 추가할지 말지 여부.
 # - fromimport의 import 혹은 import의 대상은 패키지, 모듈, 클래스, 함수이다.
 #------------------------------------------------------------------------
-def CheckTypeIgnores(names : list[str]) -> bool:
-	if not names:
+def CheckTypeIgnores(fromName : str, importNames : list[str]) -> bool:
+	if not importNames:
 		return False
-	for name in names:
-		if not IsExistsPackageOrModule(name):
+	for importName in importNames:
+		if not IsExistsPackageOrModule(importName):
 			return False
-		if not IsExistsAttribute(name):
+		if not IsExistsAttribute(fromName, importName):
 			return False
 	return True
 
@@ -233,7 +233,7 @@ def CreateDependenciesInBuildToFile(moduleDirPaths : list[str], sourceDirPath : 
 		if importTargetNames:
 			importTargetsText = COMMAWITHSPACE.join(importTargetNames)
 			text = f"from {fromTargetName} import {importTargetsText}"
-			if CheckTypeIgnore(fromTargetName) or CheckTypeIgnores(importTargetNames):
+			if CheckTypeIgnore(fromTargetName) or CheckTypeIgnores(fromTargetName, importTargetNames):
 				text += TYPEIGNORE
 		else:
 			text = f"import {fromTargetName}"

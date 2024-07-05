@@ -10,7 +10,7 @@ from dotenv import load_dotenv
 #------------------------------------------------------------------------
 # 환경 변수 목록 파일 로드.
 #------------------------------------------------------------------------
-load_dotenv(override = True)
+load_dotenv(dotenv_path = ".env", override = True)
 NAME = os.getenv("NAME")
 VERSION = os.getenv("VERSION")
 AUTHOR = os.getenv("AUTHOR")
@@ -20,6 +20,7 @@ LONG_DESCRIPTION_CONTENT_TYPE = os.getenv("LONG_DESCRIPTION_CONTENT_TYPE")
 URL = os.getenv("URL")
 PYTHON_REQUIRES = os.getenv("PYTHON_REQUIRES")
 PYPI_API_TOKEN = os.getenv("PYPI_API_TOKEN")
+builtins.print(VERSION)
 builtins.print(f"set PYPI_API_TOKEN={PYPI_API_TOKEN}")
 
 
