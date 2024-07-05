@@ -157,7 +157,7 @@ def CreateSymbolsInBuildToFile(symbols : list[str], symbolsDirPath : str) -> Non
 	symbolsFilePath : str = f"{symbolsDirPath}/{SYMBOLSINBUILDFILENAME}"
 	if os.path.exists(symbolsFilePath):
 		os.remove(symbolsFilePath)
-		builtins.print(f"os.remove(\"{symbolsFilePath}\")")
+		# builtins.print(f"os.remove(\"{symbolsFilePath}\")")
 
 	# 텍스트 작성.
 	symbols = set(symbols)
