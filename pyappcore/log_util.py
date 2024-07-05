@@ -30,11 +30,12 @@ COMMA : str = ","
 class PrintHandler(Handler):
 	def emit(self, record : LogRecord):
 		message = self.format(record)
-		if record.levelno == FATAL or record.levelno == CRITICAL: Print(f"<bg_red><white><b>{message}</b></white></bg_red>")
-		elif record.levelno == ERROR: Print(f"<red>{message}</red>")
-		elif record.levelno == WARN or record.levelno == WARNING: Print(f"<yellow>{message}</yellow>")
-		elif record.levelno == INFO: Print(f"{message}")
-		elif record.levelno == DEBUG: Print(f"<magenta>{message}</magenta>")
+		# if record.levelno == FATAL or record.levelno == CRITICAL: Print(f"<bg_red><white><b>{message}</b></white></bg_red>")
+		# elif record.levelno == ERROR: Print(f"<red>{message}</red>")
+		# elif record.levelno == WARN or record.levelno == WARNING: Print(f"<yellow>{message}</yellow>")
+		# elif record.levelno == INFO: Print(f"{message}")
+		# elif record.levelno == DEBUG: Print(f"<magenta>{message}</magenta>")
+		PrintLog(message, record.levelno)
 
 
 #------------------------------------------------------------------------
@@ -81,9 +82,11 @@ def InitializeLogSystem():
 
 	# formatter : Formatter = Formatter("[%(asctime)s][%(name)s][%(levelname)s] %(message)s")
 	formatter : Formatter = Formatter("[%(asctime)s][%(levelname)s] %(message)s")
-	printHandler : PrintHandler = PrintHandler()
-	printHandler.setLevel(logLevel)
-	printHandler.setFormatter(formatter)
+
+	# 프린트 핸들러.
+	# printHandler : PrintHandler = PrintHandler()
+	# printHandler.setLevel(logLevel)
+	# printHandler.setFormatter(formatter)
 	# applicationLogger.addHandler(printHandler)
 
 	# 로그파일 설정.
@@ -95,11 +98,20 @@ def InitializeLogSystem():
 		fileHandler.setLevel(logLevel)
 		fileHandler.setFormatter(formatter)
 		# applicationLogger.addHandler(fileHandler)
-		queueListener = handlers.QueueListener(logQueue, printHandler, fileHandler)
+		# queueListener = handlers.QueueListener(logQueue, printHandler, fileHandler)
+		queueListener = handlers.QueueListener(logQueue, fileHandler)
 		queueListener.start()
-	else:
-		queueListener = handlers.QueueListener(logQueue, printHandler)
-		queueListener.start()
+
+
+#------------------------------------------------------------------------
+# 로그 출력.
+#------------------------------------------------------------------------
+def PrintLog(text : str, logLevel : int) -> None:
+	if logLevel == FATAL or logLevel == CRITICAL: Print(f"<bg_red><white><b>{text}</b></white></bg_red>")
+	elif logLevel == ERROR: Print(f"<red>{text}</red>")
+	elif logLevel == WARN or logLevel == WARNING: Print(f"<yellow>{text}</yellow>")
+	elif logLevel == INFO: Print(f"{text}")
+	elif logLevel == DEBUG: Print(f"<magenta>{text}</magenta>")
 
 
 #------------------------------------------------------------------------

@@ -13,7 +13,7 @@ import sys
 from .ansicode import *
 from .json_util import *
 from .str_util import *
-from .log_util import GetStringFromLogLevel
+from .log_util import PrintLog, GetStringFromLogLevel
 
 
 #------------------------------------------------------------------------
@@ -63,7 +63,10 @@ class Application:
 	def __Log(message : str, logLevel : int) -> None:
 		timestamp = GetTimestampString(HYPHEN, SPACE, COLON, True, COMMA)
 		logName = GetStringFromLogLevel(logLevel)
-		builtins.print(f"[{timestamp}][{logName}] {message}")
+		# builtins.print(f"[{timestamp}][{logName}] {message}")
+		PrintLog(f"[{timestamp}][{logName}] {message}")
+
+		# 로그파일 기록시.
 		if Application._Application__Symbols and SYMBOL_LOG in Application._Application__Symbols:
 			applicationLogger = Application.GetLogger()
 			if logLevel == LOG_NOTSET: # logging.NOTSET:
