@@ -1,0 +1,33 @@
+{
+    "configurations": [
+        {
+            "name": "Debug",
+            "type": "debugpy",
+            "request": "attach",
+            "preLaunchTask": "DEBUG_TASK",
+            "connect": {
+                "host": "localhost",
+                "port": "${config:launcher.debug.remotePort}"
+            },
+            "pathMappings": [
+                {
+                    "localRoot": "${workspaceFolder}",
+                    "remoteRoot": "."
+                }
+            ],
+        },
+        {
+            "name": "No Debug",
+            "type": "PowerShell",
+            "request": "launch",
+            "script": "tools/run.bat",
+			"args": [
+				"${workspaceFolder}",
+				"${config:launcher.launcherFilePath}",
+                "NODEBUG/LOG",
+                "${config:launcher.arguments}",
+			],
+            "cwd": "${workspaceFolder}"
+        }
+    ]
+}

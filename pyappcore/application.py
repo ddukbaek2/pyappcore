@@ -5,11 +5,12 @@ from __future__ import annotations
 from typing import Any, Final, Optional, Type, TypeVar, Union
 import builtins
 import json
-from .json_util import *
 import logging
 from logging import Logger
 import subprocess
 import traceback
+from .json_util import *
+from .str_util import *
 
 
 #------------------------------------------------------------------------
@@ -23,13 +24,12 @@ BACKSLASH : str = "\\"
 COLON : str = ":"
 SPACE : str = " "
 DEBUG : str = "DEBUG"
-NODEBUG : str = "NODEBUG"
 
-PYAPPCORE_SYMBOL_EXPRESS : str = "EXPRESS" # "PYAPPCORE_SYMBOL_EXPRESS"
-PYAPPCORE_SYMBOL_SUBPROCESS : str = "SUBPROCESS" # "PYAPPCORE_SYMBOL_SUBPROCESS"
-PYAPPCORE_SYMBOL_LOG : str = "LOG" # "PYAPPCORE_SYMBOL_LOG"
-PYAPPCORE_SYMBOL_DEBUG : str = "DEBUG" # "PYAPPCORE_SYMBOL_DEBUG"
-PYAPPCORE_SYMBOL_NODEBUG : str = "NODEBUG" # "PYAPPCORE_SYMBOL_NODEBUG"
+SYMBOL_EXPRESS : str = "EXPRESS" # "PYAPPCORE_SYMBOL_EXPRESS"
+SYMBOL_SUBPROCESS : str = "SUBPROCESS" # "PYAPPCORE_SYMBOL_SUBPROCESS"
+SYMBOL_LOG : str = "LOG" # "PYAPPCORE_SYMBOL_LOG"
+SYMBOL_DEBUG : str = "DEBUG" # "PYAPPCORE_SYMBOL_DEBUG"
+NODEBUG : str = "NODEBUG" # "PYAPPCORE_SYMBOL_NODEBUG"
 
 CONFIGURATION_FILENAME : str = "configuration.json"
 PYAPPCORE_LOG_LOGGERNAME : str = "pyappcore"
@@ -58,7 +58,7 @@ class Application:
 	#------------------------------------------------------------------------
 	@staticmethod
 	def __Log(message : str, level : int) -> None:
-		if not Application.HasSymbol(PYAPPCORE_SYMBOL_LOG):
+		if not Application.HasSymbol(SYMBOL_LOG):
 			return
 		
 		logger = Application.GetLogger()
@@ -133,41 +133,36 @@ class Application:
 	# - 블렌더 기준의 arguments : {argument1} {argument2} ...
 	# ----------------------------------------------------------------------------------
 	@staticmethod
-	def RunSubprocess(pythonInterpreterPath : str, options : str, symbols : str, arguments : list[str]) -> subprocess.CompletedProcess:
-		command = list()
-		command.append(pythonInterpreterPath)
+	def RunSubprocess(pythonInterpreterPath : str, options : set[str], symbols : set[str], arguments : list[str]) -> subprocess.CompletedProcess:
+		commands = set()
+		commands.append(pythonInterpreterPath)
 		
 		if Application.IsBuild():
 			pass
 		else:
 			pass
 
-		newOptions = set()
-		newOptions.add(options.split(SLASH))
-		command.append(SLASH.join(newSymbols))
-		command.append(Application.GetRootPathWithRelativePath("/src/__launcher__.py"))
+		# 옵션 설정.
+		if options:
+			for option in options:
+				commands.add(option)
 
-
-		# 입력받은 텍스트 정리.
-		symbolsString = symbolsString.upper()
-
-		# 중복을 허용하지 않는 선에서 처리.
-		symbols : list[str] = symbolsString.split(SLASH) if SLASH in symbolsString else [symbolsString]
+		# 시작 파일 설정.
+		commands.add(Application.GetRootPathWithRelativePath("/src/__launcher__.py"))
 
 		# 객체 생성 및 심볼 설정.
-		Application._Application__Symbols = set()
-		if symbols: Application._Application__Symbols.update(symbols)
-
-
-		newSymbols = set()
-		newSymbols.add(PYAPPCORE_SYMBOL_SUBPROCESS)
-		newSymbols.update(symbols.split(SLASH))
-		command.append(SLASH.join(newSymbols))
+		if symbols:
+			symbols.add(SYMBOL_SUBPROCESS)
+		else:
+			symbols = set()
+			symbols.add(SYMBOL_SUBPROCESS)
+		commands.add(SLASH.join(symbols))
 		
 		if arguments:
 			for argument in arguments:
-				command.append(argument)
-		return subprocess.run(command, check = True)
+				commands.add(argument)
+		
+		return subprocess.run(commands, check = True)
 
  	#------------------------------------------------------------------------
 	# 실행 된 파일 이름.
@@ -205,24 +200,35 @@ class Application:
 		Application._Application__ResPath = resPath.replace(BACKSLASH, SLASH)
 
 	#------------------------------------------------------------------------
-	# 기존 심볼을 모두 지우고 새로운 심볼 목록 설정 (구분자 : ;).
+	# 기존 심볼을 모두 지우고 새로운 심볼 목록 설정 (구분자 : /).
 	#------------------------------------------------------------------------
 	@staticmethod
-	def __SetSymbols(symbolsString : str) -> None:	
-		# 입력받은 텍스트 정리.
-		symbolsString = symbolsString.upper()
+	def __SetSymbols(symbolsString : str) -> None:
+		if symbolsString:
+			# 입력받은 텍스트 정리.
+			symbolsString = symbolsString.upper()
+			symbols : list[str] = str_util.GetStringFromSeperatedStringList(symbolsString, SLASH)
 
-		# 중복을 허용하지 않는 선에서 처리.
-		symbols : list[str] = symbolsString.split(SLASH) if SLASH in symbolsString else [symbolsString]
-
-		# 객체 생성 및 심볼 설정.
-		Application._Application__Symbols = set()
-		if symbols: Application._Application__Symbols.update(symbols)
+			# 객체 생성 및 심볼 설정.
+			Application._Application__Symbols = set()
+			if symbols: 
+				Application._Application__Symbols.update(symbols)
 
 		# NONE, EMPTY, SPACE는 없는 것과 마찬가지이므로 목록에서 제거.
 		Application._Application__Symbols.discard(NONE)
 		Application._Application__Symbols.discard(EMPTY)
 		Application._Application__Symbols.discard(SPACE)
+
+	#------------------------------------------------------------------------
+	# 기존 심볼에 새로운 심볼을 추가.
+	#------------------------------------------------------------------------
+	@staticmethod
+	def __AddSymbols(symbolsString : str) -> None:
+		symbols = Application.GetSymbols()
+		if symbols:
+			originSymbolsString = SLASH.join(symbols)
+		Application._Application__SetSymbols(originSymbolsString)
+		Application._Application__SetSymbols(symbolsString)
 
 	#------------------------------------------------------------------------
 	# 빌드된 상태인지 여부.

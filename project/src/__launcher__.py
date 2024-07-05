@@ -5,12 +5,13 @@ from __future__ import annotations
 import builtins
 import os
 import sys
-from pyappcore import Launching
+from pyappcore import debug_util, Launching
 
 
 #------------------------------------------------------------------------
 # 전역 상수 목록.
 #------------------------------------------------------------------------
+SEMICOLON : str = ";"
 CURRENTFILEPATH : str = os.path.abspath(__file__)
 SRCPATH : str = os.path.dirname(CURRENTFILEPATH).replace("\\", "/")
 ROOTPATH : str = os.path.dirname(SRCPATH).replace("\\", "/")
@@ -23,13 +24,12 @@ STARTFUNCTIONNAME : str = "Main"
 #------------------------------------------------------------------------
 if __name__ == "__main__":
 	try:
-		builtins.print("__launcher__")      
-		# 현재 파일의 디렉터리를 모듈 검색 경로에 추가.
-		if ROOTPATH and ROOTPATH not in sys.path:
-			sys.path.append(ROOTPATH)
-		# 현재 파일의 디렉터리를 모듈 검색 경로에 추가.
-		if SRCPATH and SRCPATH not in sys.path:
-			sys.path.append(SRCPATH)
+		builtins.print("__launcher__")
+		builtins.print("__main__")
+		# 소스 패키지(루트폴더)를 모듈 검색 경로에 추가.
+		if ROOTPATH and ROOTPATH not in sys.path: sys.path.append(ROOTPATH)
+		# 소스 패키지의 서브 패키지(소스폴더)를 모듈 검색 경로에 추가.
+		if SRCPATH and SRCPATH not in sys.path: sys.path.append(SRCPATH)
 
 		# 의존성 파일 임포트.
 		import __pyappcore_dependencies_in_build__ #type: ignore
@@ -38,5 +38,5 @@ if __name__ == "__main__":
 		exitCode : int = Launching(STARTMODULENAME, STARTFUNCTIONNAME)
 		sys.exit(exitCode)
 	except Exception as exception:
-		builtins.print(exception)
+		debug_util.RaiseException(exception)
 		sys.exit(1)

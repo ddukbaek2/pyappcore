@@ -36,7 +36,7 @@ def GetSplitFilePath(filePath : str, useLowerExtension : bool = True) -> tuple[s
 # 구분자로 구분된 스트링을 하나의 리스트로 변환한다. 
 # - 예 : "A/B/C" ==> ["A", "B", "C"]
 #------------------------------------------------------------------------
-def GetStringFromSeperatedString(string : str, seperator : str = SLASH) -> list[str]:
+def GetStringFromSeperatedStringList(string : str, seperator : str = COMMA) -> list[str]:
 	if not string:
 		return list()
 

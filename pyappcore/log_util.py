@@ -6,7 +6,7 @@ from typing import Any, Final, Optional, Type, TypeVar, Union
 import builtins
 from logging import Logger, Handler, StreamHandler, FileHandler, Formatter, LogRecord, NOTSET, DEBUG, INFO, WARN, WARNING, ERROR, CRITICAL, FATAL
 import os
-from .application import Application, PYAPPCORE_SYMBOL_EXPRESS
+from .application import Application, SYMBOL_EXPRESS
 from .ansicode import *
 from .str_util import GetTimestampString
 
@@ -43,7 +43,7 @@ def InitializeLOGSystem():
 		logLevel = DEBUG
 		logFilePath = Application.GetRootPathWithRelativePath(f"logs/pyappcore-debug-{timestamp}.log")
 	# Blender.exe로 소스코드 실행.
-	elif Application.HasSymbol(PYAPPCORE_SYMBOL_EXPRESS):
+	elif Application.HasSymbol(SYMBOL_EXPRESS):
 		useLogFile = True
 		logLevel = INFO
 		logFilePath = Application.GetRootPathWithRelativePath(f"logs/pyappcore-express-{timestamp}.log")

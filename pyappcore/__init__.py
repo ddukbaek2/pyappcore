@@ -16,7 +16,7 @@ from .makecode import *
 from .math3d import *
 from .module_util import *
 from .property import *
-from .resources import *
+from .res import *
 from .str_util import *
 
 

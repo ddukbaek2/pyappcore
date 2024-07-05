@@ -17,6 +17,7 @@ from .log_util import *
 #------------------------------------------------------------------------
 # 전역 상수 목록.
 #------------------------------------------------------------------------
+EMPTY : str = ""
 FROZEN : str = "frozen"
 MAIN : str = "__main__"
 SLASH : str = "/"
@@ -96,7 +97,7 @@ def Launching(moduleName : str, functionName : str) -> int:
 	Application._Application__SetBuild(isBuild)
 	Application._Application__SetRootPath(rootPath)
 	Application._Application__SetResPath(resPath)
-	Application._Application__SetSymbols("")
+	Application._Application__SetSymbols(EMPTY)
 
 	# 프로젝트 값 출력.
 	builtins.print(f"Application.IsBuild(): {Application.IsBuild()}")  
@@ -120,8 +121,9 @@ def Launching(moduleName : str, functionName : str) -> int:
 				builtins.print("__pycore_symbols_in_build__")
 				module = sys.modules[SYMBOLSINBUILDMODULENAME]
 				symbols = module.SYMBOLS
-				symbolsString : str = SLASH.join(symbols)
-				Application._Application__SetSymbols(symbolsString)
+				if symbols:
+					symbolsString : str = SLASH.join(symbols)
+					Application._Application__SetSymbols(symbolsString)
 
 			# 디버그 모드 설정.
 			# 빌드 시 DEBUG 심볼이 있던 없던 무조건 False.

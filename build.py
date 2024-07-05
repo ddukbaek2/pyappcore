@@ -40,7 +40,7 @@ setup(
 	include_package_data = True,
 	package_data = {
 		"": [
-			"resources/*"
+			"res/*"
 		],
 	},
     install_requires = [
