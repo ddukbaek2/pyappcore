@@ -6,6 +6,7 @@ from typing import Any, Final, Optional, Type, TypeVar, Union
 import builtins
 import importlib.util
 import os
+from .debug_util import RaiseException
 from .str_util import GetSplitFilePath
 
 
@@ -145,7 +146,8 @@ def IsExistsPackageOrModule(packageOrModuleName : str) -> bool:
 				return True                
 			return False
 	except Exception as exception:
-		builtins.print(exception)
+		# builtins.print(exception)
+		RaiseException(exception)
 		return False
 
 
@@ -160,6 +162,7 @@ def IsExistsAttribute(moduleName : str, attributeName : str) -> bool:
 		if not builtins.hasattr(module, attributeName):
 			return False
 	except Exception as exception:
-		builtins.print(exception)
+		# builtins.print(exception)
+		RaiseException(exception)
 		return False
 	return True

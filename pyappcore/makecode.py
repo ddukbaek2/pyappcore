@@ -9,6 +9,7 @@ from datetime import datetime as DateTime
 import json
 import os
 import sys
+from .debug_util import *
 from .json_util import RemoveAllCommentsInString
 from .module_util import Node, IsExistsPackageOrModule, IsExistsAttribute
 from .str_util import GetSplitFilePath
@@ -87,7 +88,8 @@ def GetVisualStudioCodeSettings(rootDirPath : str) -> Union[dict, None]:
 				return vscodeSettings
 		return None
 	except Exception as exception:
-		builtins.print(exception)
+		# builtins.print(exception)
+		RaiseException(exception)
 		return None
 
 

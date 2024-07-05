@@ -10,8 +10,9 @@ import os
 import sys
 import unittest
 from .application import Application
-from .str_util import *
+from .debug_util import *
 from .log_util import *
+from .str_util import *
 
 
 #------------------------------------------------------------------------
@@ -196,7 +197,8 @@ def Launching(moduleName : str, functionName : str) -> int:
 
 	# 예외.
 	except Exception as exception:
-		builtins.print(exception)
+		# builtins.print(exception)
+		RaiseException(exception)
 		return 1
 		
 	# 시작.
@@ -212,7 +214,8 @@ def Launching(moduleName : str, functionName : str) -> int:
 		if useLog:
 			Application.LogException(exception)
 		else:
-			builtins.print(exception)
+			# builtins.print(exception)
+			RaiseException(exception)
 		return 1
 
 
