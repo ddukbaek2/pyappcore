@@ -13,7 +13,7 @@ import sys
 from .ansicode import *
 from .json_util import *
 from .str_util import *
-from .log_util import *
+from .log_util import GetStringFromLogLevel
 
 
 #------------------------------------------------------------------------

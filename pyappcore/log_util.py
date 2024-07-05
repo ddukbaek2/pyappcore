@@ -6,7 +6,6 @@ from typing import Any, Final, Optional, Type, TypeVar, Union
 import builtins
 from logging import Logger, Handler, StreamHandler, FileHandler, Formatter, LogRecord, getLevelName, NOTSET, DEBUG, INFO, WARN, WARNING, ERROR, CRITICAL, FATAL
 import os
-from .application import Application, SYMBOL_SERVICE
 from .ansicode import *
 from .str_util import GetTimestampString
 
@@ -39,7 +38,9 @@ class PrintHandler(Handler):
 #------------------------------------------------------------------------
 # 화면 출력.
 #------------------------------------------------------------------------
-def InitializeLOGSystem():
+def InitializeLogSystem():
+	# 순환참조 무서워서 로컬 임포트.
+	from .application import Application, SYMBOL_SERVICE
 	timestamp = GetTimestampString(EMPTY, EMPTY, EMPTY, True, EMPTY)
 	useLogFile : bool = False
 	logLevel : int = NOTSET

@@ -10,7 +10,7 @@ import os
 import sys
 import unittest
 from .application import Application
-from .log_util import *
+from .log_util import InitializeLogSystem
 from .str_util import *
 
 
@@ -192,7 +192,7 @@ def Launching(moduleName : str, functionName : str) -> int:
 		useLog : bool = Application.HasSymbol(SYMBOL_LOG)
 		if useLog:
 			Application.Log("__log__")
-			InitializeLOGSystem()
+			InitializeLogSystem()
 
 	# 예외.
 	except Exception as exception:
