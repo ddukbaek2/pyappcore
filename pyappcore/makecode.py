@@ -6,8 +6,6 @@ from typing import Any, Final, Optional, Type, TypeVar, Union
 import builtins
 import ast
 from datetime import datetime as DateTime
-import importlib
-import inspect
 import json
 import os
 import sys
@@ -50,70 +48,11 @@ def FindModuleFilePaths(moduleDirPath : str) -> set:
 	return moduleFilePaths
 
 
-# #------------------------------------------------------------------------
-# # 패키지 여부.
-# #------------------------------------------------------------------------
-# def IsPackage(name : str) -> bool:
-# 	try:
-# 		spec = importlib.util.find_spec(name)
-# 		return spec and spec.submodule_search_locations
-# 	except ModuleNotFoundError:
-# 		return False
-
-
-# #------------------------------------------------------------------------
-# # import importTarget 일 때 importTarget의 종류 반환.
-# #------------------------------------------------------------------------
-# def GetImportType(importTargetName : str) -> str:
-# 	try:
-# 		importTarget = importlib.import_module(importTargetName)
-# 		if IsPackage(importTarget):
-# 			return PACKAGE
-# 		if inspect.ismodule(importTarget):
-# 			return MODULE
-# 		elif inspect.isclass(importTarget):
-# 			return CLASS
-# 		elif inspect.isfunction(importTarget):
-# 			return FUNCTION
-# 		return None
-# 	except Exception as exception:
-# 		return None
-
-
-# #------------------------------------------------------------------------
-# # from fromTarget import importTarget 일 때 importTarget의 종류 반환.
-# #------------------------------------------------------------------------
-# def GetImportFromType(fromTargetName : str, importTargetName : str) -> str:
-# 	try:
-# 		fromTarget = importlib.import_module(fromTargetName)
-# 		importTarget = builtins.getattr(fromTarget, importTargetName)
-# 		importTargetFullName = f"{fromTargetName}.{importTargetName}"
-# 		if IsPackage(importTargetFullName):
-# 			return PACKAGE
-# 		elif inspect.ismodule(importTarget):
-# 			return MODULE
-# 		elif inspect.isclass(importTarget):
-# 			return CLASS
-# 		elif inspect.isfunction(importTarget):
-# 			return FUNCTION
-# 		return None
-# 	except Exception as exception:
-# 		return None
-
-
 #------------------------------------------------------------------------
 # "#type: ignore" 를 추가할지 말지 여부.
+# - fromimport의 from 혹은 import의 대상은 패키지 아니면 모듈이다.
 #------------------------------------------------------------------------
 def CheckTypeIgnore(name : str) -> bool:
-	# if not name:
-	# 	return False
-	# try:
-	# 	moduleSpec = importlib.util.find_spec(name)
-	# 	if not moduleSpec:
-	# 		return True
-	# except Exception as exception:
-	# 	return True
-	# return False
 	if IsExistsPackageOrModule(name):
 		return False
 	return True
@@ -121,6 +60,7 @@ def CheckTypeIgnore(name : str) -> bool:
 
 #------------------------------------------------------------------------
 # "# type: ignore" 를 추가할지 말지 여부.
+# - fromimport의 import 혹은 import의 대상은 패키지, 모듈, 클래스, 함수이다.
 #------------------------------------------------------------------------
 def CheckTypeIgnores(names : list[str]) -> bool:
 	if not names:
@@ -159,7 +99,6 @@ def CreateSymbolsInBuildToFile(symbols : list[str], symbolsDirPath : str) -> Non
 	symbolsFilePath : str = f"{symbolsDirPath}/{SYMBOLSINBUILDFILENAME}"
 	if os.path.exists(symbolsFilePath):
 		os.remove(symbolsFilePath)
-		builtins.print(f"os.remove(\"{symbolsFilePath}\")")
 
 	# 텍스트 작성.
 	symbols = set(symbols)
@@ -188,8 +127,7 @@ def CreateDependenciesInBuildToFile(moduleDirPaths : list[str], sourceDirPath : 
 	dependenciesFilePath : str = f"{sourceDirPath}/{DEPENDENCIESINBUILDFILENAME}"
 	if os.path.exists(dependenciesFilePath):
 		os.remove(dependenciesFilePath)
-		# builtins.print(f"os.remove(\"{dependenciesFilePath}\")")
-  
+
 	# 단독 임포트 금지 모듈 이름 목록.
 	excludeDontOnlyImportModuleNames = list()
 	excludeDontOnlyImportModuleNames.append("__future__")
@@ -200,8 +138,6 @@ def CreateDependenciesInBuildToFile(moduleDirPaths : list[str], sourceDirPath : 
 	excludesModuleNames.add("__prebuild__")
 	excludesModuleNames.add("__launcher__")
 	excludesModuleNames.add("__pyappcore_dependencies_in_build__")
-	# for moduleFilePath in FindModuleFilePaths(sourceDirPath):
-		# path, name, extension = GetSplitFilePath(moduleFilePath)
 
 	# 모든 모듈 파일 경로 가져옴.
 	moduleFilePaths = set()
@@ -233,11 +169,11 @@ def CreateDependenciesInBuildToFile(moduleDirPaths : list[str], sourceDirPath : 
 		# 파일(모듈)의 이름 가져오기.
 		path, name, extension = GetSplitFilePath(moduleFilePath)
 
-		# # 빌드되는 소스와 동일 폴더는 종속성 여부를 따지지 않고 일단 모듈부터 집어넣는다.
-		# # 아래쪽에서 실제 소스안의 모듈이나 소스안의 모듈의 참조 클래스 등을 집어 넣는 상황도
-  		# # 이미 고려되어 있기 때문에 미리 넣는다고 문제가 될 일은 아예 없다.
-		# if not name in importData:
-		# 	importData[name] = set()
+		# 빌드되는 소스와 동일 폴더는 종속성 여부를 따지지 않고 일단 모듈부터 집어넣는다.
+		# 아래쪽에서 실제 소스안의 모듈이나 소스안의 모듈의 참조 클래스 등을 집어 넣는 상황도
+  		# 이미 고려되어 있기 때문에 미리 넣는다고 문제가 될 일은 아예 없다.
+		if not name in importData:
+			importData[name] = set()
 
 		with open(moduleFilePath, READMODE, encoding = UTF8) as file:
 			# 파싱 및 구문분석.
