@@ -246,7 +246,7 @@ def CreateDependenciesInBuildToFile(moduleDirPaths : list[str], sourceDirPath : 
 			importTargetsText = COMMAWITHSPACE.join(importTargetNames)
 			text = f"from {srcname} import {importTargetsText}"
 			if CheckTypeIgnore(fromTargetName) or CheckTypeIgnores(fromTargetName, importTargetNames):
-				text += TYPEIGNORE
+				text += f" {TYPEIGNORE}"
 		else:
 			text = f"import {srcname}"
 			if CheckTypeIgnore(fromTargetName):

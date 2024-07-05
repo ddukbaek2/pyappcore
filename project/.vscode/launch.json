@@ -7,7 +7,7 @@
             "preLaunchTask": "DEBUG_TASK",
             "connect": {
                 "host": "localhost",
-                "port": "${config:launcher.debug.remotePort}"
+                "port": "${config:pyappcore.debug.remotePort}"
             },
             "pathMappings": [
                 {
@@ -23,9 +23,9 @@
             "script": "tools/run.bat",
 			"args": [
 				"${workspaceFolder}",
-				"${config:launcher.launcherFilePath}",
+				"${config:pyappcore.launcherFilePath}",
                 "NODEBUG/LOG",
-                "${config:launcher.arguments}",
+                "${config:pyappcore.nodebug.arguments}",
 			],
             "cwd": "${workspaceFolder}"
         }

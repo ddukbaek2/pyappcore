@@ -5,7 +5,7 @@ from __future__ import annotations
 import builtins
 import os
 import sys
-from pyappcore import debug_util, Application, Launching
+from pyappcore import Application, Launching
 
 
 #------------------------------------------------------------------------

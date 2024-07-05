@@ -35,9 +35,9 @@
             "args": [
                 "--background",
                 "--python",
-                "${config:launcher.launcherFilePath}",
+                "${config:pyappcore.launcherFilePath}",
                 "DEBUG/LOG",
-                "${config:launcher.arguments}"
+                "${config:pyappcore.debug.arguments}"
             ],
             "isBackground": true,
             "dependsOn": "SETUP_TASK",
@@ -72,7 +72,7 @@
                 "-ExecutionPolicy",
                 "Bypass",
                 "-Command",
-                "& '${workspaceFolder}/tools/build.bat' '${workspaceFolder}' '${config:launcher.launcherFilePath}' '${config:launcher.build.executeFileName}' '${config:launcher.build.isHideConsole}'"
+                "& '${workspaceFolder}/tools/build.bat' '${workspaceFolder}' '${config:pyappcore.launcherFilePath}' '${config:pyappcore.build.executeFileName}' '${config:pyappcore.build.isHideConsole}'"
             ],
             "runOptions": {
                 "instanceLimit": 1

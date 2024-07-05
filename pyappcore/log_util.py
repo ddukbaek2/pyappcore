@@ -4,8 +4,10 @@
 from __future__ import annotations
 from typing import Any, Final, Optional, Type, TypeVar, Union
 import builtins
-from logging import Logger, Handler, StreamHandler, FileHandler, Formatter, LogRecord, getLevelName, NOTSET, DEBUG, INFO, WARN, WARNING, ERROR, CRITICAL, FATAL
+from logging import Logger, handlers, Handler, StreamHandler, FileHandler, Formatter, LogRecord, getLevelName, NOTSET, DEBUG, INFO, WARN, WARNING, ERROR, CRITICAL, FATAL
 import os
+import queue
+import threading
 from .ansicode import *
 from .str_util import GetTimestampString
 
@@ -59,22 +61,30 @@ def InitializeLogSystem():
 	elif Application.HasSymbol(SYMBOL_SERVICE):
 		useLogFile = True
 		logLevel = INFO
-		logFilePath = Application.GetRootPathWithRelativePath(f"logs/pyappcore-express-{timestamp}.log")
+		logFilePath = Application.GetRootPathWithRelativePath(f"logs/pyappcore-service-{timestamp}.log")
 	# VSCode에서 디버깅 없이 실행.
 	else:
 		useLogFile = True
 		logLevel = INFO
 		logFilePath = Application.GetRootPathWithRelativePath(f"logs/pyappcore-nodebug-{timestamp}.log")
 
+
 	# 설정.
 	applicationLogger : Logger = Application.GetLogger()
 	applicationLogger.setLevel(logLevel)
+
+	# 로깅 큐.
+	# 로그가 자꾸 씹히는 이슈 있음.
+	logQueue = queue.Queue()
+	ququeHandler = handlers.QueueHandler(logQueue)
+	applicationLogger.addHandler(ququeHandler)
+
 	# formatter : Formatter = Formatter("[%(asctime)s][%(name)s][%(levelname)s] %(message)s")
 	formatter : Formatter = Formatter("[%(asctime)s][%(levelname)s] %(message)s")
 	printHandler : PrintHandler = PrintHandler()
 	printHandler.setLevel(logLevel)
 	printHandler.setFormatter(formatter)
-	applicationLogger.addHandler(printHandler)
+	# applicationLogger.addHandler(printHandler)
 
 	# 로그파일 설정.
 	if useLogFile:
@@ -84,7 +94,12 @@ def InitializeLogSystem():
 		fileHandler : StreamHandler = FileHandler(logFilePath)
 		fileHandler.setLevel(logLevel)
 		fileHandler.setFormatter(formatter)
-		applicationLogger.addHandler(fileHandler)
+		# applicationLogger.addHandler(fileHandler)
+		queueListener = handlers.QueueHandler(logQueue, printHandler, fileHandler)
+		ququeHandler.start()
+	else:
+		queueListener = handlers.QueueHandler(logQueue, printHandler)
+		ququeHandler.start()
 
 
 #------------------------------------------------------------------------

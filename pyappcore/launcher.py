@@ -129,6 +129,7 @@ def Launching(moduleName : str, functionName : str) -> int:
 			# 빌드 시 DEBUG 심볼이 있던 없던 무조건 False.
 			Application._Application__SetDebug(False)
 			Application.Log(f"Application.IsDebug() : {Application.IsDebug()}")
+			Application.Log("__nodebug__")
 
 		# 빌드 외.
 		else:
@@ -147,13 +148,16 @@ def Launching(moduleName : str, functionName : str) -> int:
 
 			# 실행된 파이썬 스크립트 파일 설정.
 			if sys.argv:
+				Application.Log("__execute__")
 				executeFileName = sys.argv[0]
 				Application._Application__SetExecuteFileName(executeFileName)
 				sys.argv = sys.argv[1:]
 
 			# 심볼 설정.
 			if sys.argv:
+				Application.Log("__symbols__")
 				symbolsString = sys.argv[0]
+				Application.Log(f"symbolsString: {symbolsString}")
 				Application._Application__SetSymbols(symbolsString)
 				sys.argv = sys.argv[1:]
 
@@ -161,16 +165,20 @@ def Launching(moduleName : str, functionName : str) -> int:
 			useDebug : bool = Application.HasSymbol(SYMBOL_DEBUG)
 			Application._Application__SetDebug(useDebug)
 			Application.Log(f"Application.IsDebug() : {Application.IsDebug()}")
-
+				
 			# 디버그 모드 일 경우 원격 디버거 실행.
 			# 콘솔에 출력되는 해당 문자열을 감지해서 디버그 대기와 시작을 판단하므로 수정금지.
 			if Application.IsDebug():
+				Application.Log("__debug__")
 				Application.Log("pyappcore.launcher.debugpy.start()")
 				remotePort : int = 4885 # vscodeSettings["launcher"]["debug"]["remotePort"]
 				debugpy.listen(("localhost", remotePort))
 				Application.Log("pyappcore.launcher.debugpy.wait()")
 				debugpy.wait_for_client()
 				Application.Log("pyappcore.launcher.debugpy.started()")
+			else:
+				Application.Log("__nodebug__")
+
 
 		# 공통.
 		# 인자 재조립 처리.
@@ -181,7 +189,7 @@ def Launching(moduleName : str, functionName : str) -> int:
 
 		# 잔여 인자 출력.
 		if sys.argv:
-			Application.Log("sys.argv")
+			Application.Log("__arguments__")
 			index = 0
 			for arg in sys.argv:
 				Application.Log(f" - [{index}] {arg}")
