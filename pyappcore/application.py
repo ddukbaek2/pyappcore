@@ -61,25 +61,23 @@ class Application:
 	#------------------------------------------------------------------------
 	@staticmethod
 	def __Log(message : str, logLevel : int) -> None:
-		if not Application._Application__Symbols or not Application.HasSymbol(SYMBOL_LOG):
-			timestamp = GetTimestampString(HYPHEN, SPACE, COLON, True, COMMA)
-			logName = GetStringFromLogLevel(logLevel)
-			Print(f"[{timestamp}][{logName}] {message}")
-			return
-		
-		logger = Application.GetLogger()
-		if logLevel == LOG_NOTSET: # logging.NOTSET:
-			return
-		elif logLevel == LOG_DEBUG: # logging.DEBUG:
-			logger.debug(message)
-		elif logLevel == LOG_INFO: # logging.INFO:
-			logger.info(message)
-		elif logLevel == LOG_WARNING: # logging.WARN or logging.WARNING:
-			logger.warning(message)
-		elif logLevel == LOG_ERROR: # logging.ERROR:
-			logger.error(message)
-		elif logLevel == LOG_CRITICAL: # logging.FATAL or logging.CRITICAL:
-			logger.critical(message)
+		timestamp = GetTimestampString(HYPHEN, SPACE, COLON, True, COMMA)
+		logName = GetStringFromLogLevel(logLevel)
+		builtins.print(f"[{timestamp}][{logName}] {message}")
+		if Application._Application__Symbols and SYMBOL_LOG in Application._Application__Symbols:
+			applicationLogger = Application.GetLogger()
+			if logLevel == LOG_NOTSET: # logging.NOTSET:
+				return
+			elif logLevel == LOG_DEBUG: # logging.DEBUG:
+				applicationLogger.debug(message)
+			elif logLevel == LOG_INFO: # logging.INFO:
+				applicationLogger.info(message)
+			elif logLevel == LOG_WARNING: # logging.WARN or logging.WARNING:
+				applicationLogger.warning(message)
+			elif logLevel == LOG_ERROR: # logging.ERROR:
+				applicationLogger.error(message)
+			elif logLevel == LOG_CRITICAL: # logging.FATAL or logging.CRITICAL:
+				applicationLogger.critical(message)
 
 	#------------------------------------------------------------------------
 	# 로그 디버그 출력.

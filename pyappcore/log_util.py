@@ -95,11 +95,11 @@ def InitializeLogSystem():
 		fileHandler.setLevel(logLevel)
 		fileHandler.setFormatter(formatter)
 		# applicationLogger.addHandler(fileHandler)
-		queueListener = handlers.QueueHandler(logQueue, printHandler, fileHandler)
-		ququeHandler.start()
+		queueListener = handlers.QueueListener(logQueue, printHandler, fileHandler)
+		queueListener.start()
 	else:
-		queueListener = handlers.QueueHandler(logQueue, printHandler)
-		ququeHandler.start()
+		queueListener = handlers.QueueListener(logQueue, printHandler)
+		queueListener.start()
 
 
 #------------------------------------------------------------------------

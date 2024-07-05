@@ -1,4 +1,5 @@
 # pyappcore
+
 ## 개요
 - 파이썬 기반의 앱을 구현할 때 사용할 수 있는 프레임워크 패키지 입니다.
 
@@ -25,6 +26,30 @@
 - run-clean.bat : 기존 빌드파일 제거.
 - run-build.bat : wheel 빌드.
 - run-distribution.bat : PyPi 배포.
+
+## VSCode 기반 설치 플러그인 목록.
+
+### 공통
+- Korean Language Pack for Visual Studio Code
+- PowerShell
+
+### 파이썬
+- Python
+- Python Debugger
+- Python Environment Manager
+- Python Image Preview
+- Pylance
+
+### 블렌더
+- Blender Development
+- Blender Python Code Templates
+
+### 맥스
+- Language MaxScript
+- MaxScript
+
+### QT
+- PYQT Integration
 
 ## 개발방법 및 노하우
 1. run-activate 로 가상환경을 활성화 합니다.
