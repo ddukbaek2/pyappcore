@@ -207,7 +207,7 @@ class Application:
 		if symbolsString:
 			# 입력받은 텍스트 정리.
 			symbolsString = symbolsString.upper()
-			symbols : list[str] = str_util.GetStringFromSeperatedStringList(symbolsString, SLASH)
+			symbols : list[str] = GetStringFromSeperatedStringList(symbolsString, SLASH)
 
 			# 객체 생성 및 심볼 설정.
 			Application._Application__Symbols = set()
