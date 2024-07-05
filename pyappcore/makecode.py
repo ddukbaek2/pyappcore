@@ -236,7 +236,10 @@ def CreateDependenciesInBuildToFile(moduleDirPaths : list[str], sourceDirPath : 
 	moduleNames = sorted(importData.keys(), key = lambda value: (value[0] != "_", value))
 	for fromTargetName in moduleNames:		
 		importTargetNames = importData[fromTargetName]
-		srcname = srcnames[fromTargetName]
+
+		srcname = fromTargetName
+		if srcname in srcnames:
+			srcname = srcnames[srcname]
 		text : str = str()
 		if importTargetNames:
 			importTargetsText = COMMAWITHSPACE.join(importTargetNames)
