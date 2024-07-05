@@ -64,7 +64,7 @@ class Application:
 		timestamp = GetTimestampString(HYPHEN, SPACE, COLON, True, COMMA)
 		logName = GetStringFromLogLevel(logLevel)
 		# builtins.print(f"[{timestamp}][{logName}] {message}")
-		PrintLog(f"[{timestamp}][{logName}] {message}")
+		PrintLog(f"[{timestamp}][{logName}] {message}", logLevel)
 
 		# 로그파일 기록시.
 		if Application._Application__Symbols and SYMBOL_LOG in Application._Application__Symbols:

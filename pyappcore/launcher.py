@@ -128,7 +128,7 @@ def Launching(moduleName : str, functionName : str) -> int:
 			# 디버그 모드 설정.
 			# 빌드 시 DEBUG 심볼이 있던 없던 무조건 False.
 			Application._Application__SetDebug(False)
-			Application.Log(f"Application.IsDebug() : {Application.IsDebug()}")
+			Application.Log(f"Application.IsDebug(): {Application.IsDebug()}")
 			Application.Log("__nodebug__")
 
 		# 빌드 외.
@@ -157,14 +157,15 @@ def Launching(moduleName : str, functionName : str) -> int:
 			if sys.argv:
 				Application.Log("__symbols__")
 				symbolsString = sys.argv[0]
-				Application.Log(f"symbolsString: {symbolsString}")
+				# Application.Log(f"symbolsString: {symbolsString}")
 				Application._Application__SetSymbols(symbolsString)
+				Application.Log(f"Application.GetSymbols(): {Application.GetSymbols()}")
 				sys.argv = sys.argv[1:]
 
 			# 디버그 모드 설정.
 			useDebug : bool = Application.HasSymbol(SYMBOL_DEBUG)
 			Application._Application__SetDebug(useDebug)
-			Application.Log(f"Application.IsDebug() : {Application.IsDebug()}")
+			Application.Log(f"Application.IsDebug(): {Application.IsDebug()}")
 				
 			# 디버그 모드 일 경우 원격 디버거 실행.
 			# 콘솔에 출력되는 해당 문자열을 감지해서 디버그 대기와 시작을 판단하므로 수정금지.

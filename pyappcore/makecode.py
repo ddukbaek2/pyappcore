@@ -228,6 +228,12 @@ def CreateDependenciesInBuildToFile(moduleDirPaths : list[str], sourceDirPath : 
 	writelines.append("")
 	writelines.append("")
 
+	# 제외해야하는 모듈 제거.
+	for moduleName in importData.keys():
+		if moduleName not in excludesModuleNames:
+			continue
+		del importData[moduleName]
+
 	# 패키지 노드 가져오기.
 	node = Node.BuildTree(sourceDirPath)
 	srcnames = Node.GetModuleNames(node)
@@ -250,7 +256,7 @@ def CreateDependenciesInBuildToFile(moduleDirPaths : list[str], sourceDirPath : 
 		else:
 			text = f"import {srcname}"
 			if CheckTypeIgnore(fromTargetName):
-				text += TYPEIGNORE
+				text += f" {TYPEIGNORE}"
 			
 		writelines.append(text)
 
