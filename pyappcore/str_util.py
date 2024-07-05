@@ -65,11 +65,11 @@ def CreateStringListFromSeperatedStringList(strings : list[str], seperator : str
 #------------------------------------------------------------------------
 # 현재 시간 텍스트 반환.
 #------------------------------------------------------------------------
-def GetTimestampString(seperateDate : str = EMPTY, seperateGap : str = SPACE, seperateTime : str = EMPTY, useMilliseconds : bool = False) -> str:
+def GetTimestampString(seperateDate : str = EMPTY, seperateGap : str = SPACE, seperateTime : str = EMPTY, useMilliseconds : bool = False, seperateMillySecondsTime : str = COMMA) -> str:
 	nowTime : DateTime = DateTime.now()
 	if useMilliseconds:
 		milliseconds = nowTime.strftime("%f")[:3]
-		timestamp = nowTime.strftime(f"%Y{seperateDate}%m{seperateDate}%d{seperateGap}%H{seperateTime}%M{seperateTime}%S{seperateTime}{milliseconds}")
+		timestamp = nowTime.strftime(f"%Y{seperateDate}%m{seperateDate}%d{seperateGap}%H{seperateTime}%M{seperateTime}%S{seperateMillySecondsTime}{milliseconds}")
 	else:
 		timestamp = nowTime.strftime(f"%Y{seperateDate}%m{seperateDate}%d{seperateGap}%H{seperateTime}%M{seperateTime}%S")
 	return timestamp
@@ -80,7 +80,7 @@ def GetTimestampString(seperateDate : str = EMPTY, seperateGap : str = SPACE, se
 #------------------------------------------------------------------------
 def PrintTimestamp(text : str = str()) -> None:
 	from pyappcore import ansicode
-	timestamp = GetTimestampString(HYPHEN, SPACE, COLON, True)
+	timestamp = GetTimestampString(HYPHEN, SPACE, COLON, True, COMMA)
 	if text:
 		ansicode.PrintWithBold(f"[{timestamp}] {text}")
 	else:

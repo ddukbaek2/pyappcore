@@ -6,7 +6,7 @@ from typing import Any, Final, Optional, Type, TypeVar, Union
 import builtins
 import importlib.util
 import os
-from .debug_util import RaiseException
+from .application import Application
 from .str_util import GetSplitFilePath
 
 
@@ -103,13 +103,13 @@ class Node:
 		if node.IsPackage:
 			path = f"{prefix}.{node.Name}" if prefix else node.Name
 			if usePrint:
-				builtins.print(f"package: {path}")
+				Application.Log(f"package: {path}")
 			for child in node.Children:
 				Node.TraverseTree(child, path, usePrint, moduleFullNames)
 		else:
 			path = f"{prefix}.{node.Name}" if prefix else node.Name
 			if usePrint:
-				builtins.print(f"module: {path}")
+				Application.Log(f"module: {path}")
 			if not moduleFullNames is None:
 				moduleFullNames[path] = node.Name
 
@@ -146,8 +146,7 @@ def IsExistsPackageOrModule(packageOrModuleName : str) -> bool:
 				return True                
 			return False
 	except Exception as exception:
-		# builtins.print(exception)
-		RaiseException(exception)
+		Application.LogException(exception, False, False)
 		return False
 
 
@@ -162,7 +161,6 @@ def IsExistsAttribute(moduleName : str, attributeName : str) -> bool:
 		if not builtins.hasattr(module, attributeName):
 			return False
 	except Exception as exception:
-		# builtins.print(exception)
-		RaiseException(exception)
+		Application.LogException(exception, False, False)
 		return False
 	return True

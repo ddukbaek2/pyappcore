@@ -4,11 +4,23 @@
 from __future__ import annotations
 from typing import Any, Final, Optional, Type, TypeVar, Union
 import builtins
-from logging import Logger, Handler, StreamHandler, FileHandler, Formatter, LogRecord, NOTSET, DEBUG, INFO, WARN, WARNING, ERROR, CRITICAL, FATAL
+from logging import Logger, Handler, StreamHandler, FileHandler, Formatter, LogRecord, getLevelName, NOTSET, DEBUG, INFO, WARN, WARNING, ERROR, CRITICAL, FATAL
 import os
-from .application import Application, SYMBOL_EXPRESS
+from .application import Application, SYMBOL_SERVICE
 from .ansicode import *
 from .str_util import GetTimestampString
+
+
+#------------------------------------------------------------------------
+# 전역 상수 목록.
+#------------------------------------------------------------------------
+EMPTY : str = ""
+NONE : str = "NONE"
+COLON : str = ":"
+SPACE : str = " "
+SLASH : str = "/"
+HYPHEN : str = "-"
+COMMA : str = ","
 
 
 #------------------------------------------------------------------------
@@ -28,7 +40,7 @@ class PrintHandler(Handler):
 # 화면 출력.
 #------------------------------------------------------------------------
 def InitializeLOGSystem():
-	timestamp = GetTimestampString("", "", "", False)
+	timestamp = GetTimestampString(EMPTY, EMPTY, EMPTY, True, EMPTY)
 	useLogFile : bool = False
 	logLevel : int = NOTSET
 	logFilePath : str = str()
@@ -43,7 +55,7 @@ def InitializeLOGSystem():
 		logLevel = DEBUG
 		logFilePath = Application.GetRootPathWithRelativePath(f"logs/pyappcore-debug-{timestamp}.log")
 	# Blender.exe로 소스코드 실행.
-	elif Application.HasSymbol(SYMBOL_EXPRESS):
+	elif Application.HasSymbol(SYMBOL_SERVICE):
 		useLogFile = True
 		logLevel = INFO
 		logFilePath = Application.GetRootPathWithRelativePath(f"logs/pyappcore-express-{timestamp}.log")
@@ -72,3 +84,10 @@ def InitializeLOGSystem():
 		fileHandler.setLevel(logLevel)
 		fileHandler.setFormatter(formatter)
 		applicationLogger.addHandler(fileHandler)
+
+
+#------------------------------------------------------------------------
+# 로그레벨에 대한 문자열 출력.
+#------------------------------------------------------------------------
+def GetStringFromLogLevel(logLevel : int) -> str:
+	return getLevelName(logLevel)

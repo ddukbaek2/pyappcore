@@ -14,7 +14,7 @@ class Test_PyAppCore(unittest.TestCase):
 	# 테스트 : 출력.
 	#------------------------------------------------------------------------
 	def test_Print(self):
-		builtins.print("Test_PyAppCore.test_Print()")
+		Application.Log("Test_PyAppCore.test_Print()")
 
 
 #------------------------------------------------------------------------

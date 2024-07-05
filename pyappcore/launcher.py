@@ -10,7 +10,6 @@ import os
 import sys
 import unittest
 from .application import Application
-from .debug_util import *
 from .log_util import *
 from .str_util import *
 
@@ -57,7 +56,7 @@ def TestsLaunching(rootPath : str) -> int:
 	# 소스, 테스트 패키지.
 	if rootPath and rootPath not in sys.path: sys.path.append(rootPath)
 
-	builtins.print("__tests__")
+	Application.Log("__tests__")
 	Application._Application__SetBuild(False)
 	Application._Application__SetDebug(False)
 	Application._Application__SetSymbols("DEBUG/LOG")
@@ -76,7 +75,7 @@ def TestsLaunching(rootPath : str) -> int:
 # 시작.
 #------------------------------------------------------------------------
 def Launching(moduleName : str, functionName : str) -> int:
-	builtins.print("pyappcore.launcher.Launch()")
+	Application.Log("pyappcore.launcher.Launch()")
 
 	# 빌드인 경우 경로.
 	isBuild : bool = IsBuild()
@@ -101,15 +100,15 @@ def Launching(moduleName : str, functionName : str) -> int:
 	Application._Application__SetSymbols(EMPTY)
 
 	# 프로젝트 값 출력.
-	builtins.print(f"Application.IsBuild(): {Application.IsBuild()}")  
-	builtins.print(f"Application.GetRootPath(): {Application.GetRootPath()}")
-	builtins.print(f"Application.GetResPath(): {Application.GetResPath()}")
+	Application.Log(f"Application.IsBuild(): {Application.IsBuild()}")  
+	Application.Log(f"Application.GetRootPath(): {Application.GetRootPath()}")
+	Application.Log(f"Application.GetResPath(): {Application.GetResPath()}")
 
 	# 시도.
 	try:
 		# 실행파일 빌드.
 		if Application.IsBuild():
-			print("__build__")
+			Application.Log("__build__")
 
 			# 실행된 파일 이름 설정.
 			if sys.argv:
@@ -119,7 +118,7 @@ def Launching(moduleName : str, functionName : str) -> int:
 
 			# 심볼 설정.
 			if SYMBOLSINBUILDMODULENAME in sys.modules:
-				builtins.print("__pycore_symbols_in_build__")
+				Application.Log("__pycore_symbols_in_build__")
 				module = sys.modules[SYMBOLSINBUILDMODULENAME]
 				symbols = module.SYMBOLS
 				if symbols:
@@ -129,11 +128,11 @@ def Launching(moduleName : str, functionName : str) -> int:
 			# 디버그 모드 설정.
 			# 빌드 시 DEBUG 심볼이 있던 없던 무조건 False.
 			Application._Application__SetDebug(False)
-			builtins.print(f"Application.IsDebug() : {Application.IsDebug()}")
+			Application.Log(f"Application.IsDebug() : {Application.IsDebug()}")
 
 		# 빌드 외.
 		else:
-			print("__nobuild__")
+			Application.Log("__nobuild__")
 
 			# PYCHARM.
 			# MANUAL.
@@ -161,17 +160,17 @@ def Launching(moduleName : str, functionName : str) -> int:
 			# 디버그 모드 설정.
 			useDebug : bool = Application.HasSymbol(SYMBOL_DEBUG)
 			Application._Application__SetDebug(useDebug)
-			builtins.print(f"Application.IsDebug() : {Application.IsDebug()}")
+			Application.Log(f"Application.IsDebug() : {Application.IsDebug()}")
 
 			# 디버그 모드 일 경우 원격 디버거 실행.
 			# 콘솔에 출력되는 해당 문자열을 감지해서 디버그 대기와 시작을 판단하므로 수정금지.
 			if Application.IsDebug():
-				builtins.print("pyappcore.launcher.debugpy.start()")
+				Application.Log("pyappcore.launcher.debugpy.start()")
 				remotePort : int = 4885 # vscodeSettings["launcher"]["debug"]["remotePort"]
 				debugpy.listen(("localhost", remotePort))
-				builtins.print("pyappcore.launcher.debugpy.wait()")
+				Application.Log("pyappcore.launcher.debugpy.wait()")
 				debugpy.wait_for_client()
-				builtins.print("pyappcore.launcher.debugpy.started()")
+				Application.Log("pyappcore.launcher.debugpy.started()")
 
 		# 공통.
 		# 인자 재조립 처리.
@@ -182,41 +181,33 @@ def Launching(moduleName : str, functionName : str) -> int:
 
 		# 잔여 인자 출력.
 		if sys.argv:
-			builtins.print("sys.argv")
+			Application.Log("sys.argv")
 			index = 0
 			for arg in sys.argv:
-				builtins.print(f" - [{index}] {arg}")
+				Application.Log(f" - [{index}] {arg}")
 				index += 1
 
 		# 로그 설정.
 		# 순서 : DEBUG < INFO < WARNING < ERROR < CRITICAL.
 		useLog : bool = Application.HasSymbol(SYMBOL_LOG)
 		if useLog:
-			builtins.print("__log__")
+			Application.Log("__log__")
 			InitializeLOGSystem()
 
 	# 예외.
 	except Exception as exception:
-		# builtins.print(exception)
-		RaiseException(exception)
-		return 1
+		Application.LogException(exception)
 		
 	# 시작.
 	try:
-		builtins.print("__running__")
+		Application.Log("__running__")
 		module = importlib.import_module(moduleName)
 		function = builtins.getattr(module, functionName)
 		exitCode : int = function(sys.argv)
 		return exitCode
 	# 예외.
 	except Exception as exception:
-		useLog : bool = Application.HasSymbol(SYMBOL_LOG)
-		if useLog:
-			Application.LogException(exception)
-		else:
-			# builtins.print(exception)
-			RaiseException(exception)
-		return 1
+		Application.LogException(exception)
 
 
 # #------------------------------------------------------------------------

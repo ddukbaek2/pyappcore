@@ -20,7 +20,7 @@ LONG_DESCRIPTION_CONTENT_TYPE = os.getenv("LONG_DESCRIPTION_CONTENT_TYPE")
 URL = os.getenv("URL")
 PYTHON_REQUIRES = os.getenv("PYTHON_REQUIRES")
 PYPI_API_TOKEN = os.getenv("PYPI_API_TOKEN")
-builtins.print(VERSION)
+builtins.print(f"pyappcore: {VERSION}")
 builtins.print(f"set PYPI_API_TOKEN={PYPI_API_TOKEN}")
 
 

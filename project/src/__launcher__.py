@@ -5,7 +5,7 @@ from __future__ import annotations
 import builtins
 import os
 import sys
-from pyappcore import debug_util, Launching
+from pyappcore import debug_util, Application, Launching
 
 
 #------------------------------------------------------------------------
@@ -24,8 +24,8 @@ STARTFUNCTIONNAME : str = "Main"
 #------------------------------------------------------------------------
 if __name__ == "__main__":
 	try:
-		builtins.print("__launcher__")
-		builtins.print("__main__")
+		Application.Log("__launcher__")
+		Application.Log("__main__")
 		# 소스 패키지(루트폴더)를 모듈 검색 경로에 추가.
 		if ROOTPATH and ROOTPATH not in sys.path: sys.path.append(ROOTPATH)
 		# 소스 패키지의 서브 패키지(소스폴더)를 모듈 검색 경로에 추가.
@@ -38,5 +38,4 @@ if __name__ == "__main__":
 		exitCode : int = Launching(STARTMODULENAME, STARTFUNCTIONNAME)
 		sys.exit(exitCode)
 	except Exception as exception:
-		debug_util.RaiseException(exception)
-		sys.exit(1)
+		Application.LogException(exception)

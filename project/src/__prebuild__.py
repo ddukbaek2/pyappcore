@@ -4,8 +4,7 @@
 from __future__ import annotations
 import builtins
 import os
-import sys
-from pyappcore import makecode, str_util, debug_util
+from pyappcore import Application, makecode, str_util
 
 
 #------------------------------------------------------------------------
@@ -22,7 +21,7 @@ ROOTPATH : str = os.path.dirname(SRCPATH).replace("\\", "/")
 #------------------------------------------------------------------------
 if __name__ == "__main__":
 	try:
-		builtins.print("__prebuild__")
+		Application.Log("__prebuild__")
 		# 1. 바이너리 빌드시 VSCODE 상의 심볼을 읽을 수 있도록 코드 생성.
 		vscodeSettings = makecode.GetVisualStudioCodeSettings(ROOTPATH)
 		if vscodeSettings:
@@ -35,5 +34,4 @@ if __name__ == "__main__":
 		moduleNames.add("debugpy")
 		makecode.CreateDependenciesInBuildToFile([SRCPATH], SRCPATH, moduleNames)
 	except Exception as exception:
-		debug_util.RaiseException(exception)
-		sys.exit(1)
+		Application.LogException(exception)

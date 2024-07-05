@@ -14,5 +14,5 @@ from dotenv import load_dotenv
 if __name__ == "__main__":
 	load_dotenv(dotenv_path = ".env", override = True)
 	version = os.getenv("VERSION")
-	builtins.print(f"pyappcore {version}")
+	builtins.print(f"pyappcore: {version}")
 	pass

@@ -9,8 +9,11 @@ import logging
 from logging import Logger
 import subprocess
 import traceback
+import sys
+from .ansicode import *
 from .json_util import *
 from .str_util import *
+from .log_util import *
 
 
 #------------------------------------------------------------------------
@@ -25,7 +28,7 @@ COLON : str = ":"
 SPACE : str = " "
 DEBUG : str = "DEBUG"
 
-SYMBOL_EXPRESS : str = "EXPRESS" # "PYAPPCORE_SYMBOL_EXPRESS"
+SYMBOL_SERVICE : str = "SERVICE" # "PYAPPCORE_SYMBOL_SERVICE"
 SYMBOL_SUBPROCESS : str = "SUBPROCESS" # "PYAPPCORE_SYMBOL_SUBPROCESS"
 SYMBOL_LOG : str = "LOG" # "PYAPPCORE_SYMBOL_LOG"
 SYMBOL_DEBUG : str = "DEBUG" # "PYAPPCORE_SYMBOL_DEBUG"
@@ -57,22 +60,25 @@ class Application:
 	# 실제 로그 출력.
 	#------------------------------------------------------------------------
 	@staticmethod
-	def __Log(message : str, level : int) -> None:
-		if not Application.HasSymbol(SYMBOL_LOG):
+	def __Log(message : str, logLevel : int) -> None:
+		if not Application._Application__Symbols or not Application.HasSymbol(SYMBOL_LOG):
+			timestamp = GetTimestampString(HYPHEN, SPACE, COLON, True, COMMA)
+			logName = GetStringFromLogLevel(logLevel)
+			Print(f"[{timestamp}][{logName}] {message}")
 			return
 		
 		logger = Application.GetLogger()
-		if level == LOG_NOTSET: # logging.NOTSET:
+		if logLevel == LOG_NOTSET: # logging.NOTSET:
 			return
-		elif level == LOG_DEBUG: # logging.DEBUG:
+		elif logLevel == LOG_DEBUG: # logging.DEBUG:
 			logger.debug(message)
-		elif level == LOG_INFO: # logging.INFO:
+		elif logLevel == LOG_INFO: # logging.INFO:
 			logger.info(message)
-		elif level == LOG_WARNING: # logging.WARN or logging.WARNING:
+		elif logLevel == LOG_WARNING: # logging.WARN or logging.WARNING:
 			logger.warning(message)
-		elif level == LOG_ERROR: # logging.ERROR:
+		elif logLevel == LOG_ERROR: # logging.ERROR:
 			logger.error(message)
-		elif level == LOG_CRITICAL: # logging.FATAL or logging.CRITICAL:
+		elif logLevel == LOG_CRITICAL: # logging.FATAL or logging.CRITICAL:
 			logger.critical(message)
 
 	#------------------------------------------------------------------------
@@ -114,10 +120,25 @@ class Application:
 	# 로그 익셉션 출력.
 	#------------------------------------------------------------------------
 	@staticmethod
-	def LogException(exception : Exception, useTraceback : bool = False) -> None:
-		Application._Application__Log(exception, LOG_EXCEPTION)
+	def LogException(exception : Exception, useTraceback : bool = True, useExit : bool = True) -> None:
 		if useTraceback:
 			traceback.print_exc()
+			tb = exception.__traceback__
+			while tb:
+				filename = tb.tb_frame.f_code.co_filename
+				lineno = tb.tb_lineno
+				funcname = tb.tb_frame.f_code.co_name
+				result = traceback.format_exc()
+				result = result.strip()
+				line = result.splitlines()[-1]
+				Application._Application__Log(f"Exception in {filename}, line {lineno}, in {funcname}", LOG_EXCEPTION)
+				Application._Application__Log(f"\t{line}", LOG_EXCEPTION)
+				tb = tb.tb_next
+		else:
+			Application._Application__Log(exception, LOG_EXCEPTION)
+
+		if useExit:
+			sys.exit(1)
 	
 	#------------------------------------------------------------------------
 	# 로그 크리티컬 출력.
@@ -224,10 +245,11 @@ class Application:
 	#------------------------------------------------------------------------
 	@staticmethod
 	def __AddSymbols(symbolsString : str) -> None:
+		additionalSymbols = GetStringFromSeperatedStringList(symbolsString, SLASH)
 		symbols = Application.GetSymbols()
 		if symbols:
-			originSymbolsString = SLASH.join(symbols)
-		Application._Application__SetSymbols(originSymbolsString)
+			symbols.extend(additionalSymbols)
+			symbolsString = SLASH.join(symbols)
 		Application._Application__SetSymbols(symbolsString)
 
 	#------------------------------------------------------------------------
@@ -269,6 +291,8 @@ class Application:
 	#------------------------------------------------------------------------
 	@staticmethod
 	def HasSymbol(symbolString : str) -> bool:
+		if not Application._Application__Symbols:
+			return False
 		symbols = Application._Application__Symbols
 		if not symbols:
 			return False

@@ -5,6 +5,7 @@ from __future__ import annotations
 from typing import Any, Final, Optional, Type, TypeVar, Union
 import builtins
 import inspect
+from .application import Application
 
 
 #------------------------------------------------------------------------
@@ -91,7 +92,7 @@ class PropertyValue(Value):
 	@Value.setter
 	def Value(self, value : TValueType):
 		base = super()
-		print(f"property value setter : {base.Value}")
+		Application.Log(f"property value setter : {base.Value}")
   
 		if not builtins.isinstance(value, base.ValueType):
 			raise TypeError(f"Value must be of type '{self.ValueType.__name__}'")
