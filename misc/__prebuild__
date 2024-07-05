@@ -11,7 +11,7 @@ from pyappcore import makecode
 #------------------------------------------------------------------------
 # 전역 상수 목록.
 #------------------------------------------------------------------------
-SEMICOLON : str = ";"
+SLASH : str = "/"
 CURRENTFILEPATH : str = os.path.abspath(__file__)
 SRCPATH : str = os.path.dirname(CURRENTFILEPATH).replace("\\", "/")
 ROOTPATH : str = os.path.dirname(SRCPATH).replace("\\", "/")
@@ -27,7 +27,7 @@ if __name__ == "__main__":
 		vscodeSettings = makecode.GetVisualStudioCodeSettings(ROOTPATH)
 		if vscodeSettings:
 			symbolsString : str = vscodeSettings["launcher"]["build"]["symbols"]
-			symbols : list[str] = symbolsString.split(SEMICOLON)
+			symbols : list[str] = symbolsString.split(SLASH)
 			makecode.CreateSymbolsInBuildToFile(symbols, SRCPATH)
 
 		# 2. 바이너리 빌드시 pyinstaller에 포함시키기 위해 의존성이 있는 다른 소스 폴더 추가 및 저장.

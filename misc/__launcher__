@@ -11,7 +11,6 @@ from pyappcore import Launching
 #------------------------------------------------------------------------
 # 전역 상수 목록.
 #------------------------------------------------------------------------
-SEMICOLON : str = ";"
 CURRENTFILEPATH : str = os.path.abspath(__file__)
 SRCPATH : str = os.path.dirname(CURRENTFILEPATH).replace("\\", "/")
 ROOTPATH : str = os.path.dirname(SRCPATH).replace("\\", "/")

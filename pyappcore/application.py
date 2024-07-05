@@ -20,7 +20,6 @@ NONE : str = "NONE"
 COMMA : str = ","
 SLASH : str = "/"
 BACKSLASH : str = "\\"
-SEMICOLON : str = ";"
 COLON : str = ":"
 SPACE : str = " "
 DEBUG : str = "DEBUG"
@@ -139,15 +138,15 @@ class Application:
 		command.append(pythonInterpreterPath)
 		
 		newOptions = set()
-		newOptions.add(options.split(SEMICOLON))
-		command.append(SEMICOLON.join(newSymbols))
+		newOptions.add(options.split(SLASH))
+		command.append(SLASH.join(newSymbols))
 
 		command.append(Application.GetRootPathWithRelativePath("/launcher/launcher.py"))
 
 		newSymbols = set()
 		newSymbols.add(PYAPPCORE_SYMBOL_SUBPROCESS)
-		newSymbols.update(symbols.split(SEMICOLON))
-		command.append(SEMICOLON.join(newSymbols))
+		newSymbols.update(symbols.split(SLASH))
+		command.append(SLASH.join(newSymbols))
 		
 		if arguments:
 			for argument in arguments:
@@ -198,7 +197,7 @@ class Application:
 		symbolsString = symbolsString.upper()
 
 		# 중복을 허용하지 않는 선에서 처리.
-		symbols : list[str] = symbolsString.split(SEMICOLON) if SEMICOLON in symbolsString else [symbolsString]
+		symbols : list[str] = symbolsString.split(SLASH) if SLASH in symbolsString else [symbolsString]
 
 		# 객체 생성 및 심볼 설정.
 		Application._Application__Symbols = set()

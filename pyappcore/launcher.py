@@ -19,7 +19,7 @@ from .log_util import *
 #------------------------------------------------------------------------
 FROZEN : str = "frozen"
 MAIN : str = "__main__"
-SEMICOLON : str = ";"
+SLASH : str = "/"
 SYMBOL_SUBPROCESS : str = "SUBPROCESS"
 SYMBOL_LOG : str = "LOG"
 SYMBOL_DEBUG : str = "DEBUG"
@@ -58,7 +58,7 @@ def TestsLaunching(rootPath : str) -> int:
 	builtins.print("__tests__")
 	Application._Application__SetBuild(False)
 	Application._Application__SetDebug(False)
-	Application._Application__SetSymbols("DEBUG;LOG")
+	Application._Application__SetSymbols("DEBUG/LOG")
 	Application._Application__SetRootPath(rootPath)
 	Application._Application__SetResPath(f"{rootPath}/res")
 	Application._Application__SetExecuteFileName("__main__.py")
@@ -119,7 +119,7 @@ def Launching(moduleName : str, functionName : str) -> int:
 				builtins.print("__pycore_symbols_in_build__")
 				module = sys.modules[SYMBOLSINBUILDMODULENAME]
 				symbols = module.SYMBOLS
-				symbolsString : str = SEMICOLON.join(symbols)
+				symbolsString : str = SLASH.join(symbols)
 				Application._Application__SetSymbols(symbolsString)
 
 			# 디버그 모드 설정.

@@ -19,7 +19,7 @@ from .str_util import GetSplitFilePath
 #------------------------------------------------------------------------
 DEPENDENCIESINBUILDFILENAME : str = "__pyappcore_dependencies_in_build__.py"
 SYMBOLSINBUILDFILENAME : str = "__pyappcore_symbols_in_build__.py"
-SEMICOLON : str = ";"
+SLASH : str = "/"
 COLON : str = "."
 PYEXTENSION : str = ".py"
 PACKAGE : str = "PACKAGE"
