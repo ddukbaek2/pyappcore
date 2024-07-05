@@ -12,7 +12,7 @@ import json
 import os
 import sys
 from .json_util import RemoveAllCommentsInString
-from .module_util import Node
+from .module_util import IsExistsPackageOrModule, IsExistsAttribute
 from .str_util import GetSplitFilePath
 
 
@@ -50,85 +50,87 @@ def FindModuleFilePaths(moduleDirPath : str) -> set:
 	return moduleFilePaths
 
 
-#------------------------------------------------------------------------
-# 패키지 여부.
-#------------------------------------------------------------------------
-def IsPackage(name : str) -> bool:
-	try:
-		spec = importlib.util.find_spec(name)
-		return spec and spec.submodule_search_locations
-	except ModuleNotFoundError:
-		return False
+# #------------------------------------------------------------------------
+# # 패키지 여부.
+# #------------------------------------------------------------------------
+# def IsPackage(name : str) -> bool:
+# 	try:
+# 		spec = importlib.util.find_spec(name)
+# 		return spec and spec.submodule_search_locations
+# 	except ModuleNotFoundError:
+# 		return False
 
 
-#------------------------------------------------------------------------
-# import importTarget 일 때 importTarget의 종류 반환.
-#------------------------------------------------------------------------
-def GetImportType(importTargetName : str) -> str:
-	try:
-		importTarget = importlib.import_module(importTargetName)
-		if IsPackage(importTarget):
-			return PACKAGE
-		if inspect.ismodule(importTarget):
-			return MODULE
-		elif inspect.isclass(importTarget):
-			return CLASS
-		elif inspect.isfunction(importTarget):
-			return FUNCTION
-		return None
-	except Exception as exception:
-		return None
+# #------------------------------------------------------------------------
+# # import importTarget 일 때 importTarget의 종류 반환.
+# #------------------------------------------------------------------------
+# def GetImportType(importTargetName : str) -> str:
+# 	try:
+# 		importTarget = importlib.import_module(importTargetName)
+# 		if IsPackage(importTarget):
+# 			return PACKAGE
+# 		if inspect.ismodule(importTarget):
+# 			return MODULE
+# 		elif inspect.isclass(importTarget):
+# 			return CLASS
+# 		elif inspect.isfunction(importTarget):
+# 			return FUNCTION
+# 		return None
+# 	except Exception as exception:
+# 		return None
 
 
-#------------------------------------------------------------------------
-# from fromTarget import importTarget 일 때 importTarget의 종류 반환.
-#------------------------------------------------------------------------
-def GetImportFromType(fromTargetName : str, importTargetName : str) -> str:
-	try:
-		fromTarget = importlib.import_module(fromTargetName)
-		importTarget = builtins.getattr(fromTarget, importTargetName)
-		importTargetFullName = f"{fromTargetName}.{importTargetName}"
-		if IsPackage(importTargetFullName):
-			return PACKAGE
-		elif inspect.ismodule(importTarget):
-			return MODULE
-		elif inspect.isclass(importTarget):
-			return CLASS
-		elif inspect.isfunction(importTarget):
-			return FUNCTION
-		return None
-	except Exception as exception:
-		return None
+# #------------------------------------------------------------------------
+# # from fromTarget import importTarget 일 때 importTarget의 종류 반환.
+# #------------------------------------------------------------------------
+# def GetImportFromType(fromTargetName : str, importTargetName : str) -> str:
+# 	try:
+# 		fromTarget = importlib.import_module(fromTargetName)
+# 		importTarget = builtins.getattr(fromTarget, importTargetName)
+# 		importTargetFullName = f"{fromTargetName}.{importTargetName}"
+# 		if IsPackage(importTargetFullName):
+# 			return PACKAGE
+# 		elif inspect.ismodule(importTarget):
+# 			return MODULE
+# 		elif inspect.isclass(importTarget):
+# 			return CLASS
+# 		elif inspect.isfunction(importTarget):
+# 			return FUNCTION
+# 		return None
+# 	except Exception as exception:
+# 		return None
 
 
 #------------------------------------------------------------------------
 # "#type: ignore" 를 추가할지 말지 여부.
 #------------------------------------------------------------------------
-def IsTypeIgnore(name : str) -> bool:
-	if not name:
+def CheckTypeIgnore(name : str) -> bool:
+	# if not name:
+	# 	return False
+	# try:
+	# 	moduleSpec = importlib.util.find_spec(name)
+	# 	if not moduleSpec:
+	# 		return True
+	# except Exception as exception:
+	# 	return True
+	# return False
+	if IsExistsPackageOrModule(name):
 		return False
-	try:
-		moduleSpec = importlib.util.find_spec(name)
-		if not moduleSpec:
-			return True
-	except Exception as exception:
-		return True
-	return False
+	return True
 
 
 #------------------------------------------------------------------------
 # "# type: ignore" 를 추가할지 말지 여부.
 #------------------------------------------------------------------------
-def IsTypeIgnores(names : list[str]) -> bool:
+def CheckTypeIgnores(names : list[str]) -> bool:
 	if not names:
 		return False
 	for name in names:
-		try:
-			if IsTypeIgnore(name):
-				return True
-		except Exception as exception:
-			return True
-	return False
+		if not IsExistsPackageOrModule(name):
+			return False
+		if not IsExistsAttribute(name):
+			return False
+	return True
 
 
 #------------------------------------------------------------------------
@@ -157,7 +159,7 @@ def CreateSymbolsInBuildToFile(symbols : list[str], symbolsDirPath : str) -> Non
 	symbolsFilePath : str = f"{symbolsDirPath}/{SYMBOLSINBUILDFILENAME}"
 	if os.path.exists(symbolsFilePath):
 		os.remove(symbolsFilePath)
-		# builtins.print(f"os.remove(\"{symbolsFilePath}\")")
+		builtins.print(f"os.remove(\"{symbolsFilePath}\")")
 
 	# 텍스트 작성.
 	symbols = set(symbols)
@@ -287,41 +289,22 @@ def CreateDependenciesInBuildToFile(moduleDirPaths : list[str], sourceDirPath : 
 	writelines.append("")
 	writelines.append("")
 
-	# 소스폴더 노드 구성 및 전체이름 획득.
-	node = Node.BuildTree(sourceDirPath, None)
-	moduleStringDict = Node.GetModuleNames(node)
-	# modulesFullNames = list(moduleStringDict.keys())
-	# for moduleFullName, moduleName in moduleStrings.items():
-	# 	packageName = moduleFullName.replace(moduleName, "")
-	# 	if moduleName.startswith("__"):
-	# 		continue
-	# 	if packageName.endswith("."):
-	# 		packageName = packageName[:-1]
-	# 	builtins.print(f"package: {packageName}, module: {moduleName}")
-	moduleStringDict = { value: key for key, value in moduleStringDict.items() }
-
 	# 참조 모듈 목록 작성.
 	moduleNames = sorted(importData.keys(), key = lambda value: (value[0] != "_", value))
 	for fromTargetName in moduleNames:
 		importTargetNames = importData[fromTargetName]
-
-		# 패키지에 소속된 모듈일 경우 전체이름으로 변경.
-		if fromTargetName in moduleStringDict:
-			fromTargetName = moduleStringDict[fromTargetName]
-
+		text : str = str()
 		if importTargetNames:
 			importTargetsText = COMMAWITHSPACE.join(importTargetNames)
-			# if IsTypeIgnore(fromTargetName) or IsTypeIgnores(importTargetNames):
-			# 	writelines.append(f"from {fromTargetName} import {importTargetsText} {TYPEIGNORE}")
-			# else:
-			# 	writelines.append(f"from {fromTargetName} import {importTargetsText}")
-			writelines.append(f"from {fromTargetName} import {importTargetsText}")
+			text = f"from {fromTargetName} import {importTargetsText}"
+			if CheckTypeIgnore(fromTargetName) or CheckTypeIgnores(importTargetNames):
+				text += TYPEIGNORE
 		else:
-			# if IsTypeIgnore(fromTargetName):
-			# 	writelines.append(f"import {fromTargetName} {TYPEIGNORE}")
-			# else:
-			# 	writelines.append(f"import {fromTargetName}")
-			writelines.append(f"import {fromTargetName}")
+			text = f"import {fromTargetName}"
+			if CheckTypeIgnore(fromTargetName):
+				text += TYPEIGNORE
+			
+		writelines.append(text)
 
 	# 파일 작성.
 	with open(dependenciesFilePath, WRITEMODE, encoding = UTF8) as file:

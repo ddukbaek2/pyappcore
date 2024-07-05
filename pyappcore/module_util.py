@@ -4,48 +4,71 @@
 from __future__ import annotations
 from typing import Any, Final, Optional, Type, TypeVar, Union
 import builtins
+import importlib.util
 import os
 from .str_util import GetSplitFilePath
 
 
 #------------------------------------------------------------------------
+# 전역 상수 목록.
+#------------------------------------------------------------------------
+
+ 
+#------------------------------------------------------------------------
 # 노드.
 #------------------------------------------------------------------------
 class Node:
-	name : str
-	path : str
-	isPackage : bool
-	parent : Node
-	children : list
+	#------------------------------------------------------------------------
+	# 공개 멤버 변수 목록.
+	#------------------------------------------------------------------------
+	Name : str # 패키지, 모듈, 클래스, 함수 이름.
+	Path : str # 패키지를 포함한 전체 이름.
+	IsPackage : bool # 패키지 여부. 
+	Parent : Node # 부모.
+	Children : list # 자식들.
 
+	#------------------------------------------------------------------------
+	# 생성됨.
+	#------------------------------------------------------------------------
 	def __init__(self, name : str = "", path : str = "", parent : Node = None, isPackage : bool = False):
-		self.name = name
-		self.path = path # fullname
-		self.isPackage = isPackage
-		self.parent = parent		
-		self.children = list()
+		self.Name = name
+		self.Path = path
+		self.IsPackage = isPackage
+		self.Parent = parent		
+		self.Children = list()
 
+	#------------------------------------------------------------------------
+	# 클래스 문자열 변환됨.
+	#------------------------------------------------------------------------
 	def __repr__(self, level : int = 0):
-		ret = "\t" * level + repr(self.name) + "\n"
-		for child in self.children:
+		ret = "\t" * level + repr(self.Name) + "\n"
+		for child in self.Children:
 			ret += child.__repr__(level + 1)
 		return ret
 	
+	#------------------------------------------------------------------------
+	# 자식 노드 추가.
+	#------------------------------------------------------------------------
 	def AddChild(self, childNode):
 		childNode.parent = self
-		self.children.append(childNode)
-	
+		self.Children.append(childNode)
+
+	#------------------------------------------------------------------------
+	# 패키지 여부.
+	# - 폴더 경로를 넣어서 확인.
+	#------------------------------------------------------------------------
 	@staticmethod
-	def IsPackage(path : str) -> bool:
+	def CheckPackage(path : str) -> bool:
 		if not os.path.isdir(path):
 			return False
-		
 		initFilePath = os.path.join(path, "__init__.py")
 		if not os.path.isfile(initFilePath):
 			return False
-
 		return True
 
+	#------------------------------------------------------------------------
+	# 폴더 기반 트리 구조 작성.
+	#------------------------------------------------------------------------
 	@staticmethod
 	def BuildTree(path : str, parent : Node = None) -> Node:
 		name = os.path.basename(path)
@@ -53,7 +76,7 @@ class Node:
 		for childName in os.listdir(path):
 			childPath = os.path.join(path, childName)
 			if os.path.isdir(childPath):
-				if Node.IsPackage(childPath):
+				if Node.CheckPackage(childPath):
 					child = Node.BuildTree(childPath, node)
 					node.AddChild(child)
 			else:
@@ -66,23 +89,72 @@ class Node:
 				node.AddChild(child)
 		return node
 
+	#------------------------------------------------------------------------
+	# 트리 탐색.
+	#------------------------------------------------------------------------
 	@staticmethod
-	def PrintTree(node : Node, prefix : str = "", usePrint : bool = True, moduleFullNames : dict[str, str] = None) -> None:
-		if node.isPackage:
-			path = f"{prefix}.{node.name}" if prefix else node.name
+	def TraverseTree(node : Node, prefix : str = "", usePrint : bool = True, moduleFullNames : dict[str, str] = None) -> None:
+		if node.IsPackage:
+			path = f"{prefix}.{node.Name}" if prefix else node.Name
 			if usePrint:
 				builtins.print(f"package: {path}")
-			for child in node.children:
-				Node.PrintTree(child, path, usePrint, moduleFullNames)
+			for child in node.Children:
+				Node.TraverseTree(child, path, usePrint, moduleFullNames)
 		else:
-			path = f"{prefix}.{node.name}" if prefix else node.name
+			path = f"{prefix}.{node.Name}" if prefix else node.Name
 			if usePrint:
 				builtins.print(f"module: {path}")
 			if not moduleFullNames is None:
-				moduleFullNames[path] = node.name
+				moduleFullNames[path] = node.Name
 
+	#------------------------------------------------------------------------
+	# 노드 기준 모듈 이름 반환.
+	# - KEY : 패키지포함모듈명, VALUE : 모듈명
+	#------------------------------------------------------------------------
 	@staticmethod
 	def GetModuleNames(node : Node) -> dict[str, str]:
 		moduleFullNames = dict()
-		Node.PrintTree(node, "", False, moduleFullNames)
+		Node.TraverseTree(node, "", False, moduleFullNames)
 		return moduleFullNames
+
+
+#------------------------------------------------------------------------
+# 실제 존재하는 패키지 혹은 모듈 인지 여부.
+#------------------------------------------------------------------------
+def IsExistsPackageOrModule(packageOrModuleName : str) -> bool:
+	try:
+		# 모듈 정보 가져오기.
+		moduleSpec = importlib.util.find_spec(packageOrModuleName)
+		if not moduleSpec:
+			return False
+		else:
+			# 모듈이 존재할 경우 origin은 해당 모듈의 경로 혹은 인터프리터 내장 라이브러리 식별자.
+			moduleFilePath = moduleSpec.origin
+			if not moduleFilePath:
+				return False
+			# 빌트인 인 경우는 실제 파일은 없지만 파이썬 인터프리터에 내장된 라이브러리이므로 있다고 간주.
+			if not moduleFilePath == "built-in":
+				return True
+			# 경로가 실존하는 파일이나 폴더일 경우 있다고 간주.
+			if os.path.isfile(moduleFilePath) or os.path.isdir(moduleFilePath):
+				return True                
+			return False
+	except Exception as exception:
+		builtins.print(exception)
+		return False
+
+
+#------------------------------------------------------------------------
+# 실제 존재하는 어트리뷰트인지 여부.
+#------------------------------------------------------------------------
+def IsExistsAttribute(moduleName : str, attributeName : str) -> bool:
+	if not IsExistsPackageOrModule(moduleName):
+		return False
+	try:
+		module = importlib.import_module(moduleName)
+		if not builtins.hasattr(module, attributeName):
+			return False
+	except Exception as exception:
+		builtins.print(exception)
+		return False
+	return True
