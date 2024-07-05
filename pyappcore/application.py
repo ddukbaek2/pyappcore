@@ -137,11 +137,27 @@ class Application:
 		command = list()
 		command.append(pythonInterpreterPath)
 		
+		if Application.IsBuild():
+			pass
+		else:
+			pass
+
 		newOptions = set()
 		newOptions.add(options.split(SLASH))
 		command.append(SLASH.join(newSymbols))
+		command.append(Application.GetRootPathWithRelativePath("/src/__launcher__.py"))
 
-		command.append(Application.GetRootPathWithRelativePath("/launcher/launcher.py"))
+
+		# 입력받은 텍스트 정리.
+		symbolsString = symbolsString.upper()
+
+		# 중복을 허용하지 않는 선에서 처리.
+		symbols : list[str] = symbolsString.split(SLASH) if SLASH in symbolsString else [symbolsString]
+
+		# 객체 생성 및 심볼 설정.
+		Application._Application__Symbols = set()
+		if symbols: Application._Application__Symbols.update(symbols)
+
 
 		newSymbols = set()
 		newSymbols.add(PYAPPCORE_SYMBOL_SUBPROCESS)

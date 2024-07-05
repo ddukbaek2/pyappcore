@@ -110,9 +110,10 @@ def Launching(moduleName : str, functionName : str) -> int:
 			print("__build__")
 
 			# 실행된 파일 이름 설정.
-			executeFileName = sys.argv[0]
-			Application._Application__SetExecuteFileName(executeFileName)
-			sys.argv = sys.argv[1:]
+			if sys.argv:
+				executeFileName = sys.argv[0]
+				Application._Application__SetExecuteFileName(executeFileName)
+				sys.argv = sys.argv[1:]
 
 			# 심볼 설정.
 			if SYMBOLSINBUILDMODULENAME in sys.modules:
@@ -138,18 +139,21 @@ def Launching(moduleName : str, functionName : str) -> int:
 			# VSCODE.
 			# run.bat을 통한 실행일 경우 최대 9개의 미사용 인수가 넘어오므로.
 			# 빈 문자열들은 안쓰는 값으로 간주하고 제거.
-			sys.argv = sys.argv[3:]
-			sys.argv = [argument for argument in sys.argv if argument]
+			if builtins.len(sys.argv) >= 3:
+				sys.argv = sys.argv[3:]
+				sys.argv = [argument for argument in sys.argv if argument]
 
 			# 실행된 파이썬 스크립트 파일 설정.
-			executeFileName = sys.argv[0]
-			Application._Application__SetExecuteFileName(executeFileName)
-			sys.argv = sys.argv[1:]
+			if sys.argv:
+				executeFileName = sys.argv[0]
+				Application._Application__SetExecuteFileName(executeFileName)
+				sys.argv = sys.argv[1:]
 
 			# 심볼 설정.
-			symbolsString = sys.argv[0]
-			Application._Application__SetSymbols(symbolsString)
-			sys.argv = sys.argv[1:]
+			if sys.argv:
+				symbolsString = sys.argv[0]
+				Application._Application__SetSymbols(symbolsString)
+				sys.argv = sys.argv[1:]
 
 			# 디버그 모드 설정.
 			useDebug : bool = Application.HasSymbol(SYMBOL_DEBUG)
@@ -171,9 +175,9 @@ def Launching(moduleName : str, functionName : str) -> int:
 		# VSCODE 상황일때의 인자 목록은 문자열 리스트가 아닌 콤마로 합쳐진 형태로 넘어올 수 있음.
 		# 어찌 되었건 쉼표 또한 구분자로 인정하고 공통 처리.
 		if not Application.IsBuild() and sys.argv:
-			sys.argv = CreateStringListFromSeperatedStringLists(sys.argv)	
+			sys.argv = CreateStringListFromSeperatedStringList(sys.argv)	
 
-		# 인자 출력.
+		# 잔여 인자 출력.
 		if sys.argv:
 			builtins.print("sys.argv")
 			index = 0
