@@ -30,13 +30,18 @@
 ## 사용방법 (예정)
 
 **파이썬 PIP 패키지 설치:**   
-```python pip install pyappcore```
+
+    python pip install pyappcore
+
 
 **프로젝트 생성:**   
-```python -m pyappcore makeproject```
+
+    python -m pyappcore makeproject
 
 **애플리케이션 빌드:**   
-```python -m pyappcore makeapplication```
+
+    python -m pyappcore makeapplication
 
 **휠 라이브러리 빌드:**   
-```python -m pyappcore makewheel```
+
+    python -m pyappcore makewheel
