@@ -54,6 +54,7 @@ class Application:
 	__IsDebug : bool = False
 	__RootPath : str = str()
 	__ResPath : str = str()
+	__WorkspacePath : str = str()
 	__Symbols : set[str] = set()
 
 	#------------------------------------------------------------------------
@@ -61,13 +62,15 @@ class Application:
 	#------------------------------------------------------------------------
 	@staticmethod
 	def __Log(message : str, logLevel : int) -> None:
+
+		# 일단 콘솔에 출력.
 		timestamp = GetTimestampString(HYPHEN, SPACE, COLON, True, COMMA)
 		logName = GetStringFromLogLevel(logLevel)
 		# builtins.print(f"[{timestamp}][{logName}] {message}")
 		PrintLog(f"[{timestamp}][{logName}] {message}", logLevel)
 
 		# 로그파일 기록시.
-		if Application._Application__Symbols and SYMBOL_LOG in Application._Application__Symbols:
+		if Application.HasSymbol(SYMBOL_LOG):
 			applicationLogger = Application.GetLogger()
 			if logLevel == LOG_NOTSET: # logging.NOTSET:
 				return
@@ -219,7 +222,16 @@ class Application:
 	#------------------------------------------------------------------------
 	@staticmethod
 	def __SetResPath(resPath : str) -> None:
+		if not os.path.isdir(resPath): os.makedirs(resPath)
 		Application._Application__ResPath = resPath.replace(BACKSLASH, SLASH)
+
+	#------------------------------------------------------------------------
+	# 워크스페이스 경로 설정.
+	#------------------------------------------------------------------------
+	@staticmethod
+	def __SetWorkspacePath(workspacePath : str) -> None:
+		if not os.path.isdir(workspacePath): os.makedirs(workspacePath)
+		Application._Application__WorkspacePath = workspacePath.replace(BACKSLASH, SLASH)
 
 	#------------------------------------------------------------------------
 	# 기존 심볼을 모두 지우고 새로운 심볼 목록 설정 (구분자 : /).
@@ -288,6 +300,13 @@ class Application:
 		return Application._Application__ResPath
 
 	#------------------------------------------------------------------------
+	# 워크스페이스 폴더 경로.
+	#------------------------------------------------------------------------
+	@staticmethod
+	def GetWorkspacePath() -> str:
+		return Application._Application__WorkspacePath
+	
+	#------------------------------------------------------------------------
 	# 현재 앱에 해당 심볼이 등록 되어있는지 여부.
 	#------------------------------------------------------------------------
 	@staticmethod
@@ -326,10 +345,28 @@ class Application:
 	@staticmethod
 	def GetResPathWithRelativePath(relativePath : str) -> str:
 		resPath = Application.GetResPath()
+		if not os.path.isdir(resPath):
+			os.makedirs(resPath)
 		if not relativePath:
 			return resPath
 		relativePath = relativePath.replace(BACKSLASH, SLASH)
 		absolutePath = f"{resPath}/{relativePath}"
+		return absolutePath
+	
+	#------------------------------------------------------------------------
+	# 워크스페이스 경로에 상대경로를 입력하여 절대경로를 획득.
+	# - 기본적으로 워크스페이스 경로는 실행파일과 동일 계층에 워크스페이스 폴더가 만들어진다.
+	#------------------------------------------------------------------------
+	@staticmethod
+	def GetWorkspacePathWithRelativePath(relativePath : str) -> str:
+		workspacePath = Application.GetWorkspacePath()
+		if not os.path.isdir(workspacePath):
+			os.makedirs(workspacePath)
+		if not relativePath:
+			return workspacePath
+		relativePath = relativePath.replace(BACKSLASH, SLASH)
+		absolutePath = f"{workspacePath}/{relativePath}"
+
 		return absolutePath
 
 	#------------------------------------------------------------------------

@@ -31,10 +31,8 @@
         {
             "label": "DEBUG_TASK",
             "type": "shell",
-            "command": "${config:blender.defaultPath}",
+            "command": "${config:python.defaultInterpreterPath}",
             "args": [
-                "--background",
-                "--python",
                 "${config:pyappcore.launcherFilePath}",
                 "DEBUG/LOG",
                 "${config:pyappcore.debug.arguments}"

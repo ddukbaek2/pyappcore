@@ -4,16 +4,29 @@
 from __future__ import annotations
 import builtins
 import os
-from pyappcore import makecode, str_util, Application
+import sys
+from pyappcore import Application, IsBuild, Launching
 
 
 #------------------------------------------------------------------------
 # 전역 상수 목록.
 #------------------------------------------------------------------------
-SLASH : str = "/"
 CURRENTFILEPATH : str = os.path.abspath(__file__)
 SRCPATH : str = os.path.dirname(CURRENTFILEPATH).replace("\\", "/")
 ROOTPATH : str = os.path.dirname(SRCPATH).replace("\\", "/")
+STARTMODULENAME : str = "src.main"
+STARTFUNCTIONNAME : str = "Main"
+
+
+#------------------------------------------------------------------------
+# 의존성 모듈 목록 모듈.
+#------------------------------------------------------------------------
+if not IsBuild():
+	# 소스 패키지(루트폴더)를 모듈 검색 경로에 추가.
+	if ROOTPATH and ROOTPATH not in sys.path: sys.path.append(ROOTPATH)
+	# 소스 패키지의 서브 패키지(소스폴더)를 모듈 검색 경로에 추가.
+	if SRCPATH and SRCPATH not in sys.path: sys.path.append(SRCPATH)
+import __pyappcore_dependencies_in_build__ #type: ignore
 
 
 #------------------------------------------------------------------------
@@ -21,18 +34,10 @@ ROOTPATH : str = os.path.dirname(SRCPATH).replace("\\", "/")
 #------------------------------------------------------------------------
 if __name__ == "__main__":
 	try:
-		builtins.print("__prebuild__")
-		# 1. 바이너리 빌드시 VSCODE 상의 심볼을 읽을 수 있도록 코드 생성.
-		vscodeSettings = makecode.GetVisualStudioCodeSettings(ROOTPATH)
-		if vscodeSettings:
-			symbolsString : str = vscodeSettings["pyappcore"]["build"]["symbols"]
-			Application.LogError(symbolsString)
-			symbols : list[str] = str_util.GetStringFromSeperatedStringList(symbolsString, SLASH)
-			makecode.CreateSymbolsInBuildToFile(symbols, SRCPATH)
-
-		# 2. 바이너리 빌드시 pyinstaller에 포함시키기 위해 의존성이 있는 다른 소스 폴더 추가 및 저장.
-		moduleNames = set()
-		moduleNames.add("debugpy")
-		makecode.CreateDependenciesInBuildToFile([SRCPATH], SRCPATH, moduleNames)
+		Application.Log("__launcher__")
+		Application.Log("__main__")
+		# 실행.
+		exitCode : int = Launching(STARTMODULENAME, STARTFUNCTIONNAME)
+		sys.exit(exitCode)
 	except Exception as exception:
 		Application.LogException(exception)

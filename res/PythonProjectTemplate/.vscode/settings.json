@@ -1,0 +1,51 @@
+{
+    "python.defaultInterpreterPath": "C:/Program Files/Python312/python.exe",
+    "python.autoComplete.extraPaths": [
+        "./hints",
+        "./src"
+    ],
+    "python.analysis.extraPaths": [
+        "./hints",
+        "./src"
+    ],
+    "python.REPL.enableREPLSmartSend": false,
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/Thumbs.db": true,
+        "**/__pycache__": true,
+        "**/logs": true,
+        "**/__pyappcore_*.py": true,
+        "**/__launcher__.py": true,
+        "**/__prebuild__.py": true,
+        "**/__main__.py": true
+    },
+	"[python]": {
+		"editor.insertSpaces": false,
+        "editor.tabSize": 4,
+        "diffEditor.ignoreTrimWhitespace": false,
+		"editor.formatOnType": true,
+		"editor.wordBasedSuggestions": "off"
+	},
+    "terminal.integrated.showExitAlert": false,
+    "pyappcore": {
+        "launcherFilePath": "${workspaceFolder}/src/__launcher__.py",
+        "debug": {
+            "remotePort": 5678,
+            "arguments": [
+            ] 
+        },
+        "nodebug": {
+            "arguments": [
+            ]    
+        },
+        "build": {
+            "executeFileName": "PythonProjectTemplate",
+            "isHideConsole": false,
+            "symbols": "DEBUG/LOG"
+        }
+    }
+}

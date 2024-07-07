@@ -86,17 +86,20 @@ def Launching(moduleName : str, functionName : str) -> int:
 		rootPath : str = os.path.dirname(sys.executable)
 		sourceDirPath : str = os.path.join(cachePath, "src")
 		resPath : str = os.path.join(cachePath, "res")
+		workspacePath : str = os.path.join(rootPath, "workspace")
 	# 빌드가 아닌 경우 경로.
 	else:
 		# 현재 프로젝트를 기준으로 한 경로.
 		sourceDirPath : str = os.path.dirname(os.path.abspath(sys.modules[MAIN].__file__))
 		rootPath : str = os.path.dirname(sourceDirPath)
 		resPath : str = os.path.join(rootPath, "res")
+		workspacePath : str = os.path.join(rootPath, "workspace")
 
-	# 프로젝트 값 설정.
+	# 프로젝트 경로 등 설정.
 	Application._Application__SetBuild(isBuild)
 	Application._Application__SetRootPath(rootPath)
 	Application._Application__SetResPath(resPath)
+	Application._Application__SetWorkspacePath(workspacePath)
 	Application._Application__SetSymbols(EMPTY)
 
 	# 프로젝트 값 출력.
