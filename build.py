@@ -43,6 +43,16 @@ setup(
 			"res/*"
 		],
 	},
+	scripts = [
+
+	],
+	entry_points = {
+		"console_scripts": [
+			"makeproject=tools.makeproject:main",
+			"makeapplication=tools.makeapplication:main",
+			"makewheel=tools.makewheel:main"
+		]
+	},
     install_requires = [
 		"pyinstaller",
 		"debugpy"

@@ -126,13 +126,12 @@ def CreateFile(path : str, fileName : str, content : str = "") -> bool:
 # 	CreateFile(testsPath, "__main__.py")	
 # 	CreateFile(testsPath, "test_main.py")
 
-
 #------------------------------------------------------------------------
-# 파일 진입점.
+# 시작점.
 #------------------------------------------------------------------------
-if __name__ == "__main__":
+def main():
+	builtins.print("makeproject")
 	projectName = sys.argv[1]
-
 	makeFilePath = os.path.abspath(__file__)
 	toolsPath = os.path.dirname(makeFilePath).replace("\\", "/")
 	rootPath = os.path.dirname(toolsPath).replace("\\", "/")
@@ -148,3 +147,10 @@ if __name__ == "__main__":
 		CreateDirectory(destinationPath)
 
 	shutil.copytree(sourcePath, destinationPath)
+
+
+#------------------------------------------------------------------------
+# 파일 진입점.
+#------------------------------------------------------------------------
+if __name__ == "__main__":
+	main()

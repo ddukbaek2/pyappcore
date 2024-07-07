@@ -201,8 +201,8 @@ def Launching(moduleName : str, functionName : str) -> int:
 
 		# 로그 설정.
 		# 순서 : DEBUG < INFO < WARNING < ERROR < CRITICAL.
-		useLog : bool = Application.HasSymbol(SYMBOL_LOG)
-		if useLog:
+		useLogFile : bool = Application.HasSymbol(SYMBOL_LOG)
+		if useLogFile:
 			Application.Log("__log__")
 			InitializeLogSystem()
 
