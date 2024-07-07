@@ -5,6 +5,11 @@
 파이썬 기반의 앱 프레임워크 패키지.
 
 
+## 설치방법
+
+    python pip install pyappcore
+
+
 ## 개발 환경 및 사용 환경
 
     OS: Windows 11 Pro  
@@ -29,11 +34,6 @@
 
 ## 추가 명령어 (작업 예정)
 
-**파이썬 PIP 패키지 설치:**   
-
-    python pip install pyappcore
-
-
 **프로젝트 생성:**   
 
     pyappcore makeproject
@@ -52,6 +52,6 @@
 ## 추가 명령어 인식이 안되는 경우
 
     시스템 환경변수에 다음 경로를 등록   
-    
+
     C:\Users\{계정}\AppData\Roaming\Python\Python{312}\site-packages   
 
