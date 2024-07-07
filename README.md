@@ -27,7 +27,7 @@
     debugpy
 
 
-## 사용방법 (예정)
+## 추가 명령어 (작업 예정)
 
 **파이썬 PIP 패키지 설치:**   
 
@@ -45,3 +45,10 @@
 **휠 라이브러리 빌드:**   
 
     python -m pyappcore makewheel
+
+
+## 추가 명령어 인식이 안되는 경우
+
+    시스템 환경변수에 다음 경로를 등록   
+    C:\Users\{계정}\AppData\Roaming\Python\Python{312}\site-packages   
+
