@@ -146,7 +146,8 @@ def IsExistsPackageOrModule(packageOrModuleName : str) -> bool:
 				return True                
 			return False
 	except Exception as exception:
-		Application.LogException(exception, False, False)
+		# Application.LogException(exception, False, False)
+		Application.LogWarning(exception)
 		return False
 
 
@@ -161,6 +162,7 @@ def IsExistsAttribute(moduleName : str, attributeName : str) -> bool:
 		if not builtins.hasattr(module, attributeName):
 			return False
 	except Exception as exception:
-		Application.LogException(exception, False, False)
+		# Application.LogException(exception, False, False)
+		Application.LogWarning(exception)
 		return False
 	return True

@@ -88,7 +88,8 @@ def GetVisualStudioCodeSettings(rootDirPath : str) -> Union[dict, None]:
 				return vscodeSettings
 		return None
 	except Exception as exception:
-		Application.LogException(exception, False, False)
+		# Application.LogException(exception, False, False)
+		Application.LogWarning(exception)
 		return None
 
 
