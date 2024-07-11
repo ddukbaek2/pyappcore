@@ -7,9 +7,10 @@ import builtins
 import json
 import logging
 from logging import Logger
+import re
 import subprocess
-import traceback
 import sys
+import traceback
 from .ansicode import *
 from .json_util import *
 from .str_util import *
@@ -34,6 +35,7 @@ SYMBOL_LOG : str = "LOG" # "PYAPPCORE_SYMBOL_LOG"
 SYMBOL_DEBUG : str = "DEBUG" # "PYAPPCORE_SYMBOL_DEBUG"
 NODEBUG : str = "NODEBUG" # "PYAPPCORE_SYMBOL_NODEBUG"
 
+SYMBOL_NAMING_PATTERN : str = "^[A-Z_][A-Z0-9_]*$"
 CONFIGURATION_FILENAME : str = "configuration.json"
 PYAPPCORE_LOG_LOGGERNAME : str = "pyappcore"
 LOG_CRITICAL : int  = 50
@@ -245,25 +247,28 @@ class Application:
 
 			# 객체 생성 및 심볼 설정.
 			Application._Application__Symbols = set()
-			if symbols: 
-				Application._Application__Symbols.update(symbols)
+			if symbols:
+				for symbol in symbols:
+					if symbol and not re.match(SYMBOL_NAMING_PATTERN):
+						continue
+					Application._Application__Symbols.add(symbol)
 
 		# NONE, EMPTY, SPACE는 없는 것과 마찬가지이므로 목록에서 제거.
 		Application._Application__Symbols.discard(NONE)
 		Application._Application__Symbols.discard(EMPTY)
 		Application._Application__Symbols.discard(SPACE)
 
-	#------------------------------------------------------------------------
-	# 기존 심볼에 새로운 심볼을 추가.
-	#------------------------------------------------------------------------
-	@staticmethod
-	def __AddSymbols(symbolsString : str) -> None:
-		additionalSymbols = GetStringFromSeperatedStringList(symbolsString, SLASH)
-		symbols = Application.GetSymbols()
-		if symbols:
-			symbols.extend(additionalSymbols)
-			symbolsString = SLASH.join(symbols)
-		Application._Application__SetSymbols(symbolsString)
+	# #------------------------------------------------------------------------
+	# # 기존 심볼에 새로운 심볼을 추가.
+	# #------------------------------------------------------------------------
+	# @staticmethod
+	# def __AddSymbols(symbolsString : str) -> None:
+	# 	additionalSymbols = GetStringFromSeperatedStringList(symbolsString, SLASH)
+	# 	symbols = Application.GetSymbols()
+	# 	if symbols:
+	# 		symbols.extend(additionalSymbols)
+	# 		symbolsString = SLASH.join(symbols)
+	# 	Application._Application__SetSymbols(symbolsString)
 
 	#------------------------------------------------------------------------
 	# 빌드된 상태인지 여부.
