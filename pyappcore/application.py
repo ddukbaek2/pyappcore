@@ -249,7 +249,7 @@ class Application:
 			Application._Application__Symbols = set()
 			if symbols:
 				for symbol in symbols:
-					if symbol and not re.match(SYMBOL_NAMING_PATTERN):
+					if symbol and not re.match(SYMBOL_NAMING_PATTERN, symbol):
 						continue
 					Application._Application__Symbols.add(symbol)
 

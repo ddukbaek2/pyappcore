@@ -17,7 +17,6 @@
         "**/.DS_Store": true,
         "**/Thumbs.db": true,
         "**/__pycache__": true,
-		"**/dummy": true,
         // "**/logs": true,
         // "**/.venv": true,
         // "**/.env": true,
@@ -25,7 +24,8 @@
         // "**/__prebuilder__.py": true,
         // "**/venv-*.bat": true,
         // "**/pyappcore-*.bat": true,
-        // "**/__pyappcore_*.py": true
+        // "**/__pyappcore_*.py": true,
+        "**/dummy": true
     },
 
 	"python.REPL.enableREPLSmartSend": false,

@@ -144,7 +144,7 @@ def Launching(moduleName : str, functionName : str) -> int:
 
 			# pyappcore-source.bat을 통한 실행일 경우 9개 중 7개의 미사용 인수가 넘어오므로.
 			# 심볼의 경우 첫글자는 영어대문자 혹은 언더바여야 하고, 이후는 영어대문자, 언더바, 숫자가 조합될 수 있음. 띄어쓰기 등은 허용하지 않음.
-			sys.argv = [argument for argument in sys.argv if argument and re.match(SYMBOL_NAMING_PATTERN, argument)]
+			sys.argv = [argument for argument in sys.argv if argument]
 
 			# 실행된 파이썬 스크립트 파일 설정.
 			if sys.argv:
