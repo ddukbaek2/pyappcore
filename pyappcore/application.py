@@ -391,5 +391,5 @@ class Application:
 				else:
 					return jsonData     
 		except Exception as exception:
-			Application.LogException(exception)
+			Application.LogException(exception, False, False)
 			return None

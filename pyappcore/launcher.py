@@ -59,7 +59,7 @@ def TestsLaunching(rootPath : str) -> int:
 	Application.Log("__tests__")
 	Application._Application__SetBuild(False)
 	Application._Application__SetDebug(False)
-	Application._Application__SetSymbols("DEBUG/LOG")
+	Application._Application__SetSymbols("NODEBUG/LOG")
 	Application._Application__SetRootPath(rootPath)
 	Application._Application__SetResPath(f"{rootPath}/res")
 	Application._Application__SetExecuteFileName("__main__.py")
@@ -115,6 +115,7 @@ def Launching(moduleName : str, functionName : str) -> int:
 
 			# 실행된 파일 이름 설정.
 			if sys.argv:
+				Application.Log("__execute__")
 				executeFileName = sys.argv[0]
 				Application._Application__SetExecuteFileName(executeFileName)
 				sys.argv = sys.argv[1:]
@@ -127,6 +128,7 @@ def Launching(moduleName : str, functionName : str) -> int:
 				if symbols:
 					symbolsString : str = SLASH.join(symbols)
 					Application._Application__SetSymbols(symbolsString)
+					Application.Log(f"Application.GetSymbols(): {Application.GetSymbols()}")
 
 			# 디버그 모드 설정.
 			# 빌드 시 DEBUG 심볼이 있던 없던 무조건 False.
@@ -136,18 +138,13 @@ def Launching(moduleName : str, functionName : str) -> int:
 
 		# 빌드 외.
 		else:
+			# VSCODE 기준 처리.
+			# 일단 수동실행, VISUALSTUDIO, PYCHARM 기반에서 실행되는 것은 별도 이슈가 있을 것이므로 무시한다.
 			Application.Log("__nobuild__")
 
-			# PYCHARM.
-			# MANUAL.
-			# 둘은 일단 상황 제외.
-
-			# VSCODE.
-			# run.bat을 통한 실행일 경우 최대 9개의 미사용 인수가 넘어오므로.
+			# pyappcore-source.bat을 통한 실행일 경우 9개 중 7개의 미사용 인수가 넘어오므로.
 			# 빈 문자열들은 안쓰는 값으로 간주하고 제거.
-			if builtins.len(sys.argv) >= 3:
-				sys.argv = sys.argv[3:]
-				sys.argv = [argument for argument in sys.argv if argument]
+			sys.argv = [argument for argument in sys.argv if argument]
 
 			# 실행된 파이썬 스크립트 파일 설정.
 			if sys.argv:

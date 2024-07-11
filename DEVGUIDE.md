@@ -2,7 +2,7 @@
 
 ## 개요
 
-파이썬 기반의 앱 프레임워크 패키지.
+파이썬 기반의 마이크로 앱 프레임워크 패키지.
 
 
 ## 개발 환경 및 사용 환경
@@ -59,14 +59,7 @@
 ## VSCode 기반 설치 플러그인 목록
 ### 공통
 - Korean Language Pack for Visual Studio Code
-- PowerShell
-
-### 파이썬
 - Python
-- Python Debugger
-- Python Environment Manager
-- Python Image Preview
-- Pylance
 
 ### 블렌더
 - Blender Development
@@ -80,7 +73,6 @@
 - PYQT Integration
 
 ## 참고 사항
-
 run-activate 로 가상환경을 활성화.
 기능 개발.
 run-distribution 으로 패키지를 릴리즈.   

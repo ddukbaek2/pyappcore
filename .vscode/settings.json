@@ -1,4 +1,34 @@
 {
+	"terminal.integrated.showExitAlert": false,
+    "terminal.integrated.defaultProfile.windows": "Command Prompt",
+    "terminal.integrated.profiles.windows": {
+        "Command Prompt": {
+            "path": [
+                "${env:windir}\\System32\\cmd.exe",
+                "${env:windir}\\SysWOW64\\cmd.exe"
+            ]
+        }
+    },
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/Thumbs.db": true,
+        "**/__pycache__": true,
+		"**/dummy": true,
+        // "**/logs": true,
+        // "**/.venv": true,
+        // "**/.env": true,
+        // "**/__launcher__.py": true,
+        // "**/__prebuilder__.py": true,
+        // "**/venv-*.bat": true,
+        // "**/pyappcore-*.bat": true,
+        // "**/__pyappcore_*.py": true
+    },
+
+	"python.REPL.enableREPLSmartSend": false,
 	"python.defaultInterpreterPath": "${workspaceFolder}/.venv/Scripts/python.exe",
 	"python.analysis.extraPaths": [
 		"./pyappcore"
@@ -10,4 +40,5 @@
 		"editor.formatOnType": true,
 		"editor.wordBasedSuggestions": "off"
 	},
+	
 }
