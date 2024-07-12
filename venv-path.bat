@@ -7,6 +7,10 @@ set PROJECTPATH=%~dp0
 set PROJECTPATH=%PROJECTPATH:~0,-1%
 for /f "tokens=1 delims=:" %%a in ("%PROJECTPATH%") do set "PROJECTDRIVE=%%a:"
 
+rem 파이썬 인터프리터 경로.
+rem set PYTHONFILEPATH=C:\Program Files\Blender Foundation\Blender 4.0\4.0\python\bin\python.exe
+set PYTHONFILEPATH=C:\Users\dagraac\AppData\Local\Programs\Python\Python312\python.exe
+
 rem 가상환경 관련 경로 설정.
 set VENVPATH=%PROJECTPATH%\.venv
 set VENVPYTHONPATH=%VENVPATH%\Script
@@ -32,4 +36,4 @@ rem 콘솔창 보이기 설정.
 set BUILD_NOCONSOLE="false"
 
 rem 프로젝트 별 추가 경로 설정.
-call project-path.bat
+rem call project-path.bat

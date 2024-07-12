@@ -3,7 +3,7 @@
 #------------------------------------------------------------------------
 import unittest
 import builtins
-from ..pyappcore import *
+from .pyappcore import Launching
 
 
 #------------------------------------------------------------------------
@@ -14,12 +14,14 @@ class Test_PyAppCore(unittest.TestCase):
 	# 테스트 : 출력.
 	#------------------------------------------------------------------------
 	def test_Print(self):
-		Application.Log("Test_PyAppCore.test_Print()")
+		builtins.print("Test_PyAppCore.test_Print()")
+
 
 
 #------------------------------------------------------------------------
 # 파일 진입점.
 #------------------------------------------------------------------------
 if __name__ == "__main__":
+
 	# 전체 테스트.
 	unittest.main()

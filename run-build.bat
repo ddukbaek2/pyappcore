@@ -7,7 +7,7 @@ rem 패키지 받기.
 call venv-pip.bat
 
 rem 빌드 파일 제거.
-call project-clean.bat
+call run-clean.bat
 
 rem 라이브러리 빌드.
 python build.py sdist bdist_wheel

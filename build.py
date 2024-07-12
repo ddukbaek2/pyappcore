@@ -36,6 +36,8 @@ setup(
 	long_description = open(file = "README.md", mode = "r", encoding = "utf-8").read(),
 	long_description_content_type = LONG_DESCRIPTION_CONTENT_TYPE,
 	url = URL,
+	# package_dir = { "pyappcore": "src/pyappcore" },
+	# packages = find_packages(where = "src"),
 	packages = find_packages(),
 	include_package_data = True,
 	package_data = {
