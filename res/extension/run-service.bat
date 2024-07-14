@@ -4,4 +4,4 @@
 :: #------------------------------------------------------------------------
 
 :: 실행.
-call pyappcore-source.bat "NODEBUG/LOG" "dev" %1 %2 %3 %4 %5 %6 %7 %8 %9
+call pyappcore-source.bat "NODEBUG/LOG" %1 %2 %3 %4 %5 %6 %7 %8 %9

@@ -10,10 +10,10 @@ chcp 65001 >nul 2>nul
 call pyappcore-path.bat
 
 :: 빌드 된 바이너리 파일 실행.
-if exist "%BUILDFILEPATH%" (
-    "%BUILDFILEPATH%" "all"
-) else (
+if not exist "%BUILDFILEPATH%" (
     echo "'%BUILDFILEPATH%' 파일이 존재하지 않습니다."
 )
+
+"%BUILDFILEPATH%" "all"
 
 pause
