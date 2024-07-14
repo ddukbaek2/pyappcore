@@ -1,10 +1,13 @@
 @echo off
 :: #------------------------------------------------------------------------
-:: # 가상환경 파괴. (Windows)
+:: # 가상 환경 생성. (Windows)
 :: #------------------------------------------------------------------------
 
-:: 경로 설정.
-call venv-path.bat
-
 :: 기존 가상환경 제거.
-if exist "%VENVPATH%" (  rmdir /s /q "%VENVPATH%" )
+call venv-destroy.bat
+
+:: 생성.
+"%PYTHONFILEPATH%" -m venv "%VENVPATH%"
+
+:: 패키지 목록 설치.
+call venv-pip.bat

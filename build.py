@@ -19,13 +19,11 @@ DESCRIPTION = os.getenv("DESCRIPTION")
 LONG_DESCRIPTION_CONTENT_TYPE = os.getenv("LONG_DESCRIPTION_CONTENT_TYPE")
 URL = os.getenv("URL")
 PYTHON_REQUIRES = os.getenv("PYTHON_REQUIRES")
-PYPI_API_TOKEN = os.getenv("PYPI_API_TOKEN")
 builtins.print(f"pyappcore: {VERSION}")
-builtins.print(f"set PYPI_API_TOKEN={PYPI_API_TOKEN}")
 
 
 #------------------------------------------------------------------------
-# 설치.
+# 패키지 라이브러리 빌드.
 #------------------------------------------------------------------------
 setup(
 	name = NAME,
@@ -36,8 +34,6 @@ setup(
 	long_description = open(file = "README.md", mode = "r", encoding = "utf-8").read(),
 	long_description_content_type = LONG_DESCRIPTION_CONTENT_TYPE,
 	url = URL,
-	# package_dir = { "pyappcore": "src/pyappcore" },
-	# packages = find_packages(where = "src"),
 	packages = find_packages(),
 	include_package_data = True,
 	package_data = {
@@ -50,9 +46,7 @@ setup(
 	],
 	entry_points = {
 		"console_scripts": [
-			"makeproject=tools.makeproject:main",
-			"makeapplication=tools.makeapplication:main",
-			"makewheel=tools.makewheel:main"
+			"pyappcore=pyappcore.command:Run",
 		]
 	},
     install_requires = [
