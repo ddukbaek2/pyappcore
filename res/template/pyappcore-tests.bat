@@ -7,4 +7,4 @@
 call pyappcore-path.bat 
 
 :: 단위 테스트 스크립트 실행.
-python "%TESTSPATH%\__main__.py"
+python "%TESTSFILEPATH%"

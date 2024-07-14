@@ -14,7 +14,7 @@ set PYTHONFILEPATH=C:\Users\dagraac\AppData\Local\Programs\Python\Python312\pyth
 :: set FBXSDKFILEPATH=%LIBSPATH%\%FBXSDKFILENAME%
 
 :: FBXSDK 라이브러리 다운로드 경로.
-:: set FBXSDKFILEURL=%LIBSPATH%\%FBXSDKFILENAME%
+:: set FBXSDKFILEURL=https://{사이트이름}/%FBXSDKFILENAME%
 
 :: 빌드 파일 이름.
 set BUILDFILENAME=pyappcore_project_template
