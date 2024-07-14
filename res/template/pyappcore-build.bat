@@ -17,7 +17,7 @@ set BUILD=python -m PyInstaller^
  --specpath "%BUILDSPECPATH%"^
  --workpath "%BUILDWORKPATH%"^
  --name "%BUILDFILENAME%"^
- --onefile "%SOURCEPATH%\__launcher__.py"
+ --onefile "%LAUNCHERFILEPATH%"
 
 :: 콘솔창 설정.
 if "%BUILD_NOCONSOLE%" == "true" (

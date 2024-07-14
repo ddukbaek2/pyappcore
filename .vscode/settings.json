@@ -16,7 +16,9 @@
         "**/CVS": true,
         "**/.DS_Store": true,
         "**/Thumbs.db": true,
-        "**/__pycache__": true
+        "**/__pycache__": true,
+        // "**/.gitkeep": true,
+        "**/__dummy__": true
     },
     "python.autoComplete.extraPaths": [
         "./hints",
@@ -37,6 +39,5 @@
 		"diffEditor.ignoreTrimWhitespace": false,
 		"editor.formatOnType": true,
 		"editor.wordBasedSuggestions": "off"
-	},
-	
+	}
 }

@@ -1,13 +1,14 @@
 #------------------------------------------------------------------------
 # 참조 모듈 목록.
 #------------------------------------------------------------------------
-from __future__ import annotations
-from pyappcore import Application
+from ..src import *
+from .__main__ import *
+from .main import Test_Project_Template
 
 
 #------------------------------------------------------------------------
-# 진입점.
+# 공개 클래스 목록.
 #------------------------------------------------------------------------
-def Main(arguments : list) -> int:
-    Application.Log("Hello World")
-    return 0
+# __all__ : list[str] = [
+# 	""
+# ]

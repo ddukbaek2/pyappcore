@@ -7,4 +7,4 @@
 call venv-pip.bat
 
 :: 빌드 전 처리 스크립트 실행.
-python "%SOURCEPATH%\__prebuilder__.py"
+python "%PREBUILDERFILEPATH%"

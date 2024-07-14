@@ -7,4 +7,4 @@
 call pyappcore-prebuild.bat
 
 :: 실행 스크립트 실행.
-python "%SOURCEPATH%\__launcher__.py" "%1" "%2" "%3" "%4" "%5" "%6" "%7" "%8" "%9"
+python "%LAUNCHERFILEPATH%" "%1" "%2" "%3" "%4" "%5" "%6" "%7" "%8" "%9"

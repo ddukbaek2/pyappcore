@@ -35,6 +35,10 @@ TEMPLATEFILES : list = {
 	("__prebuilder__.py", "src"),
 	("main.py", "src"),
 
+	("__init__.py", "tests"),
+	("__main__.py", "tests"),
+	("main.py", "tests"),
+
 	(".env", ""),
 
 	("requirements.txt", ""),
@@ -210,9 +214,12 @@ def Run():
 	# 실행 인자 획득.
 	argumentParser = argparse.ArgumentParser(description = "pyappcore commands.")
 	argumentParser.add_argument("name", type = str, help = "")
-	argumentParser.add_argument('--path', type = str, default = "", help = "")
+	argumentParser.add_argument('--type', type = str, default = "none", help = "")
+	argumentParser.add_argument('--path', type = str, default = ".", help = "")
 	argumentObject = argumentParser.parse_args()
 	commandName = argumentObject.name.upper()
+
+	builtins.print(f"[pyappcore] Command: {commandName}")
 
 	# 프로젝트 생성.
 	if commandName == "CREATE":
