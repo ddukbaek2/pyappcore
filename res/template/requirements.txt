@@ -10,4 +10,8 @@ debugpy
 python-dotenv
 pyappcore
 
+# ui.
+pyqt5
+pyqt5-tools
+
 # additional packages.
