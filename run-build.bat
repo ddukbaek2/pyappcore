@@ -10,7 +10,7 @@ call venv-pip.bat
 call run-clean.bat
 
 :: 라이브러리 빌드.
-python build.py sdist bdist_wheel
+python build.py sdist bdist_wheel >NUL 2>&1
 
 :: 업로드 빌드 파일 외 불필요 빌드 파일 제거.
 if exist "build" rmdir /s /q "build"

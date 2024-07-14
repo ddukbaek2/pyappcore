@@ -26,32 +26,25 @@
     python-dotenv   
 
 
-## 패키지 설치시 필요한 의존성 패키지
+## 패키지 설치시 선행 설치가 필요한 의존성 패키지.
 
     pyinstaller
     debugpy
 
 
-## 추가 명령어 (작업 예정)
+## 추가 명령어
 
 **프로젝트 생성:**   
 
-    pyappcore makeproject
+    pyappcore create --type project --path "{project root path based pyappcore}"
+    pyappcore create --type project --path "{project root path based pyappcore}"
 
 
-**애플리케이션 빌드:**   
+**애플리케이션 빌드: (작업 예정)**   
 
-    makeapplication
-
-
-**휠 라이브러리 빌드:**   
-
-    makewheel
+    pyappcore build --type app --srcpath "{project root path based pyappcore}"
 
 
-## 추가 명령어 인식이 안되는 경우
+**휠 라이브러리 빌드: (작업 예정)**   
 
-    시스템 환경변수에 다음 경로를 등록   
-
-    C:\Users\{계정}\AppData\Roaming\Python\Python{312}\site-packages   
-
+    pyappcore build --type wheel --srcpath "{project root path based pyappcore}"
