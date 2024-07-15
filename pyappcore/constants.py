@@ -5,6 +5,7 @@ from __future__ import annotations
 from typing import Any, Final, Optional, Type, TypeVar, Union
 import builtins
 import sys
+import types
 
 
 #------------------------------------------------------------------------
@@ -45,4 +46,4 @@ class Constants:
 def Use():
     moduleName : str = __name__
     newConstants : Constants = Constants()
-    sys.modules[moduleName] = newConstants
+    # sys.modules[moduleName] = newConstants

@@ -4,6 +4,9 @@
 :: #------------------------------------------------------------------------
 echo __pyappcore-prebuild.bat__
 
+rem 가상환경 활성화.
+call venv-enable.bat
+
 :: 패키지 목록 설치.
 call venv-pip.bat
 

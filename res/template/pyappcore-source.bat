@@ -4,6 +4,9 @@
 :: #------------------------------------------------------------------------
 echo __pyappcore-source.bat__
 
+rem 가상환경 활성화.
+call venv-enable.bat
+
 :: 빌드 전 처리 실행.
 call pyappcore-prebuild.bat
 

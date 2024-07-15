@@ -11,4 +11,4 @@ if not exist "%FBXSDKFILEPATH%" (
 )
 
 :: FBXSDK 설치.
-:: python -m pip install "%FBXSDKFILEPATH%" >nul 2>nul
+python -m pip install "%FBXSDKFILEPATH%" >nul 2>nul

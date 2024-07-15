@@ -4,6 +4,9 @@ rem # 패키지 목록 설치. (Windows)
 rem #------------------------------------------------------------------------
 echo __venv-pip.bat__
 
+rem 가상환경 활성화.
+call venv-enable.bat
+
 rem 경로 설정.
 call pyappcore-path.bat
 
