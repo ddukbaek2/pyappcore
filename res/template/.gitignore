@@ -164,7 +164,8 @@ __pycache__/
 # # pyappcore.
 build/*
 !build/.gitkeep
-libs/fbx-2020.3.7-cp310-none-win_amd64.whl
+libs/*
+!libs/.gitkeep
 logs/*
 !logs/.gitkeep
 src/__pyappcore_dependencies_in_build__.py
