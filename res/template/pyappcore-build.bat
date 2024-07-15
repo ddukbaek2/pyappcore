@@ -2,6 +2,7 @@
 :: #------------------------------------------------------------------------
 :: # 바이너리 빌드. (Windows)
 :: #------------------------------------------------------------------------
+echo __pyappcore-build.bat__
 
 :: 빌드 전 처리 실행.
 call pyappcore-prebuild.bat
@@ -16,11 +17,12 @@ set BUILD=python -m PyInstaller^
  --distpath "%BUILDBINPATH%"^
  --specpath "%BUILDSPECPATH%"^
  --workpath "%BUILDWORKPATH%"^
- --name "%BUILDFILENAME%"^
- --onefile "%LAUNCHERFILEPATH%"
+ --name %BUILDFILENAME%^
+ --onefile "%SOURCEPATH%\__launcher__.py"
 
 :: 콘솔창 설정.
 if "%BUILD_NOCONSOLE%" == "true" (
+    echo "NOCONSOLE"
     set BUILD=%BUILD% --noconsole
 )
 

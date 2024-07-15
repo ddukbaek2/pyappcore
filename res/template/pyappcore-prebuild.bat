@@ -2,9 +2,10 @@
 :: #------------------------------------------------------------------------
 :: # 빌드 전처리 실행. (Windows)
 :: #------------------------------------------------------------------------
+echo __pyappcore-prebuild.bat__
 
 :: 패키지 목록 설치.
 call venv-pip.bat
 
 :: 빌드 전 처리 스크립트 실행.
-python "%PREBUILDERFILEPATH%"
+python "%SOURCEPATH%\__prebuilder__.py"

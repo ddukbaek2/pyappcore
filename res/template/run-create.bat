@@ -1,7 +1,7 @@
 @echo off
 rem #------------------------------------------------------------------------
-rem # 가상 환경 활성화. (Windows)
+rem # 가상 환경 생성. (Windows)
 rem #------------------------------------------------------------------------
-echo __venv-enable.bat__
+echo __run-create.bat__
 
-.venv\Scripts\activate.bat
+call venv-create.bat

@@ -2,6 +2,7 @@
 :: #------------------------------------------------------------------------
 :: # 환경변수 설정. (Windows)
 :: #------------------------------------------------------------------------
+echo __pyappcore-path.bat__
 
 :: 프로젝트 경로 설정.
 set PROJECTPATH=%~dp0
@@ -26,11 +27,6 @@ set RESPATH=%PROJECTPATH%\res
 set SOURCEPATH=%PROJECTPATH%\src
 set TESTSPATH=%PROJECTPATH%\tests
 set WORKSPACEPATH=%PROJECTPATH%\workspace
-
-:: 파일 경로.
-set PREBUILDERFILEPATH=%SOURCEPATH%\__prebuilder__.py
-set LAUNCHERFILEPATH=%SOURCEPATH%\__launcher__.py
-set TESTSFILEPATH=%TESTSPATH%\__main__.py
 
 :: 콘솔창 보이기 설정.
 set BUILD_NOCONSOLE=false
