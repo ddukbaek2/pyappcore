@@ -33,7 +33,7 @@
 	"python.terminal.activateEnvironment": true,
 	"python.REPL.enableREPLSmartSend": false,
 	"python.languageServer": "Pylance",
-	"python.analysis.typeCheckingMode": "basic",
+	"python.analysis.typeCheckingMode": "off",
     "[python]": {
 		"editor.insertSpaces": false,
 		"editor.tabSize": 4,
