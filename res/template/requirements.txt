@@ -12,6 +12,4 @@ pyappcore
 
 # ui.
 pyqt5
-pyqt5-tools # 윈도우용.
-
-# additional packages.
+pyqt5-tools

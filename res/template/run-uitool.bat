@@ -11,4 +11,4 @@ call venv-pip.bat
 set QTUITOOLFILEPATH=%VENVSITEPACKAGESPATH%\qt5_applications\Qt\bin\designer.exe
 
 :: UI 편집 도구 실행.
-call "%QTUITOOLFILEPATH%"
+"%QTUITOOLFILEPATH%"

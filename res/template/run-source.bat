@@ -5,4 +5,4 @@
 echo __run-source.bat__
 
 :: 실행.
-call pyappcore-source.bat "NODEBUG/LOG" "dev"
+call pyappcore-source.bat "NODEBUG/LOG" "dev" "altava" "shoes" "C:\altava.fbx"

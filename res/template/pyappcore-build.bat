@@ -4,7 +4,7 @@
 :: #------------------------------------------------------------------------
 echo __pyappcore-build.bat__
 
-rem 가상환경 활성화.
+:: 가상 환경 활성화.
 call venv-enable.bat
 
 :: 빌드 전 처리 실행.
@@ -21,6 +21,7 @@ set BUILD=python -m PyInstaller^
  --specpath "%BUILDSPECPATH%"^
  --workpath "%BUILDWORKPATH%"^
  --name %BUILDFILENAME%^
+ --additional-hooks-dir="%HOOKSPATH%"^
  --onefile "%SOURCEPATH%\__launcher__.py"
 
 :: 콘솔창 설정.
