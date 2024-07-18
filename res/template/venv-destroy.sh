@@ -8,4 +8,4 @@ echo "__venv-destroy.sh__"
 source "pyappcore-path.sh"
 
 # 가상 환경 제거.
-if [ -d "$VENVPATH" ] rm -rf "$VSCODEPATH"
+if [ -d "$VENVPATH" ] rm -rf "$VENVPATH"
