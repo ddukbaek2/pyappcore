@@ -94,7 +94,7 @@ def InitializeLogSystem():
 		logDirPath = Application.GetRootPathWithRelativePath("logs")
 		if not os.path.exists(logDirPath):
 			os.makedirs(logDirPath)
-		fileHandler : StreamHandler = FileHandler(logFilePath)
+		fileHandler : StreamHandler = FileHandler(logFilePath, encoding = "utf-8")
 		fileHandler.setLevel(logLevel)
 		fileHandler.setFormatter(formatter)
 		# applicationLogger.addHandler(fileHandler)
