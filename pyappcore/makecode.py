@@ -241,7 +241,7 @@ def CreateDependenciesInBuildToFile(moduleDirPaths : list[str], sourceDirPath : 
 	srcnames = { name : path for path, name in srcnames.items()}
 
 	# 참조 모듈 목록 작성.
-	moduleNames = sorted(importData.keys(), key = lambda value: (value[0] != "_", value))
+	moduleNames = sorted(importData.keys(), key = lambda value: (0 if value == "__future__" else 1 if value.endswith('_') else 2 if value.startswith("bpy") else 3, value))
 	for fromTargetName in moduleNames:		
 		importTargetNames = importData[fromTargetName]
 

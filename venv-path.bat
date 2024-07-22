@@ -9,7 +9,7 @@ for /f "tokens=1 delims=:" %%a in ("%PROJECTPATH%") do set "PROJECTDRIVE=%%a:"
 
 :: 파이썬 인터프리터 경로.
 :: set PYTHONFILEPATH=C:\Program Files\Blender Foundation\Blender 4.0\4.0\python\bin\python.exe
-set PYTHONFILEPATH=C:\Users\dagraac\AppData\Local\Programs\Python\Python312\python.exe
+set PYTHONFILEPATH=C:\Program Files\Python312\python.exe
 
 :: 가상환경 관련 경로 설정.
 set VENVPATH=%PROJECTPATH%\.venv
