@@ -2,7 +2,7 @@
 # 참조 모듈 목록.
 #------------------------------------------------------------------------
 from __future__ import annotations
-from typing import Any, Final, Optional, Type, TypeVar, Union
+from typing import Any, Final, Optional, Type, TypeVar, List, Dict, Set, Union
 import builtins
 import ast
 from datetime import datetime as DateTime
@@ -34,6 +34,7 @@ WRITEMODE : str = "w"
 UTF8 : str = "utf-8"
 COMMAWITHSPACE : str = ", "
 TYPEIGNORE : str = "# type: ignore"
+ASTERISK : str = "*"
 
 
 #------------------------------------------------------------------------
@@ -159,7 +160,7 @@ def CreateDependenciesInBuildToFile(moduleDirPaths : list[str], sourceDirPath : 
 		sys.path.append(sourceDirPath)
 
 	# 저장 자료구조 추가.
-	importData = dict()
+	importData : Dict[str, Set[str]] = dict()
 	importData["main"] = set()
  
 	# 기본적으로 그 외 사용자 추가 모듈 들은 미리 추가해둔다.
@@ -248,12 +249,18 @@ def CreateDependenciesInBuildToFile(moduleDirPaths : list[str], sourceDirPath : 
 		srcname = fromTargetName
 		if srcname in srcnames:
 			srcname = srcnames[srcname]
+
 		text : str = str()
 		if importTargetNames:
-			importTargetsText = COMMAWITHSPACE.join(importTargetNames)
-			text = f"from {srcname} import {importTargetsText}"
-			if CheckTypeIgnore(fromTargetName) or CheckTypeIgnores(fromTargetName, importTargetNames):
-				text += f" {TYPEIGNORE}"
+			if ASTERISK in importTargetNames:
+				text = f"from {srcname} import {ASTERISK}"
+				if CheckTypeIgnore(fromTargetName):
+					text += f" {TYPEIGNORE}"
+			else:
+				importTargetsText = COMMAWITHSPACE.join(importTargetNames)
+				text = f"from {srcname} import {importTargetsText}"
+				if CheckTypeIgnore(fromTargetName) or CheckTypeIgnores(fromTargetName, importTargetNames):
+					text += f" {TYPEIGNORE}"
 		else:
 			text = f"import {srcname}"
 			if CheckTypeIgnore(fromTargetName):
