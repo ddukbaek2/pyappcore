@@ -23,4 +23,5 @@ pip install -r "$REQUIREMENTSFILEPATH"
 source "project-pip.sh"
 
 # 현재 가상 환경에 설치된 모든 패키지 확인.
+python3 --version
 python3 -m pip list

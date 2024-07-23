@@ -23,4 +23,5 @@ python -m pip install --upgrade -r "%REQUIREMENTSFILEPATH%" >nul 2>nul
 call project-pip.bat
 
 :: 현재 가상 환경에 설치된 모든 패키지 확인.
+python --version
 python -m pip list
