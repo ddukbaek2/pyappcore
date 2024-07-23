@@ -7,6 +7,7 @@ import builtins
 import debugpy # type: ignore
 import importlib
 import os
+import signal
 import sys
 import unittest
 from .application import Application
@@ -206,7 +207,10 @@ def Launching(moduleName : str, functionName : str) -> int:
 	# 예외.
 	except Exception as exception:
 		Application.LogException(exception)
-		
+
+	# 시그널 등록.
+	signal.signal(signal.SIGINT, lambda sight, frame: sys.exit(0))
+
 	# 시작.
 	try:
 		Application.Log("__running__")
@@ -215,6 +219,8 @@ def Launching(moduleName : str, functionName : str) -> int:
 		exitCode : int = function(sys.argv)
 		return exitCode
 	# 예외.
+	except KeyboardInterrupt as exception:
+		pass
 	except Exception as exception:
 		Application.LogException(exception)
 
