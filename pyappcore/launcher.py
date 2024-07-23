@@ -220,7 +220,8 @@ def Launching(moduleName : str, functionName : str) -> int:
 		return exitCode
 	# 예외.
 	except KeyboardInterrupt as exception:
-		pass
+		if not isBuild:
+			return 0
 	except Exception as exception:
 		Application.LogException(exception)
 
