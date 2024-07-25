@@ -1,27 +1,22 @@
 #--------------------------------------------------------------------------------
 # 참조 모듈 목록.
 #--------------------------------------------------------------------------------
-import unittest
+from __future__ import annotations
+from typing import Any, Final, Optional, Type, TypeVar, Union
 import builtins
-from .pyappcore import Launching
+import os
+from pyappcore.application import Application
+from pyappcore.str_util import GetSplitFilePath
 
 
 #--------------------------------------------------------------------------------
-# 테스트 케이스.
+# 전역 상수 목록.
 #--------------------------------------------------------------------------------
-class Test_PyAppCore(unittest.TestCase):
-	#--------------------------------------------------------------------------------
-	# 테스트 : 출력.
-	#--------------------------------------------------------------------------------
-	def test_Print(self):
-		builtins.print("Test_PyAppCore.test_Print()")
 
 
 
 #--------------------------------------------------------------------------------
-# 파일 진입점.
+# 프로세스 정보.
 #--------------------------------------------------------------------------------
-if __name__ == "__main__":
-
-	# 전체 테스트.
-	unittest.main()
+class ProcessInfo:
+	pass

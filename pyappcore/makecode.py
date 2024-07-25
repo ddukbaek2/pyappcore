@@ -1,6 +1,6 @@
-#------------------------------------------------------------------------
+#--------------------------------------------------------------------------------
 # 참조 모듈 목록.
-#------------------------------------------------------------------------
+#--------------------------------------------------------------------------------
 from __future__ import annotations
 from typing import Any, Final, Optional, Type, TypeVar, List, Dict, Set, Union
 import builtins
@@ -15,9 +15,9 @@ from .module_util import Node, IsExistsPackageOrModule, IsExistsAttribute
 from .str_util import GetSplitFilePath
 
 
-#------------------------------------------------------------------------
+#--------------------------------------------------------------------------------
 # 전역 상수 목록.
-#------------------------------------------------------------------------
+#--------------------------------------------------------------------------------
 DEPENDENCIESINBUILDFILENAME : str = "__pyappcore_dependencies_in_build__.py"
 SYMBOLSINBUILDFILENAME : str = "__pyappcore_symbols_in_build__.py"
 SLASH : str = "/"
@@ -37,9 +37,9 @@ TYPEIGNORE : str = "# type: ignore"
 ASTERISK : str = "*"
 
 
-#------------------------------------------------------------------------
+#--------------------------------------------------------------------------------
 # 대상 디렉토리에서 모듈을 찾아서 목록을 반환.
-#------------------------------------------------------------------------
+#--------------------------------------------------------------------------------
 def FindModuleFilePaths(moduleDirPath : str) -> set:
 	moduleFilePaths = set()
 	for root, dirs, files in os.walk(moduleDirPath):
@@ -50,20 +50,20 @@ def FindModuleFilePaths(moduleDirPath : str) -> set:
 	return moduleFilePaths
 
 
-#------------------------------------------------------------------------
+#--------------------------------------------------------------------------------
 # "#type: ignore" 를 추가할지 말지 여부.
 # - fromimport의 from 혹은 import의 대상은 패키지 아니면 모듈이다.
-#------------------------------------------------------------------------
+#--------------------------------------------------------------------------------
 def CheckTypeIgnore(fromName : str) -> bool:
 	if IsExistsPackageOrModule(fromName):
 		return False
 	return True
 
 
-#------------------------------------------------------------------------
+#--------------------------------------------------------------------------------
 # "# type: ignore" 를 추가할지 말지 여부.
 # - fromimport의 import 혹은 import의 대상은 패키지, 모듈, 클래스, 함수이다.
-#------------------------------------------------------------------------
+#--------------------------------------------------------------------------------
 def CheckTypeIgnores(fromName : str, importNames : list[str]) -> bool:
 	if not importNames:
 		return False
@@ -75,9 +75,9 @@ def CheckTypeIgnores(fromName : str, importNames : list[str]) -> bool:
 	return True
 
 
-#------------------------------------------------------------------------
+#--------------------------------------------------------------------------------
 # .vscode/settings.json 파일 불러오기.
-#------------------------------------------------------------------------
+#--------------------------------------------------------------------------------
 def GetVisualStudioCodeSettings(rootDirPath : str) -> Union[dict, None]:
 	try:
 		settingsFilePath = f"{rootDirPath}/.vscode/settings.json"
@@ -94,9 +94,9 @@ def GetVisualStudioCodeSettings(rootDirPath : str) -> Union[dict, None]:
 		return None
 
 
-#------------------------------------------------------------------------
+#--------------------------------------------------------------------------------
 # 빌드시 심볼 파일 생성.
-#------------------------------------------------------------------------
+#--------------------------------------------------------------------------------
 def CreateSymbolsInBuildToFile(symbols : list[str], symbolsDirPath : str) -> None:
 	# 기존 파일 제거.
 	symbolsFilePath : str = f"{symbolsDirPath}/{SYMBOLSINBUILDFILENAME}"
@@ -122,9 +122,9 @@ def CreateSymbolsInBuildToFile(symbols : list[str], symbolsDirPath : str) -> Non
 		file.write(LINEFEED.join(writelines))
 
 
-#------------------------------------------------------------------------
+#--------------------------------------------------------------------------------
 # 빌드시 의존성 참조 파일 생성.
-#------------------------------------------------------------------------
+#--------------------------------------------------------------------------------
 def CreateDependenciesInBuildToFile(moduleDirPaths : list[str], sourceDirPath : str, otherModuleNames : set[str] = None) -> None:
 	# 기존 파일 제거.
 	dependenciesFilePath : str = f"{sourceDirPath}/{DEPENDENCIESINBUILDFILENAME}"
