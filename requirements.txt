@@ -9,3 +9,6 @@ twine
 # supply-dependency-package.
 debugpy
 pyinstaller
+
+# using packages.
+dduk-core

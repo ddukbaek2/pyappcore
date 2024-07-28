@@ -13,6 +13,7 @@ from .json_util import *
 from .launcher import *
 from .log_util import *
 from .processinfo import *
+from .process_util import *
 from .makecode import *
 from .math3d import *
 from .module_util import *

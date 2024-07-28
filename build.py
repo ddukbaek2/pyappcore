@@ -50,6 +50,7 @@ setup(
 		]
 	},
     install_requires = [
+		"dduk-core",
 		"pyinstaller",
 		"debugpy"
 	],
