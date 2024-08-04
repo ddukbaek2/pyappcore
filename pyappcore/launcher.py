@@ -182,12 +182,13 @@ def Launching(moduleName : str, functionName : str) -> int:
 				Application.Log("__nodebug__")
 
 
-		# 공통.
-		# 인자 재조립 처리.
-		# VSCODE 상황일때의 인자 목록은 문자열 리스트가 아닌 콤마로 합쳐진 형태로 넘어올 수 있음.
-		# 어찌 되었건 쉼표 또한 구분자로 인정하고 공통 처리.
-		if not Application.IsBuild() and sys.argv:
-			sys.argv = CreateStringListFromSeperatedStringList(sys.argv)	
+		# # 공통.
+		# # 인자 재조립 처리.
+		# # VSCODE 상황일때의 인자 목록은 문자열 리스트가 아닌 콤마로 합쳐진 형태로 넘어올 수 있음.
+		# # 어찌 되었건 쉼표 또한 구분자로 인정하고 공통 처리.
+		# if not Application.IsBuild() and sys.argv:
+		# 	sys.argv = CreateStringListFromSeperatedStringList(sys.argv)	
+		sys.argv = CreateStringListFromSeperatedStringList(sys.argv)
 
 		# 잔여 인자 출력.
 		if sys.argv:
